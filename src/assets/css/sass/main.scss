@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700');
+@import './_01_mixins.scss';
+@import './_02_variables';
+@import './_03_core.scss';
+@import './_04_plugins.scss';
+@import './_05_views.scss';
+
+/** your custom css code **/
+
+.svd_commercial_container {
+  display: none !important;
+}
+
+.survey-list-item {
+  ul {
+    justify-content: space-around;
+    li {
+      margin-right: 10px;
+      i {
+        font-size: 1.2em;
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.luci-survey-name {
+  width: calc(100% - 30px);
+}
+
+/* 
+html {
+  background-color: $theme-color-1 !important;
+}
+*/
