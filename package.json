@@ -3,6 +3,7 @@
   "version": "5.2.0",
   "description": "Survey Wizard - Frontend",
   "private": true,
+  "homeplage": "http://127.0.0.1/",
   "dependencies": {
     "@glidejs/glide": "^3.4.1",
     "availity-reactstrap-validation": "^2.6.1",
@@ -33,6 +34,7 @@
     "react-image-lightbox": "^5.1.1",
     "react-intl": "5.0.2",
     "react-lines-ellipsis": "^0.14.1",
+    "react-moment": "^1.1.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-quill": "^1.3.5",
     "react-rater": "^5.1.1",

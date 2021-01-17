@@ -28,6 +28,8 @@ module.exports = {
   'user.reset-password-button': 'RESET',
   'user.buy': 'BUY',
   'user.username': 'Username',
+  'user.role': 'Role',
+  'user.organization': 'Organization',
 
   /* 03.Menu */
   'menu.home': 'Home',
@@ -124,10 +126,14 @@ module.exports = {
   'menu.run': 'Run',
   'menu.edit': 'Edit',
   'menu.save': 'Save',
-  'menu.results': 'Results',
   'menu.settings': 'Settings',
   'menu.account': 'Account Settings',
-  'menu.profile': 'Profile',
+  'menu.results': 'Results',
+  'menu.reports': 'Reports',
+  'menu.links': 'Links',
+  'menu.share': 'Share',
+  'menu.admin': 'Admin',
+  'menu.users': 'Users',
 
   /* 04.Error Page */
   'pages.error-title': 'Ooops... looks like an error occurred!',
@@ -159,8 +165,6 @@ module.exports = {
   'pages.bake-progress': 'Bake Progress',
   'pages.popularity': 'Popularity',
   'pages.comments': 'Comments',
-  'pages.error-title': 'Ooops... looks like an error occurred!',
-  'pages.error-code': 'Error code',
   'pages.go-back-home': 'GO BACK HOME',
   'pages.mailing-info':
     'Mailing templates use inline styling and table layout to be displayed well at various service providers. To provide better usability we include it as regular html with dangerouslySetInnerHTML.',
@@ -197,6 +201,7 @@ module.exports = {
   'pages.price.useractionsauditlog': 'User actions audit log',
   'pages.prices.featurecomparison': 'Feature Comparison',
   'pages.prices.pricecomparison': 'Price Comparison',
+  'pages.add-new-user-title': 'Add New User',
 
   /* 06.02.Survey */
   'survey.delete': 'Delete',
@@ -220,8 +225,9 @@ module.exports = {
   'survey.run': 'Run',
   'survey.results': 'Results',
   'survey.reports': 'Reports',
-  'survey.links': 'Link',
+  'survey.links': 'Links',
   'survey.share': 'Share',
+  'survey.unshare': 'Unshare',
   'survey.settings': 'Settings',
   'survey.copy': 'Copy',
   'survey.delete-title': 'Delete Surveys',
@@ -573,5 +579,9 @@ module.exports = {
   /* 08.Settings */
 
   /* 08.01.Profile */
-  'profile.role': 'Role'
+  'profile.role': 'Role',
+
+  /* 09.Admin Panel */
+
+  /* 09.01.Profile */
 };

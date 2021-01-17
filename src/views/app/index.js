@@ -3,7 +3,7 @@ import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import AppLayout from '../../layout/AppLayout';
-// import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
+import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
 
 const Dashboards = React.lazy(() => 
   import(/* webpackChunkName: "viwes-dashboard" */ './dashboards')
@@ -13,6 +13,9 @@ const Surveys = React.lazy(() =>
 );
 const Settings = React.lazy(() =>
   import(/* webpackChunkName: "viwes-settings" */ './settings')
+);
+const AdminSettings = React.lazy(() =>
+  import(/* webpackChunkName: "viwes-blank-page" */ './admin')
 );
 const BlankPage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-blank-page" */ './blank-page')
@@ -37,11 +40,11 @@ const App = ({ match }) => {
               path={`${match.url}/settings`}
               render={(props) => <Settings {...props} />}
             />
-            {/* <ProtectedRoute
-                    path={`${match.url}/second-menu`}
-                    component={SecondMenu}
-                    roles={[UserRole.Admin]}
-            /> */}
+            <ProtectedRoute
+              path={`${match.url}/admin`}
+              component={AdminSettings}
+              // roles={[UserRole.Admin]}
+            />
             <Route
               path={`${match.url}/blank-page`}
               render={(props) => <BlankPage {...props} />}

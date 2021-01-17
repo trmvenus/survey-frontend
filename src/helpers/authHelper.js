@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
     Route,
@@ -35,7 +34,6 @@ const ProtectedRoute = ({ component: Component, roles = undefined, ...rest }) =>
         } else {
             return <Component {...props} />;
         }
-
     }
 
     return (
@@ -47,7 +45,17 @@ const ProtectedRoute = ({ component: Component, roles = undefined, ...rest }) =>
 }
 const UserRole = {
     Admin: 0,
-    Editor: 1,
+    User: 1,
+    OrgAdmin: 2,
 }
 
-export { ProtectedRoute, UserRole };
+const getRoleName = (role) => {
+    if (role == UserRole.Admin)
+        return 'Super Manager';
+    else if (role == UserRole.User)
+        return 'User';
+    else if (role == UserRole.OrgAdmin)
+        return 'University Manager';
+}
+
+export { ProtectedRoute, UserRole, getRoleName };

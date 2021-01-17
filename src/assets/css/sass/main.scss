@@ -28,6 +28,18 @@
   width: calc(100% - 30px);
 }
 
+.edit-profile {
+  .react-datepicker-wrapper {
+    input:disabled {
+      background-color: #e9ecef !important;
+    }
+  }
+  .react-select__control--is-disabled {
+    background-color: #e9ecef !important;
+    
+  }
+}
+
 /* 
 html {
   background-color: $theme-color-1 !important;

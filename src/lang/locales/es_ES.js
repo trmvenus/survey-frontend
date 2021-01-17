@@ -28,6 +28,8 @@ module.exports = {
   'user.reset-password-button': 'REINICIAR',
   'user.buy': 'COMPRAR',
   'user.username': 'Nombre de Usuario',
+  'user.role': 'Rol',
+  'user.organization': 'Organización',
 
   /* 03.Menú */
   'menu.home': 'Inicio',
@@ -120,14 +122,18 @@ module.exports = {
   'menu.dashboard': 'Tablero',
   'menu.mysurveys': 'Mi Encuestas',
   'menu.surveys': 'Encuestas',
-  'menu.list': 'Lista',
+  'menu.list': 'Listas',
   'menu.run': 'Correr',
   'menu.edit': 'Edit',
   'menu.save': 'Guardar',
-  'menu.results': 'Resultados',
   'menu.settings': 'Configuraciones',
   'menu.account': 'Cuenta Configuraciones',
-  'menu.profile': 'Perfil',
+  'menu.results': 'Resultados',
+  'menu.reports': 'Informes',
+  'menu.links': 'Enlaces',
+  'menu.share': 'Compartir',
+  'menu.admin': 'Admin',
+  'menu.users': 'Usuarios',
 
   /* 04.Error  */
   'layouts.error-title': 'Vaya, parece que ha ocurrido un error!',
@@ -197,6 +203,7 @@ module.exports = {
   'pages.price.useractionsauditlog': 'Registro de acciones del usuario',
   'pages.prices.featurecomparison': 'Comparación de Características',
   'pages.prices.pricecomparison': 'Comparación de Precios',
+  'pages.add-new-user-title': 'Agregar nuevo usuario',
 
   /* 06.02.Encuesta */
   'survey.delete': 'Borrar',
@@ -222,6 +229,7 @@ module.exports = {
   'survey.reports': 'Informes',
   'survey.links': 'Enlaces',
   'survey.share': 'Compartir',
+  'survey.unshare': 'Dejar de Compartir',
   'survey.settings': 'Configuraciones',
   'survey.copy': 'Copiar',
   'survey.delete-title': 'Borrar Encuestas',
@@ -574,5 +582,9 @@ module.exports = {
   /* 08.Settings */
 
   /* 08.01.Profile */
-  'profile.role': 'Rol'
+  'profile.role': 'Rol',
+
+  /* 09.Admin Panel */
+
+  /* 09.01.Profile */
 };

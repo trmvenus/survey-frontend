@@ -17,6 +17,7 @@ import {
 } from '../../redux/actions';
 
 import menuItems from '../../constants/menu';
+import { currentUser } from '../../constants/defaultValues';
 
 class Sidebar extends Component {
   constructor(props) {

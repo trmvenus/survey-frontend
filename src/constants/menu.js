@@ -1,5 +1,5 @@
 import { adminRoot } from "./defaultValues";
-// import { UserRole } from "../helpers/authHelper"
+import { UserRole } from "../helpers/authHelper"
 
 const data = [
   {
@@ -33,13 +33,27 @@ const data = [
     id: 'settings',
     icon: 'simple-icon-settings',
     label: 'menu.settings',
-    to: `${adminRoot} /settings`,
+    to: `${adminRoot}/settings`,
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: [
       {
         icon: 'simple-icon-user',
         label: 'menu.account',
         to: `${adminRoot}/settings/account`,
+      },
+    ],
+  },
+  {
+    id: 'admin',
+    icon: 'iconsminds-administrator',
+    label: 'menu.admin',
+    to: `${adminRoot}/admin`,
+    roles: [UserRole.Admin],
+    subs: [
+      {
+        icon: 'simple-icon-people',
+        label: 'menu.users',
+        to: `${adminRoot}/admin/users`,
       },
     ],
   },

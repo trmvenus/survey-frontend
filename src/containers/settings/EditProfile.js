@@ -81,7 +81,7 @@ const EditProfile = ({
             touched,
             isSubmitting
           }) => (
-            <Form className="av-tooltip tooltip-label-bottom">
+            <Form className="av-tooltip tooltip-label-bottom edit-profile">
               <FormGroup className="form-group has-top-label">
                 <Label>
                   <IntlMessages id="forms.name" />

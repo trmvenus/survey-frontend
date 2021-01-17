@@ -15,6 +15,9 @@ import {
   SURVEY_LIST_COPY_ITEMS,
   SURVEY_LIST_COPY_ITEMS_SUCCESS,
   SURVEY_LIST_COPY_ITEMS_ERROR,
+  SURVEY_LIST_SHARE_ITEM,
+  SURVEY_LIST_SHARE_ITEM_SUCCESS,
+  SURVEY_LIST_SHARE_ITEM_ERROR,
 } from '../actions';
 
 const INIT_STATE = {
@@ -164,7 +167,7 @@ export default (state = INIT_STATE, action) => {
         loading: true,
         surveyItems: [...action.payload, ...state.surveyItems],
         selectedItems: [],
-      }
+      };
 
     case SURVEY_LIST_COPY_ITEMS_ERROR:
       return { 
@@ -173,6 +176,23 @@ export default (state = INIT_STATE, action) => {
         error: action.payload,
         selectedItems: [],
       };
+
+    case SURVEY_LIST_SHARE_ITEM:
+      return {
+        ...state,
+      };
+
+    case SURVEY_LIST_SHARE_ITEM_SUCCESS:
+      return {
+        ...state,
+        surveyItems: state.surveyItems.map(item => item.id == action.payload.id ? {...item, is_share: !item.is_share} : item),
+      }
+
+    case SURVEY_LIST_SHARE_ITEM_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+      }
 
     default:
       return { ...state };

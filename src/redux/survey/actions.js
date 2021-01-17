@@ -36,4 +36,3 @@ export const updateSurveyError = (error) => ({
   type: UPDATE_SURVEY_ERROR,
   payload: error,
 });
-

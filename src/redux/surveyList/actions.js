@@ -15,6 +15,9 @@ import {
   SURVEY_LIST_COPY_ITEMS,
   SURVEY_LIST_COPY_ITEMS_SUCCESS,
   SURVEY_LIST_COPY_ITEMS_ERROR,
+  SURVEY_LIST_SHARE_ITEM,
+  SURVEY_LIST_SHARE_ITEM_SUCCESS,
+  SURVEY_LIST_SHARE_ITEM_ERROR,
 } from '../actions';
 
 export const getSurveyList = () => ({
@@ -92,5 +95,20 @@ export const copySurveyItemsSuccess = (items) => ({
 
 export const copySurveyItemsError = (error) => ({
   type: SURVEY_LIST_COPY_ITEMS_ERROR,
+  payload: error,
+});
+
+export const shareSurveyItem = (payload) => ({
+  type: SURVEY_LIST_SHARE_ITEM,
+  payload: payload,
+});
+
+export const shareSurveyItemSuccess = (item) => ({
+  type: SURVEY_LIST_SHARE_ITEM_SUCCESS,
+  payload: item,
+});
+
+export const shareSurveyItemError = (error) => ({
+  type: SURVEY_LIST_SHARE_ITEM_ERROR,
   payload: error,
 });

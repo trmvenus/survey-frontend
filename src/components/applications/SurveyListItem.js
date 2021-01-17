@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { connect } from 'react-redux';
 import { Card, CardBody, Badge, CustomInput, NavItem, Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import TimeAgo from 'react-timeago';
@@ -6,9 +7,20 @@ import TimeAgo from 'react-timeago';
 import IntlMessages from '../../helpers/IntlMessages';
 import { Colxx } from '../common/CustomBootstrap';
 import { adminRoot } from '../../constants/defaultValues';
+import { shareSurveyItem } from '../../redux/actions';
 
-const SurveyListItem = ({ item, handleCheckChange, isSelected }) => {
+const SurveyListItem = ({ 
+  item, 
+  handleCheckChange, 
+  isSelected,
+
+  shareSurveyItemAction,
+}) => {
   const [collapse, setCollapse] = useState(false);
+
+  const handleShareSurvey = () => {
+    shareSurveyItemAction({id: item.id})
+  }
 
   return (
     <Colxx className="survey-list-item" xxs="12">
@@ -75,21 +87,25 @@ const SurveyListItem = ({ item, handleCheckChange, isSelected }) => {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="#" onClick={() => {}} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/reports/${item.id}`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-chart" />
                   <IntlMessages id="survey.reports" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="#" onClick={() => {}} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/links/${item.id}`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-link" />
                   <IntlMessages id="survey.links" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="#" onClick={() => {}} location={{}}>
+                <NavLink to="#" onClick={() => {handleShareSurvey()}} location={{}}>
                   <i className="simple-icon-share" />
-                  <IntlMessages id="survey.share" />
+                  {item.is_share ? (
+                    <IntlMessages id="survey.unshare" />
+                  ) : (
+                    <IntlMessages id="survey.share" />
+                  )}
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -106,4 +122,13 @@ const SurveyListItem = ({ item, handleCheckChange, isSelected }) => {
   );
 };
 
-export default React.memo(SurveyListItem);
+const mapStateToProps = ({  }) => {
+  return {
+  };
+};
+
+export default 
+  connect(mapStateToProps, {
+    shareSurveyItemAction: shareSurveyItem
+  })(React.memo(SurveyListItem));
+

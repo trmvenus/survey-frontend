@@ -47,6 +47,7 @@ const ColorSwitcher = () => {
     setCurrentColor(color)
     setIsOpen(false);
     setTimeout(() => {
+      console.log('setTimeout');
       window.location.reload();
     }, 500);
   };

@@ -2,7 +2,7 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { client } from '../../helpers/client';
 
-import { SURVEY_LIST_GET_LIST, SURVEY_LIST_ADD_ITEM, SURVEY_LIST_DELETE_ITEMS, SURVEY_LIST_COPY_ITEMS } from '../actions';
+import { SURVEY_LIST_GET_LIST, SURVEY_LIST_ADD_ITEM, SURVEY_LIST_DELETE_ITEMS, SURVEY_LIST_COPY_ITEMS, SURVEY_LIST_SHARE_ITEM } from '../actions';
 
 import {
   getSurveyListSuccess,
@@ -13,6 +13,8 @@ import {
   deleteSurveyItemsError,
   copySurveyItemsSuccess,
   copySurveyItemsError,
+  shareSurveyItemSuccess,
+  shareSurveyItemError,
 } from './actions';
 
 const getSurveyListRequest = async () => 
@@ -77,6 +79,22 @@ function* copySurveyItems({ payload }) {
 }
 
 
+const shareSurveyItemRequest = async (item) =>
+  await client
+    .get(`/survey/share?id=${item.id}`)
+    .then((res) => res.data)
+    .catch((error) => {throw error});
+
+function* shareSurveyItem({ payload }) {
+  try {
+    const response = yield call(shareSurveyItemRequest, payload);
+    yield put(shareSurveyItemSuccess(response));
+  } catch (error) {
+    yield put(shareSurveyItemError(error));
+  }
+}
+
+
 export function* watchGetList() {
   yield takeEvery(SURVEY_LIST_GET_LIST, getSurveyListItems);
 }
@@ -93,6 +111,10 @@ export function* watchCopyItems() {
   yield takeEvery(SURVEY_LIST_COPY_ITEMS, copySurveyItems);
 }
 
+export function* watchShareItem() {
+  yield takeEvery(SURVEY_LIST_SHARE_ITEM, shareSurveyItem);
+}
+
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(watchAddItem), fork(watchDeleteItems), fork(watchCopyItems)]);
+  yield all([fork(watchGetList), fork(watchAddItem), fork(watchDeleteItems), fork(watchCopyItems), fork(watchShareItem)]);
 }

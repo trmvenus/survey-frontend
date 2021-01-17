@@ -14,7 +14,15 @@ const EditSurvey = React.lazy(() =>
 );
 
 const ResultsSurvey = React.lazy(() =>
-  import(/* webpackChunkName: "edit" */ './results')
+  import(/* webpackChunkName: "results" */ './results')
+);
+
+const ReportsSurvey = React.lazy(() =>
+  import(/* webpackChunkName: "reports" */ './reports')
+);
+
+const LinksSurvey = React.lazy(() =>
+  import(/* webpackChunkName: "links" */ './links')
 );
 
 const Surveys = ({ match }) => (
@@ -38,6 +46,16 @@ const Surveys = ({ match }) => (
       <Route
         path={`${match.url}/results/:surveyid`}
         render={(props) => <ResultsSurvey {...props} />}
+        isExact
+      />
+      <Route
+        path={`${match.url}/reports/:surveyid`}
+        render={(props) => <ReportsSurvey {...props} />}
+        isExact
+      />
+      <Route
+        path={`${match.url}/links/:surveyid`}
+        render={(props) => <LinksSurvey {...props} />}
         isExact
       />
       <Redirect to="/error" />

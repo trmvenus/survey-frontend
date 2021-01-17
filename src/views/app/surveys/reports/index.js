@@ -31,35 +31,29 @@ import SurveyResultTable from '../../../../containers/ui/ReactTableCards';
 import IntlMessages from '../../../../helpers/IntlMessages';
 
 
-const ResultsSurvey = ({ 
+const ReportsSurvey = ({ 
   match, 
   error,
-  getResultListAction,
 }) => {
 
   useEffect(() => {
     if (error) {
-      NotificationManager.warning(error.message??error, 'Get Results Error', 3000, null, null, '');
+      NotificationManager.warning(error.message??error, 'Report Error', 3000, null, null, '');
     }
   }, [error]);
-  
-  useEffect(() => {
-    getResultListAction({id: match.params.surveyid});
-  }, [getResultListAction]);
 
   return (
     <>
       <Row>
         <Colxx xxs="12">
           <div className="mb-2">
-            <Breadcrumb heading="survey.results" match={match} />
+            <Breadcrumb heading="survey.reports" match={match} />
           </div>
           <Separator className="mb-5" />
         </Colxx>
       </Row>
       <Row>
         <Colxx xxs="12" className="mb-4">
-					<SurveyResultTable />{' '}
         </Colxx>
       </Row>
     </>
@@ -82,6 +76,5 @@ const mapStateToProps = ({ result }) => {
 
 export default injectIntl(
   connect(mapStateToProps, {
-    getResultListAction: getResultList
-  })(ResultsSurvey)
+  })(ReportsSurvey)
 );
