@@ -134,6 +134,7 @@ module.exports = {
   'menu.share': 'Share',
   'menu.admin': 'Admin',
   'menu.users': 'Users',
+  'menu.summary': 'Summary',
 
   /* 04.Error Page */
   'pages.error-title': 'Ooops... looks like an error occurred!',
@@ -202,8 +203,13 @@ module.exports = {
   'pages.prices.featurecomparison': 'Feature Comparison',
   'pages.prices.pricecomparison': 'Price Comparison',
   'pages.add-new-user-title': 'Add New User',
+  'pages.pages': 'Pages',
+  'pages.questions': 'Questions',
+  'pages.createdon': 'Created On',
 
-  /* 06.02.Survey */
+  /* 06.Survey */
+
+  /* 06.01. Dashboard */
   'survey.delete': 'Delete',
   'survey.edit': 'Edit',
   'survey.add-new': 'ADD NEW',
@@ -232,6 +238,20 @@ module.exports = {
   'survey.copy': 'Copy',
   'survey.delete-title': 'Delete Surveys',
   'survey.copy-title': 'Copy Surveys',
+
+  /* 06.02. Summary */
+  'summary.total-responses': 'Total Responses',
+  'summary.survey-status': 'Survey Status',
+  'summary.average-time': 'Average Time',
+  'summary.survey-sharing': 'Sharing',
+  'summary.active': 'ACTIVE',
+  'summary.inactive': 'INACTIVE',
+  'summary.yes': 'YES',
+  'summary.no': 'NO',
+  'summary.survey-responses': 'Survey Responses',
+  'summary.this-week': 'This Week',
+  'summary.last-week': 'Last Week',
+  'summary.this-month': 'This Month',
 
   /* 07.UI */
 

@@ -134,10 +134,11 @@ module.exports = {
   'menu.share': 'Compartir',
   'menu.admin': 'Admin',
   'menu.users': 'Usuarios',
+  'menu.summary': 'Resumen',
 
   /* 04.Error  */
   'layouts.error-title': 'Vaya, parece que ha ocurrido un error!',
-  'layouts.error-code': 'Código de error',
+  'layouts.error-code': 'Código de error',  
   'layouts.go-back-home': 'REGRESAR A INICIO',
 
   /* 05.Esquemas */
@@ -204,8 +205,13 @@ module.exports = {
   'pages.prices.featurecomparison': 'Comparación de Características',
   'pages.prices.pricecomparison': 'Comparación de Precios',
   'pages.add-new-user-title': 'Agregar nuevo usuario',
+  'pages.pages': 'Páginas',
+  'pages.questions': 'Preguntas',
+  'pages.createdon': 'Creado en',
 
-  /* 06.02.Encuesta */
+  /* 06.Survey */
+
+  /* 06.01. Dashboard */
   'survey.delete': 'Borrar',
   'survey.edit': 'Edit',
   'survey.add-new': 'AGREGAR NUEVO',
@@ -234,6 +240,20 @@ module.exports = {
   'survey.copy': 'Copiar',
   'survey.delete-title': 'Borrar Encuestas',
   'survey.copy-title': 'Copiar Encuestas',
+
+  /* 06.02. Summary */
+  'summary.total-responses': 'Respuestas Totales',
+  'summary.survey-status': 'Estado de la Encuesta',
+  'summary.average-time': 'Tiempo Promedio',
+  'summary.survey-sharing': 'Compartiendo',
+  'summary.active': 'ACTIVO',
+  'summary.inactive': 'INACTIVO',
+  'summary.yes': 'SI',
+  'summary.no': 'NO',
+  'summary.survey-responses': 'Respuestas a la Encuesta',
+  'summary.this-week': 'Esta Semana',
+  'summary.last-week': 'La Semana Pasada',
+  'summary.this-month': 'Este Mes',
 
   /* 07.IU */
 

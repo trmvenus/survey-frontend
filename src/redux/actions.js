@@ -72,6 +72,15 @@ export const RESULT_LIST_UPDATE_RESULT = 'RESULT_LIST_UPDATE_RESULT';
 export const RESULT_LIST_UPDATE_RESULT_SUCCESS = 'RESULT_LIST_UPDATE_RESULT_SUCCESS';
 export const RESULT_LIST_UPDATE_RESULT_ERROR = 'RESULT_LIST_UPDATE_RESULT_ERROR';
 
+/* USER */
+export const USER_GET_LIST = 'USER_GET_LIST';
+export const USER_GET_LIST_SUCCESS = 'USER_GET_LIST_SUCCESS';
+export const USER_GET_LIST_ERROR = 'USER_GET_LIST_ERROR';
+export const USER_GET_LIST_WITH_FILTER = 'USER_GET_LIST_WITH_FILTER';
+export const USER_ADD = 'USER_ADD';
+export const USER_ADD_SUCCESS = 'USER_ADD_SUCCESS';
+export const USER_ADD_ERROR = 'USER_ADD_ERROR';
+
 export * from './menu/actions';
 export * from './settings/actions';
 export * from './auth/actions';

@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-
-import axios from 'axios';
+import { connect } from 'react-redux';
 
 import { servicePath } from '../../../constants/defaultValues';
+
+import { NotificationManager } from '../../../components/common/react-notifications';
 
 import ListPageHeading from '../../../containers/users/ListPageHeading';
 import AddNewModal from '../../../containers/users/AddNewModal';
 import ListPageListing from '../../../containers/users/ListPageListing';
+
 import useMousetrap from '../../../hooks/use-mousetrap';
+
+import { getUserList } from '../../../redux/user/actions';
 
 const getIndex = (value, arr, prop) => {
   for (let i = 0; i < arr.length; i += 1) {
@@ -33,8 +37,17 @@ const categories = [
   { label: 'University 3', value: 'uni-3', key: 2 },
 ];
 
-const UsersSettings = ({ match }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+const UsersSettings = ({ 
+  match,
+
+  users,
+  isLoaded,
+  error,
+  totalPage,
+  totalCount,
+
+  getUserListAction,
+}) => {
   const [displayMode, setDisplayMode] = useState('thumblist');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedPageSize, setSelectedPageSize] = useState(8);
@@ -44,11 +57,8 @@ const UsersSettings = ({ match }) => {
   });
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [totalItemCount, setTotalItemCount] = useState(0);
-  const [totalPage, setTotalPage] = useState(1);
   const [search, setSearch] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
-  const [items, setItems] = useState([]);
   const [lastChecked, setLastChecked] = useState(null);
 
   useEffect(() => {
@@ -56,24 +66,21 @@ const UsersSettings = ({ match }) => {
   }, [selectedPageSize, selectedOrderOption]);
 
   useEffect(() => {
-    async function fetchData() {
-      axios
-        .get(
-          `${apiUrl}?pageSize=${selectedPageSize}&currentPage=${currentPage}&orderBy=${selectedOrderOption.column}&search=${search}`
-        )
-        .then((res) => {
-          return res.data;
-        })
-        .then((data) => {
-          setTotalPage(data.totalPage);
-          setItems(data.data);
-          setSelectedItems([]);
-          setTotalItemCount(data.totalItem);
-          setIsLoaded(true);
-        });
-    }
-    fetchData();
+    getUserListAction({
+      pageSize: selectedPageSize,
+      currentPage: currentPage,
+      orderBy: selectedOrderOption.column,
+      search: search,
+    });
+
+    setSelectedItems([]);
   }, [selectedPageSize, currentPage, selectedOrderOption, search]);
+
+  useEffect(() => {
+    if (error) {
+      NotificationManager.warning(error.message??error, 'Users Page Error', 3000, null, null, '');
+    }
+  }, [error]);
 
   const onCheckItem = (event, id) => {
     if (
@@ -95,7 +102,7 @@ const UsersSettings = ({ match }) => {
     setSelectedItems(selectedList);
 
     if (event.shiftKey) {
-      let newItems = [...items];
+      let newItems = [...users];
       const start = getIndex(id, newItems, 'id');
       const end = getIndex(lastChecked, newItems, 'id');
       newItems = newItems.slice(Math.min(start, end), Math.max(start, end) + 1);
@@ -112,12 +119,12 @@ const UsersSettings = ({ match }) => {
   };
 
   const handleChangeSelectAll = (isToggle) => {
-    if (selectedItems.length >= items.length) {
+    if (selectedItems.length >= users.length) {
       if (isToggle) {
         setSelectedItems([]);
       }
     } else {
-      setSelectedItems(items.map((x) => x.id));
+      setSelectedItems(users.map((x) => x.id));
     }
     document.activeElement.blur();
     return false;
@@ -167,13 +174,13 @@ const UsersSettings = ({ match }) => {
           }}
           changePageSize={setSelectedPageSize}
           selectedPageSize={selectedPageSize}
-          totalItemCount={totalItemCount}
+          totalItemCount={totalCount}
           selectedOrderOption={selectedOrderOption}
           match={match}
           startIndex={startIndex}
           endIndex={endIndex}
           selectedItemsLength={selectedItems ? selectedItems.length : 0}
-          itemsLength={items ? items.length : 0}
+          itemsLength={users ? users.length : 0}
           onSearchKey={(e) => {
             if (e.key === 'Enter') {
               setSearch(e.target.value.toLowerCase());
@@ -189,7 +196,7 @@ const UsersSettings = ({ match }) => {
           categories={categories}
         />
         <ListPageListing
-          items={items}
+          items={users}
           displayMode={displayMode}
           selectedItems={selectedItems}
           onCheckItem={onCheckItem}
@@ -204,4 +211,23 @@ const UsersSettings = ({ match }) => {
   );
 };
 
-export default UsersSettings;
+const mapStateToProps = ({ user }) => {
+  const {
+    users,
+    loading,
+    error,
+    totalPage,
+    totalCount,
+  } = user;
+
+  return {
+    users,
+    isLoaded: loading,
+    error,
+    totalPage,
+    totalCount,
+  };
+};
+export default connect(mapStateToProps, {
+    getUserListAction: getUserList,
+  })(UsersSettings);

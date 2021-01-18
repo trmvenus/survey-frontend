@@ -1,0 +1,185 @@
+import React, {useState, useEffect} from 'react';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
+import { 
+  Row,
+  Card,
+  CardBody,
+  CardTitle,
+  NavItem,
+} from 'reactstrap';
+import Moment from 'react-moment';
+import { NavLink } from 'react-router-dom';
+
+import { adminRoot } from '../../../constants/defaultValues';
+import IntlMessages from '../../../helpers/IntlMessages';
+
+import Breadcrumb from '../../../containers/navs/Breadcrumb';
+import IconCardsCarousel from '../../../containers/summary/IconCardsCarousel';
+
+import {
+  getSurvey, updateSurvey,
+} from '../../../redux/actions';
+
+import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
+import { NotificationManager } from '../../../components/common/react-notifications';
+import { getPagesCount, getQuestionsCount } from '../../../helpers/Utils';
+import ResponsesChartCard from '../../../containers/summary/ResponsesChartCard';
+
+
+const SummarySurvey = ({ 
+  match,
+  intl,
+
+  surveyItem,
+  error,
+  isLoaded,
+  getSurveyAction,
+ }) => {
+
+  const { messages } = intl;
+
+  useEffect(() => {
+    if (error) {
+      NotificationManager.warning(error.message??error, 'Survey Error', 3000, null, null, '');
+    }
+  }, [error]);
+  
+  useEffect(() => {
+    getSurveyAction({id: match.params.surveyid});
+  }, [getSurveyAction, match]);
+
+  let pages = 1;
+  let questions = 0;
+
+  if (isLoaded) {
+    pages = getPagesCount(surveyItem.json);
+    questions = getQuestionsCount(surveyItem.json);
+  }
+
+  return !isLoaded ? (
+    <div className="loading" />
+  ) : (
+    <>
+      <Row>
+        <Colxx xxs="12">
+          <div className="mb-2">
+            <h1>
+              {surveyItem.name}
+            </h1>
+
+            <Breadcrumb match={match} />
+          </div>
+          <Separator className="mb-5" />
+        </Colxx>
+      </Row>
+      <Row>
+        <Colxx xl="4" md="6" className="mb-4">
+          <Card className="mb-4">
+            <CardBody>
+              <CardTitle>
+                {surveyItem.name}
+              </CardTitle>
+              <IntlMessages id="pages.createdon" /> {' '}
+              <Moment format="YYYY-MM-DD">
+                {surveyItem.created_at}
+              </Moment>
+              <Row className='mt-4'>
+                <Colxx xl="6" md="12" className='icon-cards-row text-center'>
+                  <i className="simple-icon-doc" />
+                  <p className="card-text font-weight-semibold mb-0">
+                    <IntlMessages id="pages.pages" />
+                  </p>
+                  <p className="lead text-center">{pages}</p>
+                </Colxx>
+                <Colxx xl="6" md="12" className='icon-cards-row text-center'>
+                  <i className="simple-icon-question" />
+                  <p className="card-text font-weight-semibold mb-0">
+                    <IntlMessages id="pages.questions" />
+                  </p>
+                  <p className="lead text-center">{questions}</p>
+                </Colxx>
+              </Row>
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardBody >
+              <ul className="list-unstyled list-group flex-column">
+                <NavItem className="text-one p-2">
+                  <NavLink to={`${adminRoot}/surveys/run/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                    <i className="simple-icon-control-play mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.run"/></span>
+                  </NavLink>
+                </NavItem>
+                <Separator class="mb-3"/>
+                <NavItem className="text-one p-2">
+                  <NavLink to={`${adminRoot}/surveys/edit/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                    <i className="simple-icon-pencil mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.edit"/></span>
+                  </NavLink>
+                </NavItem>
+                <Separator class="mb-3"/>
+                <NavItem className="text-one p-2">
+                  <NavLink to={`${adminRoot}/surveys/results/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                    <i className="simple-icon-list mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.results"/></span>
+                  </NavLink>
+                </NavItem>
+                <Separator class="mb-3"/>
+                <NavItem className="text-one p-2">
+                  <NavLink to={`${adminRoot}/surveys/reports/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                    <i className="simple-icon-chart mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.reports"/></span>
+                  </NavLink>
+                </NavItem>
+                <Separator class="mb-3"/>
+                <NavItem className="text-one p-2">
+                  <NavLink to={`${adminRoot}/surveys/links/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                    <i className="simple-icon-link mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.links"/></span>
+                  </NavLink>
+                </NavItem>
+                <Separator class="mb-3"/>
+                <NavItem className="text-one p-2">
+                  <NavLink to={`#`} onClick={() => {}} location={{}}>
+                    <i className="simple-icon-settings mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.settings"/></span>
+                  </NavLink>
+                </NavItem>
+              </ul>
+            </CardBody>
+          </Card>
+        </Colxx>
+        <Colxx xl="8" md="6" className="mb-4">
+          <IconCardsCarousel 
+            totalResponses = {surveyItem.responses}
+            surveyStatus = {surveyItem.is_active ? messages['summary.active'] : messages['summary.inactive']}
+            averageTime = {new Date(Math.floor(surveyItem.average_time) * 1000).toISOString().substr(14, 5)}
+            sharing = {surveyItem.is_share ? messages['summary.yes'] : messages['summary.no']}
+          />
+          <ResponsesChartCard dates={surveyItem.results.map(item => item.created_at)}/>
+        </Colxx>
+      </Row>
+    </>
+  )
+};
+
+const mapStateToProps = ({ survey }) => {
+  const {
+    surveyItem,
+    error,
+    loading
+  } = survey;
+
+  return {
+    surveyItem,
+    error,
+    isLoaded: loading,
+  };
+};
+export default injectIntl(
+  connect(mapStateToProps, {
+    getSurveyAction: getSurvey,
+  })(SummarySurvey)
+);

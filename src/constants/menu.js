@@ -12,7 +12,6 @@ const data = [
         icon: 'simple-icon-briefcase',
         label: 'menu.default',
         to: `${adminRoot}/dashboards/default`,
-        // roles: [UserRole.Admin],
       },
     ],
   },
@@ -23,9 +22,18 @@ const data = [
     to: `${adminRoot}/surveys`,
     subs: [
       {
+        id: 'mysurveys',
         icon: 'simple-icon-paper-plane',
         label: 'menu.mysurveys',
         to: `${adminRoot}/surveys/mysurveys`,
+      },
+      {
+        id: 'mysurveys-parent',
+        icon: 'simple-icon-layers',
+        label: 'menu.mysurveys',
+        to: ``,
+        subs: [
+        ],
       },
     ],
   },

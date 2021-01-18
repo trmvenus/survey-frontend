@@ -25,6 +25,10 @@ const LinksSurvey = React.lazy(() =>
   import(/* webpackChunkName: "links" */ './links')
 );
 
+const SummarySurvey = React.lazy(() => 
+import(/* webpackChunkName: "links" */ './summary')
+)
+
 const Surveys = ({ match }) => (
   <Suspense fallback={<div className="loading" />}>
     <Switch>
@@ -56,6 +60,11 @@ const Surveys = ({ match }) => (
       <Route
         path={`${match.url}/links/:surveyid`}
         render={(props) => <LinksSurvey {...props} />}
+        isExact
+      />
+      <Route
+        path={`${match.url}/summary/:surveyid`}
+        render={(props) => <SummarySurvey {...props} />}
         isExact
       />
       <Redirect to="/error" />

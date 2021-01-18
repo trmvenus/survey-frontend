@@ -1,6 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
-  CustomInput,
   Button,
   Modal,
   ModalHeader,
@@ -13,9 +13,11 @@ import Select from 'react-select';
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 
-import { FormikReactSelect, } from '../../containers/form-validations/FormikFields';
+import { FormikReactSelect, FormikCustomRadioGroup } from '../../containers/form-validations/FormikFields';
 import CustomSelectInput from '../../components/common/CustomSelectInput';
 import IntlMessages from '../../helpers/IntlMessages';
+import { addUser } from '../../redux/user/actions';
+import { getRoleName, UserRole } from '../../helpers/authHelper';
 
 const UserSchema = Yup.object().shape({
   name: Yup.string()
@@ -27,67 +29,98 @@ const UserSchema = Yup.object().shape({
   password: Yup.string()
     .required('Password is required!')
     .min(6, 'Password must be longer than 6 characters!'),
+  role: Yup.string()
+    .required('Role is required'),
 });
 
-const AddNewModal = ({ modalOpen, toggleModal, categories }) => {
+const options = [
+  { value: UserRole.Admin, label: getRoleName(UserRole.Admin), },
+  { value: UserRole.OrgAdmin, label: getRoleName(UserRole.OrgAdmin), },
+  { value: UserRole.User, label: getRoleName(UserRole.User), },
+];
+
+const AddNewModal = ({ 
+  modalOpen, 
+  toggleModal, 
+  categories,
+
+  addUserAction,
+}) => {
 
   const addNewUser = (values, { setSubmitting}) => {
-
+    addUserAction(values);
+    toggleModal();
   }
 
   return (
-    <Formik
-      initialValues={{
-        name: '',
-        email: '',
-        password: '',
-        category: '',
-
-      }}
-      validationSchema={UserSchema}
-      onSubmit={addNewUser}
+    <Modal
+      isOpen={modalOpen}
+      toggle={toggleModal}
+      wrapClassName="modal-right"
+      backdrop="static"
     >
-      {({
-            handleSubmit,
-            setFieldValue,
-            setFieldTouched,
-            values,
-            errors,
-            touched,
-            isSubmitting
-          }) => (
-        <Form>
-          <Modal
-            isOpen={modalOpen}
-            toggle={toggleModal}
-            wrapClassName="modal-right"
-            backdrop="static"
-          >
+      <Formik
+        initialValues={{
+          name: '',
+          email: '',
+          password: '',
+          category: '',
+          role: 1,
+        }}
+        validationSchema={UserSchema}
+        onSubmit={addNewUser}
+      >
+        {({
+          handleSubmit,
+          setFieldValue,
+          setFieldTouched,
+          values,
+          errors,
+          touched,
+          isSubmitting
+        }) => (
+          <Form>
             <ModalHeader toggle={toggleModal}>
               <IntlMessages id="pages.add-new-modal-title" />
             </ModalHeader>
             <ModalBody>
               <Label>
-                <IntlMessages id="user.fullname" />
-              </Label>
-              <Input />
-
-              <Label>
-                <IntlMessages id="user.email" />
-              </Label>
-              <Input />
-
-              <Label className="mt-4">
-                <IntlMessages id="user.password" />
+                <IntlMessages id="user.fullname" />{' '}<span className='luci-primary-color'>*</span>
               </Label>
               <Field
                 className='form-control'
                 name='name'
-                type='password'
               />
               {errors.name && touched.name && (
                 <div className="invalid-feedback d-block">
                   {errors.name}
+                </div>
+              )}
+
+              <Label className="mt-3">
+                <IntlMessages id="user.email" />{' '}<span className='luci-primary-color'>*</span>
+              </Label>
+              <Field
+                className='form-control'
+                name='email'
+              />
+              {errors.email && touched.email && (
+                <div className="invalid-feedback d-block">
+                  {errors.email}
+                </div>
+              )}
+
+              <Label className="mt-3">
+                <IntlMessages id="user.password" />{' '}<span className='luci-primary-color'>*</span>
+              </Label>
+              <Field
+                className='form-control'
+                name='password'
+                type='password'
+              />
+              {errors.password && touched.password && (
+                <div className="invalid-feedback d-block">
+                  {errors.password}
                 </div>
               )}
               <Label className="mt-4">
@@ -107,26 +140,23 @@ const AddNewModal = ({ modalOpen, toggleModal, categories }) => {
                 </div>
               ) : null}
               <Label className="mt-4">
-                <IntlMessages id="user.role" />
+                <IntlMessages id="user.role" />{' '}<span className='luci-primary-color'>*</span>
               </Label>
-              <CustomInput
-                type="radio"
-                id="exCustomRadio"
-                name="customRadio"
-                label="Super Manager"
+              <FormikCustomRadioGroup
+                // inline
+                name="role"
+                id="role"
+                // label="Which of these?"
+                value={values.role}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+                options={options}
               />
-              <CustomInput
-                type="radio"
-                id="exCustomRadio2"
-                name="customRadio"
-                label="University Manager"
-              />
-              <CustomInput
-                type="radio"
-                id="exCustomRadio3"
-                name="customRadio"
-                label="User"
-              />
+              {errors.role && touched.role ? (
+                <div className="invalid-feedback d-block">
+                  {errors.role}
+                </div>
+              ) : null}
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" outline onClick={toggleModal}>
@@ -136,11 +166,17 @@ const AddNewModal = ({ modalOpen, toggleModal, categories }) => {
                 <IntlMessages id="pages.submit" />
               </Button>{' '}
             </ModalFooter>
-          </Modal>
-        </Form>
-      )}
-      </Formik>
+          </Form>
+        )}
+        </Formik>
+      </Modal>
   );
 };
 
-export default AddNewModal;
+const mapStateToProps = ({  }) => {
+  return {
+  };
+};
+export default connect(mapStateToProps, {
+    addUserAction: addUser,
+  })(AddNewModal);

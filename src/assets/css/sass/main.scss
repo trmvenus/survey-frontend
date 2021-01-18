@@ -36,8 +36,11 @@
   }
   .react-select__control--is-disabled {
     background-color: #e9ecef !important;
-    
   }
+}
+
+.luci-primary-color {
+  color: $theme-color-1;
 }
 
 /* 

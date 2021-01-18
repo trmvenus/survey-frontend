@@ -13,9 +13,10 @@ import {
   addContainerClassname,
   changeDefaultClassnames,
   changeSelectedMenuHasSubItems,
-
+  getSurveyList,
 } from '../../redux/actions';
 
+import { adminRoot } from "../../constants/defaultValues";
 import menuItems from '../../constants/menu';
 import { currentUser } from '../../constants/defaultValues';
 
@@ -245,6 +246,25 @@ class Sidebar extends Component {
 
       window.scrollTo(0, 0);
     }
+
+    if (this.props.allSurveyItems !== prevProps.allSurveyItems) {
+      const surveysMenu = menuItems.find(item => item.id == 'surveys');
+
+      if (surveysMenu) {
+        const mySurveysMenu = surveysMenu.subs.find(item => item.id == 'mysurveys-parent');
+        if (mySurveysMenu) {
+          this.props.allSurveyItems.forEach(surveyItem => {
+            mySurveysMenu.subs.push({
+              id: 'survey-id-' + surveyItem.id,
+              icon: 'simple-icon-arrow-right',
+              label: surveyItem.name,
+              to: `${adminRoot}/surveys/summary/${surveyItem.id}`,
+            });
+          });
+        }
+      }
+    }
+
     this.handleProps();
   }
 
@@ -253,6 +273,7 @@ class Sidebar extends Component {
     this.handleWindowResize();
     this.handleProps();
     this.setSelectedLiActive(this.setHasSubItemStatus);
+    this.props.getSurveyListAction();
   }
 
   componentWillUnmount() {
@@ -334,7 +355,6 @@ class Sidebar extends Component {
 
 
   render() {
-
 
     const {
       selectedParentMenu,
@@ -469,16 +489,16 @@ class Sidebar extends Component {
                                                 target="_blank"
                                               >
                                                 <i className={thirdSub.icon} />{' '}
-                                                <IntlMessages
-                                                  id={thirdSub.label}
-                                                />
+                                                <span className='truncate'>
+                                                  {thirdSub.label}
+                                                </span>
                                               </a>
                                             ) : (
                                                 <NavLink to={thirdSub.to}>
                                                   <i className={thirdSub.icon} />{' '}
-                                                  <IntlMessages
-                                                    id={thirdSub.label}
-                                                  />
+                                                  <span className='truncate' style={{width: 120}}>
+                                                    {thirdSub.label}
+                                                  </span>
                                                 </NavLink>
                                               )}
                                           </NavItem>
@@ -507,7 +527,7 @@ class Sidebar extends Component {
   }
 }
 
-const mapStateToProps = ({ menu, authUser }) => {
+const mapStateToProps = ({ menu, surveyListApp, authUser }) => {
   const {
     containerClassnames,
     subHiddenBreakpoint,
@@ -516,6 +536,10 @@ const mapStateToProps = ({ menu, authUser }) => {
     selectedMenuHasSubItems,
   } = menu;
 
+  const {
+    allSurveyItems,
+  } = surveyListApp;
+
   const { currentUser } = authUser;
   return {
     containerClassnames,
@@ -523,7 +547,8 @@ const mapStateToProps = ({ menu, authUser }) => {
     menuHiddenBreakpoint,
     menuClickCount,
     selectedMenuHasSubItems,
-    currentUser
+    allSurveyItems,
+    currentUser,
   };
 };
 export default withRouter(
@@ -532,5 +557,6 @@ export default withRouter(
     addContainerClassname,
     changeDefaultClassnames,
     changeSelectedMenuHasSubItems,
+    getSurveyListAction: getSurveyList,
   })(Sidebar)
 );

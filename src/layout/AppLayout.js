@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
@@ -6,7 +6,12 @@ import TopNav from '../containers/navs/Topnav';
 import Sidebar from '../containers/navs/Sidebar';
 import Footer from '../containers/navs/Footer';
 
-const AppLayout = ({ containerClassnames, children, history }) => {
+const AppLayout = ({ 
+  containerClassnames, 
+  children, 
+  history ,
+}) => {
+
   return (
     <div id="app-container" className={containerClassnames}>
       <TopNav history={history} />
@@ -18,11 +23,14 @@ const AppLayout = ({ containerClassnames, children, history }) => {
     </div>
   );
 };
+
 const mapStateToProps = ({ menu }) => {
   const { containerClassnames } = menu;
   return { containerClassnames };
 };
-const mapActionToProps = {};
+
+const mapActionToProps = {
+};
 
 export default withRouter(
   connect(mapStateToProps, mapActionToProps)(AppLayout)
