@@ -21,7 +21,7 @@ import Breadcrumb from '../../../containers/navs/Breadcrumb';
 import SurveyPage from '../../../containers/surveyjs/SurveyRun';
 
 import {
-  getResultItem, getSurvey, updateResultItem,
+  getResultItem, updateResultItem,
 } from '../../../redux/actions';
 
 import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
@@ -30,6 +30,7 @@ import { NotificationManager } from '../../../components/common/react-notificati
 
 const RunSurvey = ({ 
   match,
+  survey_id,
 
   surveyItem,
   surveyItemError,
@@ -38,12 +39,9 @@ const RunSurvey = ({
   resultItemError,
   resultItemLoading,
 
-  getSurveyItemAction,
   getResultItemAction,
   updateResultItemAction,
 }) => {
-
-  const survey_id = match.params.surveyid;
 
   const handleOnUpdate = async (result, timeSpent, completed=false) => {
     const ip_address = await publicIp.v4();
@@ -81,10 +79,6 @@ const RunSurvey = ({
       NotificationManager.warning(resultItemError.message??resultItemError, 'Run Survey Error', 3000, null, null, '');
     }
   }, [resultItemError]);
-  
-  useEffect(() => {
-    getSurveyItemAction({id: survey_id});
-  }, [getSurveyItemAction]);
 
   return (
     <>
@@ -140,7 +134,6 @@ const mapStateToProps = ({ survey, result }) => {
 };
 export default injectIntl(
   connect(mapStateToProps, {
-    getSurveyItemAction: getSurvey,
     getResultItemAction: getResultItem,
     updateResultItemAction: updateResultItem
   })(RunSurvey)

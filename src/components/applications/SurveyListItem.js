@@ -69,31 +69,31 @@ const SurveyListItem = ({
           <div className="card-body pt-1">
             <ul className="list-unstyled list-group flex-sm-row flex-column">
               <NavItem>
-                <NavLink to={`${adminRoot}/surveys/run/${item.id}`} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/${item.id}/run`} location={{}}>
                   <i className="simple-icon-control-play" />
                   <IntlMessages id="survey.run" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to={`${adminRoot}/surveys/edit/${item.id}`} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/${item.id}/edit`} location={{}}>
                   <i className="simple-icon-pencil" />
                   <IntlMessages id="survey.edit" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to={`${adminRoot}/surveys/results/${item.id}`} onClick={() => {}} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/${item.id}/results`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-list" />
                   <IntlMessages id="survey.results" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to={`${adminRoot}/surveys/reports/${item.id}`} onClick={() => {}} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/${item.id}/reports`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-chart" />
                   <IntlMessages id="survey.reports" />
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to={`${adminRoot}/surveys/links/${item.id}`} onClick={() => {}} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/${item.id}/links`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-link" />
                   <IntlMessages id="survey.links" />
                 </NavLink>

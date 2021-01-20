@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import * as SurveyKo from "survey-knockout";
 import * as SurveyJSCreator from "survey-creator";
 import "survey-creator/survey-creator.css";
+import "survey-react/survey.css";
 
 import "jquery-ui/themes/base/all.css";
 import "nouislider/distribute/nouislider.css";
@@ -37,7 +39,12 @@ widgets.ckeditor(SurveyKo);
 widgets.autocomplete(SurveyKo, $);
 widgets.bootstrapslider(SurveyKo);
 
-const SurveyCreator = ({json = {}, saveSurvey = null}) => {
+const SurveyCreator = ({
+  json = {}, 
+  saveSurvey = null,
+
+  locale,
+}) => {
 
   var surveyCreator;
   
@@ -49,6 +56,22 @@ const SurveyCreator = ({json = {}, saveSurvey = null}) => {
   };
 
   useEffect(() => {
+    SurveyJSCreator.localization.currentLocale = locale;
+  }, [locale]);
+
+  useEffect(() => {
+
+    SurveyKo
+      .Serializer
+      .addProperty("question", {
+        name: "pillar:dropdown", 
+        choices: [{"value": "1", text: "1"}, {"value": "2", text: "2"},]
+      });
+    
+    SurveyKo.Serializer.addProperty("question", {name: "question score(not for pillar):number"});
+    
+    SurveyKo.Serializer.addProperty("itemvalue", {name:"score:number"});
+
     let options = { 
       showJSONEditorTab: false,
       showTranslationTab: true,
@@ -62,6 +85,10 @@ const SurveyCreator = ({json = {}, saveSurvey = null}) => {
       null,
       options
     );
+
+    // surveyCreator..currentLocale = locale;
+
+    console.log(surveyCreator);
 
     surveyCreator.toolbox.removeItem("panel");
     surveyCreator.toolbox.removeItem("paneldynamic");
@@ -83,4 +110,11 @@ const SurveyCreator = ({json = {}, saveSurvey = null}) => {
   </div>);
 }
 
-export default SurveyCreator;
+const mapStateToProps = ({ settings, }) => {
+  return {
+    locale: settings.locale,
+  };
+};
+
+export default connect(mapStateToProps, {
+  })(SurveyCreator);

@@ -3,7 +3,7 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { client } from '../../helpers/client';
 
-import { RESULT_LIST_UPDATE_RESULT, RESULT_LIST_GET_LIST, RESULT_LIST_GET_ITEM } from '../actions';
+import { RESULT_LIST_UPDATE_ITEM, RESULT_LIST_GET_LIST, RESULT_LIST_GET_ITEM } from '../actions';
 
 import {
   getResultListSuccess,
@@ -30,11 +30,20 @@ function* getResultListItems({payload}) {
 }
 
 
-const getResultItemRequest = async (payload) =>
-  await client
+const getResultItemRequest = async (payload) => {
+  if (payload.survey_id) {
+    return await client
     .get(`/result?survey=${payload.survey_id}&ip=${payload.ip_address}`)
     .then((user) => user.data)
     .catch((error) => {throw error});
+  } else {
+    return await client
+    .get(`/result/${payload.id}`)
+    .then((user) => user.data)
+    .catch((error) => {throw error});
+  }
+  
+}
 
 function* getResultItem({payload}) {
   try {
@@ -71,7 +80,7 @@ export function* watchGetItem() {
 }
 
 export function* watchPostItem() {
-  yield takeEvery(RESULT_LIST_UPDATE_RESULT, updateResultItem);
+  yield takeEvery(RESULT_LIST_UPDATE_ITEM, updateResultItem);
 }
 
 export default function* rootSaga() {

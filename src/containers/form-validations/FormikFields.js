@@ -299,7 +299,7 @@ const FormikSwitch = ({ name, value, className, onChange, onBlur }) => {
   );
 };
 
-const FormikDatePicker = ({ name, value, disabled=false, className, onChange, onBlur }) => {
+const FormikDatePicker = ({ name, value, disabled=false, className, onChange, onBlur, ...props }) => {
   const handleChange = (val) => {
     onChange(name, val);
   };
@@ -316,6 +316,7 @@ const FormikDatePicker = ({ name, value, disabled=false, className, onChange, on
       onChange={handleChange}
       onBlur={handleBlur}
       disabled={disabled}
+      {...props}
     />
   );
 };

@@ -13,10 +13,6 @@ import {
   CustomInput,
 } from 'reactstrap';
 
-// Redux
-import {
-  getSurvey, updateSurvey,
-} from '../../../../redux/actions';
 
 // Components
 import { Colxx, Separator } from '../../../../components/common/CustomBootstrap';

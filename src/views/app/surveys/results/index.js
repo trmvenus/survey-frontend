@@ -16,7 +16,6 @@ import {
 // Redux
 import {
   getResultList,
-  getSurvey, updateSurvey,
 } from '../../../../redux/actions';
 
 // Components
@@ -25,15 +24,20 @@ import { NotificationManager } from '../../../../components/common/react-notific
 
 // Containers
 import Breadcrumb from '../../../../containers/navs/Breadcrumb';
-import SurveyResultTable from '../../../../containers/ui/ReactTableCards';
+import SurveyResultTable from '../../../../containers/results/SurveyResultTable';
+import AddNewSurveyModal from '../../../../containers/applications/AddNewSurveyModal';
 
 // Helpers
 import IntlMessages from '../../../../helpers/IntlMessages';
 
 
 const ResultsSurvey = ({ 
-  match, 
+  match,
+  surveyid,
+
+  loading = true, 
   error,
+  
   getResultListAction,
 }) => {
 
@@ -44,7 +48,7 @@ const ResultsSurvey = ({
   }, [error]);
   
   useEffect(() => {
-    getResultListAction({id: match.params.surveyid});
+    getResultListAction({id: surveyid});
   }, [getResultListAction]);
 
   return (
@@ -59,7 +63,7 @@ const ResultsSurvey = ({
       </Row>
       <Row>
         <Colxx xxs="12" className="mb-4">
-					<SurveyResultTable />{' '}
+					<SurveyResultTable />
         </Colxx>
       </Row>
     </>

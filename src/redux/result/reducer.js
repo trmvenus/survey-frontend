@@ -2,9 +2,9 @@ import {
   RESULT_LIST_GET_LIST,
   RESULT_LIST_GET_LIST_SUCCESS,
   RESULT_LIST_GET_LIST_ERROR,
-  RESULT_LIST_UPDATE_RESULT,
-  RESULT_LIST_UPDATE_RESULT_SUCCESS,
-  RESULT_LIST_UPDATE_RESULT_ERROR,
+  RESULT_LIST_UPDATE_ITEM,
+  RESULT_LIST_UPDATE_ITEM_SUCCESS,
+  RESULT_LIST_UPDATE_ITEM_ERROR,
   RESULT_LIST_GET_ITEM,
   RESULT_LIST_GET_ITEM_SUCCESS,
   RESULT_LIST_GET_ITEM_ERROR,
@@ -37,13 +37,13 @@ export default (state = INIT_STATE, action) => {
       return { ...state, loading: false, error: action.payload, };
 
 
-    case RESULT_LIST_UPDATE_RESULT:
+    case RESULT_LIST_UPDATE_ITEM:
       return { ...state, saving: true };
 
-    case RESULT_LIST_UPDATE_RESULT_SUCCESS:
+    case RESULT_LIST_UPDATE_ITEM_SUCCESS:
       return { ...state, saving: false };
 
-    case RESULT_LIST_UPDATE_RESULT_ERROR:
+    case RESULT_LIST_UPDATE_ITEM_ERROR:
       return { ...state, saving: false, error: action.payload };
 
     default:

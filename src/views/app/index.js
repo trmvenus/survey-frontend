@@ -1,9 +1,10 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import AppLayout from '../../layout/AppLayout';
 import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
+import { getPillarList } from '../../redux/actions';
 
 const Dashboards = React.lazy(() => 
   import(/* webpackChunkName: "viwes-dashboard" */ './dashboards')
@@ -21,7 +22,13 @@ const BlankPage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-blank-page" */ './blank-page')
 );
 
-const App = ({ match }) => {
+const App = ({ 
+  match,
+  getPillarListAction,
+}) => {
+  useEffect(() => {
+    getPillarListAction();
+  }, [getPillarListAction]);
   return (
     <AppLayout>
       <div className="dashboard-wrapper">
@@ -62,4 +69,6 @@ const mapStateToProps = ({ menu }) => {
   return { containerClassnames };
 };
 
-export default withRouter(connect(mapStateToProps, {})(App));
+export default withRouter(connect(mapStateToProps, {
+  getPillarListAction: getPillarList,
+})(App));

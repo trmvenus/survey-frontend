@@ -134,9 +134,9 @@ const AddNewModal = ({
                 onChange={setFieldValue}
                 onBlur={setFieldTouched}
               />
-              {errors.gender && touched.gender ? (
+              {errors.category && touched.category ? (
                 <div className="invalid-feedback d-block">
-                  {errors.gender}
+                  {errors.category}
                 </div>
               ) : null}
               <Label className="mt-4">

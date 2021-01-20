@@ -258,7 +258,7 @@ class Sidebar extends Component {
               id: 'survey-id-' + surveyItem.id,
               icon: 'simple-icon-arrow-right',
               label: surveyItem.name,
-              to: `${adminRoot}/surveys/summary/${surveyItem.id}`,
+              to: `${adminRoot}/surveys/${surveyItem.id}`,
             });
           });
         }

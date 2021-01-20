@@ -252,6 +252,28 @@ module.exports = {
   'summary.this-week': 'This Week',
   'summary.last-week': 'Last Week',
   'summary.this-month': 'This Month',
+  'summary.export': 'Export',
+  'summary.pdf': 'PDF',
+  'summary.excel': 'Excel',
+
+  /* 06.03. Report */
+  'report.add-new-title': 'Add New Report',
+  'report.name': 'Name',
+  'report.report-type': 'Report Type',
+  'report.summary': 'Summary',
+  'report.cross-tab': 'Cross Tab',
+  'report.open-end': 'Open End',
+  'report.question-score': 'Question Score',
+  'report.pillar': 'Pillar',
+  'report.condition-filter': 'Condition Filter',
+  'report.question': 'Question',
+  'report.operator': 'Operator',
+  'report.option': 'Option',
+  'report.date-filter': 'Date Filter',
+  'report.date-range': 'Date Range',
+  'report.horizontal-question': 'Horizontal Question',
+  'report.vertical-question': 'Vertical Question',
+  'report.open-end-question': 'Open-End Question',
 
   /* 07.UI */
 

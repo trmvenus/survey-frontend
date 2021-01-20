@@ -6,7 +6,9 @@ import surveyListApp from './surveyList/reducer';
 import categoryList from './categoryList/reducer';
 import survey from './survey/reducer';
 import result from './result/reducer';
+import report from './report/reducer';
 import user from './user/reducer';
+import pillar from './pillar/reducer';
 
 const reducers = combineReducers({
   menu,
@@ -16,7 +18,9 @@ const reducers = combineReducers({
   categoryList,
   survey,
   result,
+  report,
   user,
+  pillar,
 });
 
 export default reducers;

@@ -6,6 +6,7 @@ import {
   themeColorStorageKey,
   themeRadiusStorageKey
 } from '../constants/defaultValues';
+import { adminRoot } from '../constants/defaultValues';
 
 export const mapOrder = (array, order, key) => {
   array.sort(function (a, b) {
@@ -156,32 +157,3 @@ export const setCurrentUser = (user) => {
     console.log(">>>>: src/helpers/Utils.js : setCurrentUser -> error", error);
   }
 };
-
-export const getPagesCount = (survey) => {
-  try {
-    if (survey && survey.pages)
-      return survey.pages.length;
-    else
-      return 0;
-  } catch (error) {
-    console.log(">>>>: src/helpers/Utils.js : getPagesCount -> error", error);
-    return 0;
-  }
-}
-
-export const getQuestionsCount = (survey) => {
-  try {
-    if (survey && survey.pages) {
-      var questions = 0;
-      for (let page of survey.pages) {
-        questions += page.elements ? page.elements.length : 0;
-      }
-      return questions;
-    }
-    else
-      return 0;
-  } catch (error) {
-    console.log(">>>>: src/helpers/Utils.js : getQuestionsCount -> error", error);
-    return 0;
-  }
-}

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, } from "react";
+import { connect } from "react-redux";
 import * as Survey from "survey-react";
 import * as widgets from "surveyjs-widgets";
 import "survey-react/survey.css";
@@ -39,29 +40,43 @@ widgets.ckeditor(Survey);
 widgets.autocomplete(Survey, $);
 widgets.bootstrapslider(Survey);
 
-const SurveyPage = ({surveyJson = {}, resultJson = {}, timeSpent=0, handleOnUpdate}) => {
+const SurveyPage = ({
+	locale, 
+
+	surveyJson = {}, 
+	resultJson = {}, 
+	timeSpent=0, 
+	handleOnUpdate = null,
+	mode = 'edit',
+}) => {
 
 	const model = new Survey.Model(surveyJson);
 	model.data = resultJson;	
 	model.timeSpent = timeSpent;
 	model.pages[0].timeSpent = timeSpent;
+	model.locale = locale;
+	model.mode = mode;
 
 	var timerId;
 
 	const onValueChanged = (result) => {
-		handleOnUpdate(result.data, timeSpent)
+		if (mode === 'edit' && handleOnUpdate) {
+			handleOnUpdate(result.data, timeSpent)
+		}
 	}
 	
 	const onComplete = (result) => {
 		clearInterval(timerId);
-		handleOnUpdate(result.data, timeSpent, true);
+		if (mode === 'edit' && handleOnUpdate) {
+			handleOnUpdate(result.data, timeSpent, true);
+		}
 	}
 
 	useEffect(() => {
 		timerId = window.setInterval(function() {
 			timeSpent ++;
 		}, 1000);
-	}, [])
+	}, []);
 
 	return (
 	<div className="container">
@@ -74,4 +89,11 @@ const SurveyPage = ({surveyJson = {}, resultJson = {}, timeSpent=0, handleOnUpda
 	);
 }
 
-export default SurveyPage;
+const mapStateToProps = ({ settings, }) => {
+  return {
+    locale: settings.locale,
+  };
+};
+
+export default connect(mapStateToProps, {
+  })(SurveyPage);

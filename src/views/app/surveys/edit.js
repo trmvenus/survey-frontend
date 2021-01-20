@@ -19,7 +19,7 @@ import Breadcrumb from '../../../containers/navs/Breadcrumb';
 import SurveyCreator from '../../../containers/surveyjs/SurveyCreator';
 
 import {
-  getSurvey, updateSurvey,
+  updateSurvey,
 } from '../../../redux/actions';
 
 import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
@@ -28,15 +28,16 @@ import { NotificationManager } from '../../../components/common/react-notificati
 
 const EditSurvey = ({ 
   match,
+  surveyid,
+
   surveyItem,
   error,
   loading,
-  getSurveyAction,
   updateSurveyAction,
  }) => {
 
   const saveSurvey = (json) => {
-    updateSurveyAction({id: match.params.surveyid, json: json});
+    updateSurveyAction({id: surveyid, json: json});
   }
 
   useEffect(() => {
@@ -45,10 +46,6 @@ const EditSurvey = ({
     }
   }, [error]);
   
-  useEffect(() => {
-    getSurveyAction({id: match.params.surveyid});
-  }, [getSurveyAction]);
-
   return (
     <>
       <Row>
@@ -97,7 +94,6 @@ const mapStateToProps = ({ survey }) => {
 };
 export default injectIntl(
   connect(mapStateToProps, {
-    getSurveyAction: getSurvey,
     updateSurveyAction: updateSurvey
   })(EditSurvey)
 );

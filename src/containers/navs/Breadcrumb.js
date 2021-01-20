@@ -7,6 +7,7 @@ import { adminRoot } from '../../constants/defaultValues';
 
 const getMenuTitle = (sub) => {
   if('/'+sub===adminRoot) return <IntlMessages id="menu.home" />;
+  else if (+sub>0) return <>{sub}</>;
   return <IntlMessages id={`menu.${sub}`} />;
 };
 
@@ -28,11 +29,20 @@ const BreadcrumbContainer = ({ heading, match }) => {
 };
 
 const BreadcrumbItems = ({ match }) => {
-  const path = match.path.substr(1);
+  let path = match.path.substr(1);
   let paths = path.split('/');
-  if (paths[paths.length - 1].indexOf(':') > -1) {
-    paths = paths.filter((x) => x.indexOf(':') === -1);
+  // if (paths[paths.length - 1].indexOf(':') > -1) {
+  //   paths = paths.filter((x) => x.indexOf(':') === -1);
+  // }
+  if (paths.length > 1 && paths[paths.length - 2] == ':surveyid') {
+    paths[paths.length-2] = match.params.surveyid;
+    path = path.replace(':surveyid', match.params.surveyid);
   }
+  if (paths[paths.length - 1] == ':resultid') {
+    paths[paths.length-1] = match.params.resultid;
+    path = path.replace(':resultid', match.params.resultid);
+  }
+
   return (
     <>
       <Breadcrumb className="pt-0 breadcrumb-container d-none d-sm-block d-lg-inline-block">

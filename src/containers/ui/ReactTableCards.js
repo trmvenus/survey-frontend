@@ -4,15 +4,13 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/display-name */
 import React from 'react';
-import { connect } from 'react-redux';
-import { Badge, Table as ReactTable } from 'reactstrap';
+import { Table as ReactTable } from 'reactstrap';
 import { useTable, usePagination, useSortBy } from 'react-table';
-import TimeAgo from 'react-timeago';
 import classnames from 'classnames';
 
 import DatatablePagination from '../../components/DatatablePagination';
 
-function Table({ columns, data, divided = false, defaultPageSize = 6 }) {
+export default function Table({ columns, data, divided = false, defaultPageSize = 6 }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -101,74 +99,3 @@ function Table({ columns, data, divided = false, defaultPageSize = 6 }) {
     </>
   );
 }
-
-const SurveyResultTable = ({
-  resultItems,
-  loading,
-  error,
-}) => {
-  const cols = React.useMemo(
-    () => [
-      {
-        Header: 'ID',
-        accessor: 'id',
-        cellClass: 'text-muted  w-10  w-xs-100',
-        Cell: (props) => <>{props.value}</>,
-      },
-      {
-        Header: 'Respondent',
-        accessor: 'username',
-        cellClass: 'list-item-heading w-20  w-xs-100',
-        Cell: (props) => <>{props.value}</>,
-      },
-      {
-        Header: 'Started Time',
-        accessor: 'created_at',
-        cellClass: 'text-muted  w-10  w-xs-100',
-        Cell: (props) => <TimeAgo date={props.value}/>,
-      },
-      {
-        Header: 'State',
-        accessor: 'is_completed',
-        cellClass: 'text-muted  w-10  w-xs-100',
-        Cell: (props) => <Badge color={props.value ? "primary" : "secondary"} pill>{props.value ? "Completed" : "In Progress"}</Badge>,
-      },
-      {
-        Header: 'Time Spent',
-        accessor: 'time_spent',
-        cellClass: 'text-muted  w-10  w-xs-100',
-        Cell: (props) => <>{new Date(props.value * 1000).toISOString().substr(14, 5)}</>,
-      },
-      {
-        Header: 'IP Address',
-        accessor: 'ip_address',
-        cellClass: 'text-muted  w-10  w-xs-100',
-        Cell: (props) => <>{props.value}</>,
-      },
-    ],
-    []
-  );
-
-  return (
-    <div className="mb-4">
-      <Table columns={cols} data={resultItems} divided />
-    </div>
-  );
-};
-
-const mapStateToProps = ({ result }) => {
-  const {
-    resultItems, 
-    loading,
-    error
-  } = result;
-
-  return {
-    resultItems,
-    loading,
-    error,
-  };
-};
-
-export default connect(mapStateToProps, {
-})(SurveyResultTable);

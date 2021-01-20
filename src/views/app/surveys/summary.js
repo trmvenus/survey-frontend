@@ -3,9 +3,13 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { 
   Row,
+  UncontrolledDropdown,
   Card,
   CardBody,
   CardTitle,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
   NavItem,
 } from 'reactstrap';
 import Moment from 'react-moment';
@@ -17,14 +21,11 @@ import IntlMessages from '../../../helpers/IntlMessages';
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 import IconCardsCarousel from '../../../containers/summary/IconCardsCarousel';
 
-import {
-  getSurvey, updateSurvey,
-} from '../../../redux/actions';
-
 import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import { NotificationManager } from '../../../components/common/react-notifications';
-import { getPagesCount, getQuestionsCount } from '../../../helpers/Utils';
+import { getPagesCount, getQuestionsCount } from '../../../helpers/surveyHelper';
 import ResponsesChartCard from '../../../containers/summary/ResponsesChartCard';
+import { savePDF } from '../../../helpers/export';
 
 
 const SummarySurvey = ({ 
@@ -34,20 +35,21 @@ const SummarySurvey = ({
   surveyItem,
   error,
   isLoaded,
-  getSurveyAction,
  }) => {
 
   const { messages } = intl;
+
+  const exportToPDF = () => {
+    if (isLoaded) {
+      savePDF(surveyItem.name, surveyItem.json);
+    }
+  }
 
   useEffect(() => {
     if (error) {
       NotificationManager.warning(error.message??error, 'Survey Error', 3000, null, null, '');
     }
   }, [error]);
-  
-  useEffect(() => {
-    getSurveyAction({id: match.params.surveyid});
-  }, [getSurveyAction, match]);
 
   let pages = 1;
   let questions = 0;
@@ -67,7 +69,24 @@ const SummarySurvey = ({
             <h1>
               {surveyItem.name}
             </h1>
-
+            <div className="text-zero top-right-button-container">
+              <UncontrolledDropdown>
+                <DropdownToggle
+                  caret
+                  color="primary"
+                  size="lg"
+                  outline
+                  className="top-right-button top-right-button-single"
+                >
+                  <IntlMessages id="summary.export" />
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={exportToPDF}>
+                    <IntlMessages id="summary.pdf" />
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </div>
             <Breadcrumb match={match} />
           </div>
           <Separator className="mb-5" />
@@ -107,35 +126,35 @@ const SummarySurvey = ({
             <CardBody >
               <ul className="list-unstyled list-group flex-column">
                 <NavItem className="text-one p-2">
-                  <NavLink to={`${adminRoot}/surveys/run/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                  <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/run`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-control-play mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.run"/></span>
                   </NavLink>
                 </NavItem>
                 <Separator class="mb-3"/>
                 <NavItem className="text-one p-2">
-                  <NavLink to={`${adminRoot}/surveys/edit/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                  <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/edit`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-pencil mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.edit"/></span>
                   </NavLink>
                 </NavItem>
                 <Separator class="mb-3"/>
                 <NavItem className="text-one p-2">
-                  <NavLink to={`${adminRoot}/surveys/results/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                  <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/results`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-list mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.results"/></span>
                   </NavLink>
                 </NavItem>
                 <Separator class="mb-3"/>
                 <NavItem className="text-one p-2">
-                  <NavLink to={`${adminRoot}/surveys/reports/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                  <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/reports`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-chart mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.reports"/></span>
                   </NavLink>
                 </NavItem>
                 <Separator class="mb-3"/>
                 <NavItem className="text-one p-2">
-                  <NavLink to={`${adminRoot}/surveys/links/${surveyItem.id}`} onClick={() => {}} location={{}}>
+                  <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/links`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-link mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.links"/></span>
                   </NavLink>
@@ -180,6 +199,5 @@ const mapStateToProps = ({ survey }) => {
 };
 export default injectIntl(
   connect(mapStateToProps, {
-    getSurveyAction: getSurvey,
   })(SummarySurvey)
 );
