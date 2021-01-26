@@ -15,7 +15,7 @@ const getPillarListRequest = async () => {
   return await client
     .get('/pillar')
     .then((user) => user.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 }
 
 
@@ -32,7 +32,7 @@ const addPillarItemRequest = async (item) =>
   await client
     .post('/pillar', item)
     .then((user) => user.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 
 
 function* addPillarItem({ payload }) {

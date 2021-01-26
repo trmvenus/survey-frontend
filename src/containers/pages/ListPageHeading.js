@@ -43,6 +43,7 @@ const ListPageHeading = ({
   pageSizes,
   toggleModal,
   heading,
+  handleDeleteSelected = () => {}
 }) => {
   const [dropdownSplitOpen, setDropdownSplitOpen] = useState(false);
   const [displayOptionsIsOpen, setDisplayOptionsIsOpen] = useState(false);
@@ -95,11 +96,8 @@ const ListPageHeading = ({
                 className="dropdown-toggle-split btn-lg"
               />
               <DropdownMenu right>
-                <DropdownItem>
-                  <IntlMessages id="pages.delete" />
-                </DropdownItem>
-                <DropdownItem>
-                  <IntlMessages id="pages.another-action" />
+                <DropdownItem  onClick={() => handleDeleteSelected()} >
+                  <IntlMessages id="pages.delete"/>
                 </DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>

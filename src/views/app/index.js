@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import AppLayout from '../../layout/AppLayout';
 import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
-import { getPillarList } from '../../redux/actions';
+import { getOrganizationList, getPillarList } from '../../redux/actions';
 
 const Dashboards = React.lazy(() => 
   import(/* webpackChunkName: "viwes-dashboard" */ './dashboards')
@@ -25,10 +25,16 @@ const BlankPage = React.lazy(() =>
 const App = ({ 
   match,
   getPillarListAction,
+  getOrganizationListAction,
 }) => {
+
   useEffect(() => {
     getPillarListAction();
-  }, [getPillarListAction]);
+
+    getOrganizationListAction();
+
+  }, []);
+  
   return (
     <AppLayout>
       <div className="dashboard-wrapper">
@@ -71,4 +77,5 @@ const mapStateToProps = ({ menu }) => {
 
 export default withRouter(connect(mapStateToProps, {
   getPillarListAction: getPillarList,
+  getOrganizationListAction: getOrganizationList,
 })(App));

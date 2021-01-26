@@ -1,11 +1,16 @@
 import {
-  USER_GET_LIST,
-  USER_GET_LIST_SUCCESS,
-  USER_GET_LIST_ERROR,
-  USER_GET_LIST_WITH_FILTER,
-  USER_ADD,
-  USER_ADD_SUCCESS,
-  USER_ADD_ERROR,
+  USER_LIST_GET_LIST,
+  USER_LIST_GET_LIST_SUCCESS,
+  USER_LIST_GET_LIST_ERROR,
+  USER_LIST_ADD_ITEM,
+  USER_LIST_ADD_ITEM_SUCCESS,
+  USER_LIST_ADD_ITEM_ERROR,
+  USER_LIST_DELETE_ITEMS,
+  USER_LIST_DELETE_ITEMS_SUCCESS,
+  USER_LIST_DELETE_ITEMS_ERROR,
+  USER_LIST_CHANGE_ORGANIZATION,
+  USER_LIST_CHANGE_ORGANIZATION_SUCCESS,
+  USER_LIST_CHANGE_ORGANIZATION_ERROR,
 } from '../actions';
 
 const INIT_STATE = {
@@ -27,10 +32,9 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
-    case USER_GET_LIST:
+    case USER_LIST_GET_LIST:
       return { ...state, loading: false };
-
-    case USER_GET_LIST_SUCCESS:
+    case USER_LIST_GET_LIST_SUCCESS:
       return {
         ...state,
         loading: true,
@@ -38,33 +42,46 @@ export default (state = INIT_STATE, action) => {
         totalCount: action.payload.totalCount,
         totalPage: action.payload.totalPage,
       };
-
-    case USER_GET_LIST_ERROR:
+    case USER_LIST_GET_LIST_ERROR:
       return { ...state, loading: true, error: action.payload };
 
-    case USER_GET_LIST_WITH_FILTER:
-      if (action.payload.column === '' || action.payload.value === '') {
-        return {
-          ...state,
-          loading: true,
-          users: action.payload,
-        };
-      }
 
-    case USER_ADD:
+    case USER_LIST_ADD_ITEM:
       return { ...state, loading: false };
-
-    case USER_ADD_SUCCESS:
-      console.log('new user => ');
-      console.log(action.payload);
+    case USER_LIST_ADD_ITEM_SUCCESS:
       return {
         ...state,
         loading: true, 
         users: [action.payload, ...state.users]
       };
-
-    case USER_ADD_ERROR:
+    case USER_LIST_ADD_ITEM_ERROR:
       return { ...state, loading: true, error: action.payload };
+
+    case USER_LIST_DELETE_ITEMS:
+      return { ...state };
+    case USER_LIST_DELETE_ITEMS_SUCCESS:
+      const ids = action.payload.map(item => item.id);
+      return {
+        ...state,
+        users: state.users.filter(item => !ids.includes(item.id))
+      }
+    case USER_LIST_DELETE_ITEMS_ERROR:
+      return { ...state, error: action.payload, };
+
+    case USER_LIST_CHANGE_ORGANIZATION:
+      return { ...state, };
+    case USER_LIST_CHANGE_ORGANIZATION_SUCCESS:
+      console.log(action.payload);
+      return { 
+        ...state, 
+        users: state.users.map(user => 
+          user.id === action.payload.id ? {
+            ...user, organization_id: action.payload.organization_id, organization_name: action.payload.organization_name
+          } : user
+        ),
+      };
+    case USER_LIST_CHANGE_ORGANIZATION_ERROR:
+      return { ...state, error: action.payload }
 
     default:
       return { ...state };

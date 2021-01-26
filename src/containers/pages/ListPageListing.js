@@ -1,10 +1,6 @@
 import React from 'react';
 import { Row } from 'reactstrap';
 import Pagination from './Pagination';
-import ContextMenuContainer from './ContextMenuContainer';
-import DataListView from './DataListView';
-import ImageListView from './ImageListView';
-import ThumbListView from './ThumbListView';
 
 function collect(props) {
   return { data: props.data };
@@ -20,16 +16,20 @@ const ListPageListing = ({
   onContextMenuClick,
   onContextMenu,
   onChangePage,
+  ImageListView,
+  DataListView,
+  ThumbListView,
+  ContextMenuContainer,
 }) => {
   return (
     <Row>
-      {items.map((product) => {
+      {items.map((item) => {
         if (displayMode === 'imagelist') {
           return (
             <ImageListView
-              key={product.id}
-              user={product}
-              isSelect={selectedItems.includes(product.id)}
+              key={item.id}
+              item={item}
+              isSelect={selectedItems.includes(item.id)}
               collect={collect}
               onCheckItem={onCheckItem}
             />
@@ -38,9 +38,9 @@ const ListPageListing = ({
         if (displayMode === 'thumblist') {
           return (
             <ThumbListView
-              key={product.id}
-              user={product}
-              isSelect={selectedItems.includes(product.id)}
+              key={item.id}
+              item={item}
+              isSelect={selectedItems.includes(item.id)}
               collect={collect}
               onCheckItem={onCheckItem}
             />
@@ -48,9 +48,9 @@ const ListPageListing = ({
         }
         return (
           <DataListView
-            key={product.id}
-            user={product}
-            isSelect={selectedItems.includes(product.id)}
+            key={item.id}
+            item={item}
+            isSelect={selectedItems.includes(item.id)}
             onCheckItem={onCheckItem}
             collect={collect}
           />

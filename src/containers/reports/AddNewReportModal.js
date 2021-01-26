@@ -19,7 +19,7 @@ import { addReportItem } from '../../redux/actions';
 
 // Helpers
 import IntlMessages from '../../helpers/IntlMessages';
-import { getQuestionOptions, getCrossTabQuestionOptions, getOpenEndQuestionOptions } from '../../helpers/surveyHelper';
+import { getQuestionOptions, getCrossTabQuestionOptions, getOpenEndQuestionOptions, getChoiceOptions } from '../../helpers/surveyHelper';
 
 // Component
 import { Colxx } from '../../components/common/CustomBootstrap';
@@ -133,17 +133,6 @@ const AddNewReportModal = ({
 
     toggleModal();
   };
-
-  const getChoiceOptions = (questionName) => {
-    for (const page of questions) {
-      for (const question of page.questions) {
-        if (question.name === questionName) {
-          return question.choices.map(choice => ({value: choice.value, label: choice.text}));
-        }
-      }
-    }
-    return [];
-  }
 
   const questionOptions = getQuestionOptions(questions);
 
@@ -386,7 +375,7 @@ const AddNewReportModal = ({
                       name="conditionOption"
                       id="conditionOption"
                       value={values.conditionOption}
-                      options={getChoiceOptions(values.conditionQuestion.value)}
+                      options={getChoiceOptions(questions, values.conditionQuestion.value)}
                       onChange={setFieldValue}
                       onBlur={setFieldTouched}
                     />

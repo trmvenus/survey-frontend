@@ -30,6 +30,7 @@ module.exports = {
   'user.username': 'Nombre de Usuario',
   'user.role': 'Rol',
   'user.organization': 'Organización',
+  'user.add-new-modal-title': 'Add New Usuario',
 
   /* 03.Menú */
   'menu.home': 'Inicio',
@@ -135,6 +136,7 @@ module.exports = {
   'menu.admin': 'Admin',
   'menu.users': 'Usuarios',
   'menu.summary': 'Resumen',
+  'menu.organizations': 'Organizaciones',
 
   /* 04.Error  */
   'layouts.error-title': 'Vaya, parece que ha ocurrido un error!',
@@ -208,6 +210,7 @@ module.exports = {
   'pages.pages': 'Páginas',
   'pages.questions': 'Preguntas',
   'pages.createdon': 'Creado en',
+  'pages.move-to-organization': 'Mover a la Organización',
 
   /* 06.Survey */
 
@@ -257,11 +260,15 @@ module.exports = {
   'summary.export': 'Exportar',
   'summary.pdf': 'PDF',
   'summary.excel': 'Excel',
+  'summary.total-reports': 'Reportes Totales',
+  'summary.total-web-links': 'Enlaces Web Totales',
+  'summary.total-email-links': 'Enlaces Email Totales',
 
   /* 06.03. Report */
   'report.add-new-title': 'Add New Reporte',
   'report.name': 'Nombre',
   'report.report-type': 'Reporte Type',
+  'report.section-type': 'Sección Type',
   'report.summary': 'Summary',
   'report.cross-tab': 'Cross Tab',
   'report.open-end': 'Open End',
@@ -276,7 +283,52 @@ module.exports = {
   'report.horizontal-question': 'Horizontal Pregunta',
   'report.vertical-question': 'Vertical Pregunta',
   'report.open-end-question': 'Open-End Pregunta',
+  'report.view': 'Ver',
+  'report.filter': 'Filtro',
+  'report.customize': 'Personalizar',
+  'report.share': 'Compartir',
+  'report.answer': 'Responder',
+  'report.count': 'Contar',
+  'report.percent': 'Por ciento',
+  'report.score': 'Puntuación',
+  'report.overall-score': 'Puntaje General',
+  'report.filter-options': 'Opciones de Filtro',
+  'report.add-condition': 'Agregar Condición',
+  'report.add-section': 'Agregar Sección',
+  'report.add-new-section': 'Add New Sección',
+  'report.show': 'Mostrar',
+  'report.total': 'Total',
+  'report.respondent-name': 'Nombre del Encuestado',
+  'report.text': 'Texto',
+  'report.responses': 'Respuestas',
+  'report.points-obtained': 'Puntos Obtenidos',
+  'report.total-points': 'Puntos Totales',
+  'report.copy-url': 'Copiar URL',
+  'report.reset-link': 'Restablecer Enlace',
+  'report.share-tab-title': 'Comparte Reporte',
+  'report.share-tab-comment': 'Utilice este enlace a continuación para compartir el informe con alguien.',
 
+  /* 06.04. Result */
+
+  /* 06.05. Link */
+  'link.add-title': 'Agregar Más Enlaces',
+  'link.web-link': 'Web Enlaces',
+  'link.email-link': 'Email Enlaces',
+  'link.add-new-web-title': 'Agregar Nuevo Web Enlace',
+  'link.add-new-email-title': 'Agregar Nuevo Email Enlace',
+  'link.survey-url': 'Url de la Encuesta',
+  'link.close-quota': 'Cerrar Cuota',
+  'link.close-date': 'Fecha de Cierre',
+  'link.is-active': '¿Es Activo?',
+  'link.download-template': 'Descargue un archivo de plantilla.',
+  'link.contacts': 'Contactos',
+  'link.contacts-file': 'Archivo de Contactos',
+  'link.sender-name': 'Nombre del Remitente',
+  'link.send-replies-to': 'Enviar Respuestas A',
+  'link.message-text': 'Mensaje de Texto',
+  'link.send-emails': 'Enviar Email',
+  'link.already-sent': 'Ya Enviado',
+  'link.email-sending-success-message': 'El correo electrónico se envió correctamente.',
 
   /* 07.IU */
 
@@ -629,5 +681,11 @@ module.exports = {
 
   /* 09.Admin Panel */
 
-  /* 09.01.Profile */
+  /* 09.01.Users */
+  'settings.choose-organization-title': 'Seleccione Organización.',
+  'settings.choose-organization-message': 'Seleccione una organización.',
+
+  /* 09.02.Organization */
+  'organization.name': 'Nombre',
+  'organization.add-new-modal-title': 'Agregar Nueva Organización.',
 };

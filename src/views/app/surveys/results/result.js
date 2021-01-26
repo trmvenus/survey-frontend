@@ -23,7 +23,6 @@ import {
 import { Colxx, Separator } from '../../../../components/common/CustomBootstrap';
 import { NotificationManager } from '../../../../components/common/react-notifications';
 import { savePDF } from '../../../../helpers/export';
-import survey from '../survey';
 
 const ResultPage = ({ 
   match,

@@ -81,7 +81,7 @@ const AddNewModal = ({
         }) => (
           <Form>
             <ModalHeader toggle={toggleModal}>
-              <IntlMessages id="pages.add-new-modal-title" />
+              <IntlMessages id="user.add-new-modal-title" />
             </ModalHeader>
             <ModalBody>
               <Label>

@@ -38,9 +38,13 @@ const BreadcrumbItems = ({ match }) => {
     paths[paths.length-2] = match.params.surveyid;
     path = path.replace(':surveyid', match.params.surveyid);
   }
-  if (paths[paths.length - 1] == ':resultid') {
+  if (paths[paths.length - 1] === ':resultid') {
     paths[paths.length-1] = match.params.resultid;
-    path = path.replace(':resultid', match.params.resultid);
+    path = path.replace(paths[paths.length - 1], match.params.resultid);
+  }
+  if (paths[paths.length - 1] == ':reportid') {
+    paths[paths.length-1] = match.params.reportid;
+    path = path.replace(paths[paths.length - 1], match.params.reportid);
   }
 
   return (

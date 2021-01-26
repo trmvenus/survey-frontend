@@ -1,16 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { 
   Row,
-  Button,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-  Collapse,
-  ButtonDropdown, 
-  CustomInput,
 } from 'reactstrap';
 
 // Redux
@@ -25,17 +17,11 @@ import { NotificationManager } from '../../../../components/common/react-notific
 // Containers
 import Breadcrumb from '../../../../containers/navs/Breadcrumb';
 import SurveyResultTable from '../../../../containers/results/SurveyResultTable';
-import AddNewSurveyModal from '../../../../containers/applications/AddNewSurveyModal';
-
-// Helpers
-import IntlMessages from '../../../../helpers/IntlMessages';
-
 
 const ResultsSurvey = ({ 
   match,
   surveyid,
 
-  loading = true, 
   error,
   
   getResultListAction,
@@ -72,14 +58,10 @@ const ResultsSurvey = ({
 
 const mapStateToProps = ({ result }) => {
   const {
-    resultItems, 
-    loading,
     error
   } = result;
 
   return {
-    resultItems,
-    loading,
     error,
   };
 };

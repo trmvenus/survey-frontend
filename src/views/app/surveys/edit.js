@@ -1,19 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { 
   Row,
-  Button,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-  Collapse,
-  ButtonDropdown, 
-  CustomInput,
 } from 'reactstrap';
-
-import IntlMessages from '../../../helpers/IntlMessages';
 
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 import SurveyCreator from '../../../containers/surveyjs/SurveyCreator';

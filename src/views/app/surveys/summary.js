@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { 
@@ -19,7 +19,7 @@ import { adminRoot } from '../../../constants/defaultValues';
 import IntlMessages from '../../../helpers/IntlMessages';
 
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
-import IconCardsCarousel from '../../../containers/summary/IconCardsCarousel';
+import SurveySummaryCarousel from '../../../containers/summary/SurveySummaryCarousel';
 
 import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import { NotificationManager } from '../../../components/common/react-notifications';
@@ -171,8 +171,11 @@ const SummarySurvey = ({
           </Card>
         </Colxx>
         <Colxx xl="8" md="6" className="mb-4">
-          <IconCardsCarousel 
+          <SurveySummaryCarousel 
             totalResponses = {surveyItem.responses}
+            totalReports = {surveyItem.reports}
+            totalWebLinks = {surveyItem.weblinks}
+            totalEmailLinks = {surveyItem.emaillinks}
             surveyStatus = {surveyItem.is_active ? messages['summary.active'] : messages['summary.inactive']}
             averageTime = {new Date(Math.floor(surveyItem.average_time) * 1000).toISOString().substr(14, 5)}
             sharing = {surveyItem.is_share ? messages['summary.yes'] : messages['summary.no']}

@@ -47,6 +47,35 @@
   font-size: 15px;
   cursor: pointer;
 }
+
+.luci-sortable {
+  max-width: 500px;
+  .luci-sortable-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.luci-cursor-grabbing {
+  cursor: pointer ;
+}
+
+.luci-share-container {
+  main {
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 130px;
+    margin-bottom: 30px;
+  }
+
+  footer {
+    .footer-content {
+      margin-left: 100px;
+      margin-right: 100px;
+    }
+  }
+}
 /* 
 html {
   background-color: $theme-color-1 !important;

@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import UserLayout from '../../layout/UserLayout';
+import { getCurrentUser } from '../../helpers/Utils';
 
 const Login = React.lazy(() =>
   import(/* webpackChunkName: "user-login" */ './login')
@@ -16,6 +17,13 @@ const ResetPassword = React.lazy(() =>
 );
 
 const User = ({ match }) => {
+
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    return <Redirect to='/'/>
+  }
+
   return (
     <UserLayout>
       <Suspense fallback={<div className="loading" />}>

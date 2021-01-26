@@ -185,7 +185,7 @@ export default (state = INIT_STATE, action) => {
     case SURVEY_LIST_SHARE_ITEM_SUCCESS:
       return {
         ...state,
-        surveyItems: state.surveyItems.map(item => item.id == action.payload.id ? {...item, is_share: !item.is_share} : item),
+        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_share: !item.is_share} : item),
       }
 
     case SURVEY_LIST_SHARE_ITEM_ERROR:

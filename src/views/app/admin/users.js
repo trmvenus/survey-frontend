@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { servicePath } from '../../../constants/defaultValues';
-
 import { NotificationManager } from '../../../components/common/react-notifications';
 
-import ListPageHeading from '../../../containers/users/ListPageHeading';
+import ListPageHeading from '../../../containers/pages/ListPageHeading';
+import ListPageListing from '../../../containers/pages/ListPageListing';
 import AddNewModal from '../../../containers/users/AddNewModal';
-import ListPageListing from '../../../containers/users/ListPageListing';
+import ChooseOrganizationModal from '../../../containers/users/ChooseOrganizationModal';
+import ImageListView from '../../../containers/users/ImageListView';
+import DataListView from '../../../containers/users/DataListView';
+import ThumbListView from '../../../containers/users/ThumbListView';
+import ContextMenuContainer from '../../../containers/users/ContextMenuContainer';
+
 
 import useMousetrap from '../../../hooks/use-mousetrap';
 
-import { getUserList } from '../../../redux/user/actions';
+import { getUserList, deleteUsers, changeOrganization } from '../../../redux/actions';
 
 const getIndex = (value, arr, prop) => {
   for (let i = 0; i < arr.length; i += 1) {
@@ -22,12 +26,10 @@ const getIndex = (value, arr, prop) => {
   return -1;
 };
 
-const apiUrl = `${process.env.REACT_APP_API_URL}/user`;
-
 const orderOptions = [
   { column: 'name', label: 'Name' },
-  { column: 'category', label: 'Organization' },
-  { column: 'status', label: 'Status' },
+  { column: 'organization_name', label: 'Organization' },
+  // { column: 'status', label: 'Status' },
 ];
 const pageSizes = [4, 8, 12, 20];
 
@@ -47,6 +49,8 @@ const UsersSettings = ({
   totalCount,
 
   getUserListAction,
+  deleteUsersAction,
+  changeOrganizationAction,
 }) => {
   const [displayMode, setDisplayMode] = useState('thumblist');
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,9 +60,11 @@ const UsersSettings = ({
     label: 'Name',
   });
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [newModalOpen, setNewModalOpen] = useState(false);
+  const [chooseModalOpen, setChooseModalOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItemOrganizationId, setSelectedItemOrganizationId] = useState(0);
   const [lastChecked, setLastChecked] = useState(null);
 
   useEffect(() => {
@@ -130,10 +136,26 @@ const UsersSettings = ({
     return false;
   };
 
+  const handleDeleteSelected = () => {
+    deleteUsersAction({ids: selectedItems});
+  }
+
   const onContextMenuClick = (e, data) => {
-    // params : (e,data,target)
-    console.log('onContextMenuClick - selected items', selectedItems);
-    console.log('onContextMenuClick - action : ', data.action);
+    if (data.action === 'delete') {
+      deleteUsersAction({ids: selectedItems});
+    } else if (data.action === 'move') {
+      if (selectedItems.length > 0) {
+        const selectedUser = users.find(user => user.id === selectedItems[0]);
+        if (selectedUser) {
+          setSelectedItemOrganizationId(selectedUser.organization_id);
+        } else {
+          setSelectedItemOrganizationId(0);
+        }
+      } else {
+        setSelectedItemOrganizationId(0);
+      }
+      setChooseModalOpen(true);
+    }
   };
 
   const onContextMenu = (e, data) => {
@@ -144,6 +166,10 @@ const UsersSettings = ({
 
     return true;
   };
+
+  const handleChooseOrganization = (organization_id) => {
+    changeOrganizationAction(selectedItems[0], organization_id);
+  }
 
   useMousetrap(['ctrl+a', 'command+a'], () => {
     handleChangeSelectAll(false);
@@ -188,11 +214,12 @@ const UsersSettings = ({
           }}
           orderOptions={orderOptions}
           pageSizes={pageSizes}
-          toggleModal={() => setModalOpen(!modalOpen)}
+          toggleModal={() => setNewModalOpen(!newModalOpen)}
+          handleDeleteSelected={handleDeleteSelected}
         />
         <AddNewModal
-          modalOpen={modalOpen}
-          toggleModal={() => setModalOpen(!modalOpen)}
+          modalOpen={newModalOpen}
+          toggleModal={() => setNewModalOpen(!newModalOpen)}
           categories={categories}
         />
         <ListPageListing
@@ -205,13 +232,23 @@ const UsersSettings = ({
           onContextMenuClick={onContextMenuClick}
           onContextMenu={onContextMenu}
           onChangePage={setCurrentPage}
+          ImageListView={ImageListView}
+          DataListView={DataListView}
+          ThumbListView={ThumbListView}
+          ContextMenuContainer={ContextMenuContainer}
+        />
+        <ChooseOrganizationModal
+          modalOpen={chooseModalOpen}
+          toggleModal={() => setChooseModalOpen(!chooseModalOpen)}
+          handleClickYes={handleChooseOrganization}
+          previousOrganizationId={selectedItemOrganizationId}
         />
       </div>
     </>
   );
 };
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ user, organization }) => {
   const {
     users,
     loading,
@@ -226,8 +263,14 @@ const mapStateToProps = ({ user }) => {
     error,
     totalPage,
     totalCount,
+
+    organizations: organization.organizations,
+    organizationsError: organization.error,
+    isOrganizationsLoaded: organization.isLoaded,
   };
 };
 export default connect(mapStateToProps, {
     getUserListAction: getUserList,
+    deleteUsersAction: deleteUsers,
+    changeOrganizationAction: changeOrganization,
   })(UsersSettings);

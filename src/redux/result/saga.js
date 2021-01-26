@@ -1,4 +1,3 @@
-import { func } from 'prop-types';
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { client } from '../../helpers/client';
@@ -18,7 +17,7 @@ const getResultListRequest = async (payload) =>
   await client
     .get(`/result/list?survey=${payload.id}`)
     .then((user) => user.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 
 function* getResultListItems({payload}) {
   try {
@@ -35,12 +34,12 @@ const getResultItemRequest = async (payload) => {
     return await client
     .get(`/result?survey=${payload.survey_id}&ip=${payload.ip_address}`)
     .then((user) => user.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
   } else {
     return await client
     .get(`/result/${payload.id}`)
     .then((user) => user.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
   }
   
 }
@@ -59,7 +58,7 @@ const updateResultItemRequest = async (payload) =>
   await client
     .put(`/result`, payload)
     .then((res) => res.data)
-    .catch((error) => {throw error});  
+    .catch((error) => {throw error.response.data});  
 
 
 function* updateResultItem({payload}) {

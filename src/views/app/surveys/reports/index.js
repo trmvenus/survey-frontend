@@ -85,51 +85,51 @@ const ReportsSurvey = ({
             <h1>
               <IntlMessages id="survey.reports" />
             </h1>
-          {(isSurveyLoaded) && (
-            <div className="text-zero top-right-button-container">
-              <Button
-                color="primary"
-                size="lg"
-                className="top-right-button mr-1"
-                onClick={() => setModalOpen(true)}
-              >
-                <IntlMessages id="survey.add-new" />
-              </Button>
-              <ButtonDropdown
-                isOpen={dropdownSplitOpen}
-                toggle={() => setDropdownSplitOpen(!dropdownSplitOpen)}
-              >
-                <div className="btn btn-primary btn-lg pl-4 pr-0 check-button check-all">
-                  <CustomInput
-                    className="custom-checkbox mb-0 d-inline-block"
-                    type="checkbox"
-                    id="checkAll"
-                    // checked={selectedItems.length >= surveyItems.length}
-                    onClick={() => handleChangeSelectAll()}
-                    onChange={() => handleChangeSelectAll()}
-                    label={
-                      <span
-                        className={`custom-control-label`}
-                      />
-                    }
-                  />
-                </div>
-                <DropdownToggle
-                  caret
+            {(isSurveyLoaded) && (
+              <div className="text-zero top-right-button-container">
+                <Button
                   color="primary"
-                  className="dropdown-toggle-split btn-lg"
-                />
-                <DropdownMenu right>
-                  <DropdownItem onClick={() => selectedItems.length > 0 ? setDeleteModalOpen(true) : {}}>
-                    <IntlMessages id="survey.delete" />
-                  </DropdownItem>
-                  <DropdownItem onClick={() => selectedItems.length > 0 ? setCopyModalOpen(true) : {}}>
-                    <IntlMessages id="survey.copy" />
-                  </DropdownItem>
-                </DropdownMenu>
-              </ButtonDropdown>
-            </div>
-          )}
+                  size="lg"
+                  className="top-right-button mr-1"
+                  onClick={() => setModalOpen(true)}
+                >
+                  <IntlMessages id="survey.add-new" />
+                </Button>
+                <ButtonDropdown
+                  isOpen={dropdownSplitOpen}
+                  toggle={() => setDropdownSplitOpen(!dropdownSplitOpen)}
+                >
+                  <div className="btn btn-primary btn-lg pl-4 pr-0 check-button check-all">
+                    <CustomInput
+                      className="custom-checkbox mb-0 d-inline-block"
+                      type="checkbox"
+                      id="checkAll"
+                      // checked={selectedItems.length >= surveyItems.length}
+                      onClick={() => handleChangeSelectAll()}
+                      onChange={() => handleChangeSelectAll()}
+                      label={
+                        <span
+                          className={`custom-control-label`}
+                        />
+                      }
+                    />
+                  </div>
+                  <DropdownToggle
+                    caret
+                    color="primary"
+                    className="dropdown-toggle-split btn-lg"
+                  />
+                  <DropdownMenu right>
+                    <DropdownItem onClick={() => selectedItems.length > 0 ? setDeleteModalOpen(true) : {}}>
+                      <IntlMessages id="survey.delete" />
+                    </DropdownItem>
+                    <DropdownItem onClick={() => selectedItems.length > 0 ? setCopyModalOpen(true) : {}}>
+                      <IntlMessages id="survey.copy" />
+                    </DropdownItem>
+                  </DropdownMenu>
+                </ButtonDropdown>
+              </div>
+            )}
             <Breadcrumb match={match} />
           </div>
           <Separator className="mb-5" />

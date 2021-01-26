@@ -542,7 +542,7 @@ const Home = () => {
                 <div className="col-12 text-center footer-content">
                   <a className="c-pointer" href="#scroll" onClick={(event) => scrollTo(event, 'home')}>
                     <img className="footer-logo" alt="footer logo"
-                      src="/assets/logos/white-full.svg" />
+                      src="/assets/logos/white.png" />
                   </a>
                 </div>
               </div>

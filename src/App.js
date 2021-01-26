@@ -15,11 +15,11 @@ import { isMultiColorActive, adminRoot } from './constants/defaultValues';
 import { getDirection } from './helpers/Utils';
 import { ProtectedRoute, UserRole } from './helpers/authHelper';
 
-const ViewHome = React.lazy(() =>
-  import(/* webpackChunkName: "views" */ './views/home')
-);
 const ViewApp = React.lazy(() =>
   import(/* webpackChunkName: "views-app" */ './views/app')
+);
+const ViewShare = React.lazy(() =>
+  import(/* webpackChunkName: "views-share" */ './views/share')
 );
 const ViewUser = React.lazy(() =>
   import(/* webpackChunkName: "views-user" */ './views/user')
@@ -70,6 +70,10 @@ class App extends React.Component {
                   <Route
                     path="/user"
                     render={(props) => <ViewUser {...props} />}
+                  />
+                  <Route
+                    path="/share"
+                    render={(props) => <ViewShare {...props} />}
                   />
                   <Route
                     path="/error"

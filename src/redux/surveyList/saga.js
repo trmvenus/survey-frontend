@@ -21,7 +21,7 @@ const getSurveyListRequest = async () =>
   await client
     .get('/survey')
     .then((res) => res.data)
-    .catch((error) => {throw error});  
+    .catch((error) => {throw error.response.data});  
 
 function* getSurveyListItems() {
   try {
@@ -36,7 +36,7 @@ const addSurveyItemRequest = async (item) =>
   await client
     .post('/survey', item)
     .then((res) => res.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 
 function* addSurveyItem({ payload }) {
   try {
@@ -52,7 +52,7 @@ const deleteSurveyItemsRequest = async (item) =>
   await client
     .delete('/survey', item)
     .then((res) => res.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 
 function* deleteSurveyItems({ payload }) {
   try {
@@ -67,7 +67,7 @@ const copySurveyItemsRequest = async (item) =>
   await client
     .post('/survey/copy', item)
     .then((res) => res.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 
 function* copySurveyItems({ payload }) {
   try {
@@ -81,9 +81,9 @@ function* copySurveyItems({ payload }) {
 
 const shareSurveyItemRequest = async (item) =>
   await client
-    .get(`/survey/share?id=${item.id}`)
+    .get(`/survey/${item.id}/share`)
     .then((res) => res.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 
 function* shareSurveyItem({ payload }) {
   try {

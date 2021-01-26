@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CustomInput, Badge } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import classnames from 'classnames';
@@ -9,7 +9,9 @@ import { Colxx } from '../../components/common/CustomBootstrap';
 import { getRoleName } from '../../helpers/authHelper';
 import { client } from '../../helpers/client';
 
-const ThumbListView = ({ user, isSelect, collect, onCheckItem }) => {
+const ThumbListView = ({ item, isSelect, collect, onCheckItem }) => {
+  const user = item;
+
   return (
     <Colxx xxs="12" key={user.id} className="mb-3">
       <ContextMenuTrigger id="menu_id" data={user.id} collect={collect}>
@@ -33,11 +35,11 @@ const ThumbListView = ({ user, isSelect, collect, onCheckItem }) => {
                 </p>
               </NavLink>
               <p className="mb-1 text-muted text-small w-20 w-sm-100">
-                University 1
+                {user.organization_name}
               </p>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
                 <Moment format="YYYY-MM-DD">
-                  {user.date}
+                  {user.created_at}
                 </Moment>
               </p>
               <div className="w-10 w-sm-100 text-muted custom-control custom-checkbox pl-1 d-flex align-self-center pr-2">

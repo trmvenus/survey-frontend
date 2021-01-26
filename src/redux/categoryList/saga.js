@@ -15,7 +15,7 @@ const getCategoryListRequest = async () => {
   return await client
     .get('/category')
     .then((user) => user.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 }
 
 
@@ -32,7 +32,7 @@ const addCategoryItemRequest = async (item) =>
   await client
     .post('/category', item)
     .then((user) => user.data)
-    .catch((error) => {throw error});
+    .catch((error) => {throw error.response.data});
 
 
 function* addCategoryItem({ payload }) {

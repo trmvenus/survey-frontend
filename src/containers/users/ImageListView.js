@@ -17,7 +17,8 @@ import Moment from 'react-moment';
 import { Colxx } from '../../components/common/CustomBootstrap';
 import { getRoleName } from '../../helpers/authHelper';
 
-const ImageListView = ({ user, isSelect, collect, onCheckItem }) => {
+const ImageListView = ({ item, isSelect, collect, onCheckItem }) => {
+  const user = item;
   return (
     <Colxx sm="6" lg="4" xl="3" className="mb-3" key={user.id}>
       <ContextMenuTrigger id="menu_id" data={user.id} collect={collect}>
@@ -57,7 +58,7 @@ const ImageListView = ({ user, isSelect, collect, onCheckItem }) => {
                 <CardSubtitle>{user.name}</CardSubtitle>
                 <CardText className="text-muted text-small mb-0 font-weight-light">  
                   <Moment format="YYYY-MM-DD">
-                    {user.date}
+                    {user.created_at}
                   </Moment>
                 </CardText>
               </Colxx>

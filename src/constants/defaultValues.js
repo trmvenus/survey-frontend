@@ -29,6 +29,9 @@ export const buyUrl = 'https://1.envato.market/k4z0';
 export const searchPath = `${adminRoot}/#`;
 export const servicePath = 'https://api.coloredstrategies.com';
 
+export const shareReportPath = `${window.location.origin}/share/report?id=`;
+export const shareSurveyPath = `${window.location.origin}/share/run?id=`;
+
 export const currentUser = {
   id: 1,
   title: 'Sarah Kortney',

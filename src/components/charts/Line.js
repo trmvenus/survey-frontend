@@ -4,7 +4,13 @@ import { Chart } from 'chart.js';
 
 import { lineChartOptions } from './config';
 
-const Line = ({ data, shadow = false }) => {
+const Line = ({ 
+  data, 
+  shadow = false,
+  mintick = 50,
+  maxtick = 70,
+  stepSize = 5,
+}) => {
   const chartContainer = useRef(null);
   const [, setChartInstance] = useState(null);
 
@@ -31,6 +37,11 @@ const Line = ({ data, shadow = false }) => {
         });
       }
       const context = chartContainer.current.getContext('2d');
+
+      lineChartOptions.scales.yAxes[0].ticks.stepSize = stepSize;
+      lineChartOptions.scales.yAxes[0].ticks.min = mintick;
+      lineChartOptions.scales.yAxes[0].ticks.max = maxtick;
+
       const newChartInstance = new Chart(context, {
         type: shadow ? 'lineWithShadow' : 'line',
         options: lineChartOptions,

@@ -30,6 +30,7 @@ module.exports = {
   'user.username': 'Username',
   'user.role': 'Role',
   'user.organization': 'Organization',
+  'user.add-new-modal-title': 'Add New User',
 
   /* 03.Menu */
   'menu.home': 'Home',
@@ -135,6 +136,7 @@ module.exports = {
   'menu.admin': 'Admin',
   'menu.users': 'Users',
   'menu.summary': 'Summary',
+  'menu.organizations': 'Organizations',
 
   /* 04.Error Page */
   'pages.error-title': 'Ooops... looks like an error occurred!',
@@ -166,7 +168,6 @@ module.exports = {
   'pages.bake-progress': 'Bake Progress',
   'pages.popularity': 'Popularity',
   'pages.comments': 'Comments',
-  'pages.go-back-home': 'GO BACK HOME',
   'pages.mailing-info':
     'Mailing templates use inline styling and table layout to be displayed well at various service providers. To provide better usability we include it as regular html with dangerouslySetInnerHTML.',
   'pages.invoice-info':
@@ -206,6 +207,7 @@ module.exports = {
   'pages.pages': 'Pages',
   'pages.questions': 'Questions',
   'pages.createdon': 'Created On',
+  'pages.move-to-organization': 'Move to Organization',
 
   /* 06.Survey */
 
@@ -255,11 +257,15 @@ module.exports = {
   'summary.export': 'Export',
   'summary.pdf': 'PDF',
   'summary.excel': 'Excel',
+  'summary.total-reports': 'Total Reports',
+  'summary.total-web-links': 'Total Web Links',
+  'summary.total-email-links': 'Total Email Links',
 
   /* 06.03. Report */
   'report.add-new-title': 'Add New Report',
   'report.name': 'Name',
   'report.report-type': 'Report Type',
+  'report.section-type': 'Section Type',
   'report.summary': 'Summary',
   'report.cross-tab': 'Cross Tab',
   'report.open-end': 'Open End',
@@ -274,6 +280,52 @@ module.exports = {
   'report.horizontal-question': 'Horizontal Question',
   'report.vertical-question': 'Vertical Question',
   'report.open-end-question': 'Open-End Question',
+  'report.view': 'View',
+  'report.filter': 'Filter',
+  'report.customize': 'Customize',
+  'report.share': 'Share',
+  'report.answer': 'Answer',
+  'report.count': 'Count',
+  'report.percent': 'Percent',
+  'report.score': 'Score',
+  'report.overall-score': 'Overall Score',
+  'report.filter-options': 'Filter Options',
+  'report.add-condition': 'Add Condition',
+  'report.add-section': 'Add Section',
+  'report.add-new-section': 'Add New Section',
+  'report.show': 'Show',
+  'report.total': 'Total',
+  'report.respondent-name': 'Respondent Name',
+  'report.text': 'Text',
+  'report.responses': 'Responses',
+  'report.points-obtained': 'Points Obtained',
+  'report.total-points': 'Total Points',
+  'report.copy-url': 'Copy URL',
+  'report.reset-link': 'Reset Link',
+  'report.share-tab-title': 'Share Report',
+  'report.share-tab-comment': 'Use this link below to share the report to someone.',
+
+  /* 06.04. Result */
+
+  /* 06.05. Link */
+  'link.add-title': 'Add More Links',
+  'link.web-link': 'Web Link',
+  'link.email-link': 'Email Link',
+  'link.add-new-web-title': 'Add New Web Link',
+  'link.add-new-email-title': 'Add New Email Link',
+  'link.survey-url': 'Survey Url',
+  'link.close-quota': 'Close Quota',
+  'link.close-date': 'Close Date',
+  'link.is-active': 'Is Active?',
+  'link.download-template': 'Download a template file.',
+  'link.contacts': 'Contacts',
+  'link.contacts-file': 'Contacts File',
+  'link.sender-name': 'Sender Name',
+  'link.send-replies-to': 'Send Replies To',
+  'link.message-text': 'Message Text',
+  'link.send-emails': 'Send Emails',
+  'link.already-sent': 'Already Sent',
+  'link.email-sending-success-message': 'The email has been sent successfully.',
 
   /* 07.UI */
 
@@ -625,5 +677,12 @@ module.exports = {
 
   /* 09.Admin Panel */
 
-  /* 09.01.Profile */
+  /* 09.01.Users */
+  'settings.choose-organization-title': 'Choose Organization',
+  'settings.choose-organization-message': 'Please select an organization.',
+
+  /* 09.02.Organizations */
+  'organization.name': 'Name',
+  'organization.add-new-modal-title': 'Add New Organization',
+
 };

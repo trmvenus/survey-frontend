@@ -3,28 +3,47 @@ import React from 'react';
 import IconCard from '../../components/cards/IconCard';
 import GlideComponent from '../../components/carousel/GlideComponent';
 
-const IconCardsCarousel = ({ 
+const SurveySummaryCarousel = ({ 
   className = 'icon-cards-row' ,
   totalResponses = 0,
+  totalReports = 0,
+  totalWebLinks = 0,
+  totalEmailLinks = 0,
   surveyStatus = '-',
   averageTime = '0s',
   sharing = 'NO',
 }) => {
+
   const data = [
+    {
+      title: 'summary.survey-status',
+      icon: 'iconsminds-arrow-refresh',
+      value: surveyStatus,
+    },
     { 
       title: 'summary.total-responses', 
       icon: 'iconsminds-mail-read', 
       value: totalResponses 
     },
     {
-      title: 'summary.survey-status',
-      icon: 'iconsminds-arrow-refresh',
-      value: surveyStatus,
-    },
-    {
       title: 'summary.average-time',
       icon: 'iconsminds-clock', 
       value: averageTime,
+    },
+    { 
+      title: 'summary.total-reports', 
+      icon: 'simple-icon-chart', 
+      value: totalReports 
+    },
+    { 
+      title: 'summary.total-web-links', 
+      icon: 'simple-icon-link', 
+      value: totalWebLinks 
+    },
+    { 
+      title: 'summary.total-email-links', 
+      icon: 'iconsminds-mail', 
+      value: totalEmailLinks 
     },
     { 
       title: 'summary.survey-sharing', 
@@ -60,4 +79,4 @@ const IconCardsCarousel = ({
     </div>
   );
 };
-export default IconCardsCarousel;
+export default SurveySummaryCarousel;

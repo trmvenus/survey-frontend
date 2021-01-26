@@ -3,8 +3,12 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute, UserRole } from '../../../helpers/authHelper';
 
 const Users = React.lazy(() =>
-  import(/* webpackChunkName: "second" */ './users')
+  import(/* webpackChunkName: "users" */ './users')
 );
+const Organizations = React.lazy(() => 
+  import(/* webpackChunkName: "organizations" */ './organizations')
+)
+
 const AdminSettings = ({ match }) => (
   <Suspense fallback={<div className="loading" />}>
     <Switch>
@@ -12,6 +16,11 @@ const AdminSettings = ({ match }) => (
       <ProtectedRoute
         path={`${match.url}/users`}
         component={Users}
+        roles={[UserRole.Admin, UserRole.OrgAdmin]}
+      />
+      <ProtectedRoute
+        path={`${match.url}/organizations`}
+        component={Organizations}
         roles={[UserRole.Admin]}
       />
       <Redirect to="/error" />

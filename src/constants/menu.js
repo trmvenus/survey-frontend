@@ -63,6 +63,11 @@ const data = [
         label: 'menu.users',
         to: `${adminRoot}/admin/users`,
       },
+      {
+        icon: 'simple-icon-organization',
+        label: 'menu.organizations',
+        to: `${adminRoot}/admin/organizations`,
+      },
     ],
   },
 ];

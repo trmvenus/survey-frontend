@@ -2,6 +2,7 @@ import {
   GET_SURVEY,
   GET_SURVEY_SUCCESS,
   GET_SURVEY_ERROR,
+  GET_SURVEY_SHARE,
   UPDATE_SURVEY,
   UPDATE_SURVEY_SUCCESS,
   UPDATE_SURVEY_ERROR
@@ -10,6 +11,11 @@ import {
 export const getSurvey = (payload) => ({
   type: GET_SURVEY,
   payload: payload,
+});
+
+export const getSurveyItemShare = (share_id) => ({
+  type: GET_SURVEY_SHARE,
+  payload: share_id,
 });
 
 export const getSurveySuccess = (item) => ({

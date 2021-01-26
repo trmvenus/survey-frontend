@@ -1,21 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { 
   Row,
-  Button,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-  Collapse,
-  ButtonDropdown, 
-  CustomInput,
 } from 'reactstrap';
 
 import publicIp from 'public-ip';
-
-import IntlMessages from '../../../helpers/IntlMessages';
 
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 import SurveyPage from '../../../containers/surveyjs/SurveyRun';
@@ -30,14 +20,14 @@ import { NotificationManager } from '../../../components/common/react-notificati
 
 const RunSurvey = ({ 
   match,
-  survey_id,
+  surveyid,
 
   surveyItem,
   surveyItemError,
-  surveyItemLoading,
+  isSurveyItemLoaded,
   resultItem,
   resultItemError,
-  resultItemLoading,
+  isResultItemLoaded,
 
   getResultItemAction,
   updateResultItemAction,
@@ -58,13 +48,15 @@ const RunSurvey = ({
   }
 
   useEffect(() => {
+
     const getResult = async () => {
       const ip_address = await publicIp.v4();
       getResultItemAction({
-        survey_id: survey_id,
+        survey_id: surveyid,
         ip_address,
       })
     };
+
     getResult();
   }, [getResultItemAction]);
 
@@ -85,7 +77,7 @@ const RunSurvey = ({
       <Row>
         <Colxx xxs="12">
           <div className="mb-2">
-            {surveyItemLoading && (
+            {isSurveyItemLoaded && (
             <h1>
               {surveyItem.name}
             </h1>
@@ -98,7 +90,7 @@ const RunSurvey = ({
       </Row>
       <Row>
         <Colxx xxs="12" className="mb-4">
-          {surveyItemLoading && !resultItemLoading ? (
+          {isSurveyItemLoaded && isResultItemLoaded && !surveyItemError && !resultItemError ? (
             <SurveyPage 
               surveyJson={surveyItem.json}
               resultJson={resultItem.json}
@@ -117,19 +109,19 @@ const RunSurvey = ({
 const mapStateToProps = ({ survey, result }) => {
   const surveyItem = survey.surveyItem;
   const surveyItemError = survey.error;
-  const surveyItemLoading = survey.loading;
+  const isSurveyItemLoaded = survey.loading;
 
   const resultItem = result.resultItem;
   const resultItemError = result.error;
-  const resultItemLoading = result.loading;
+  const isResultItemLoaded = !result.loading;
 
   return {
     surveyItem,
     surveyItemError,
-    surveyItemLoading,
+    isSurveyItemLoaded,
     resultItem,
     resultItemError,
-    resultItemLoading,
+    isResultItemLoaded,
   };
 };
 export default injectIntl(

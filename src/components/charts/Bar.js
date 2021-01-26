@@ -4,7 +4,13 @@ import { Chart } from 'chart.js';
 
 import { barChartOptions } from './config';
 
-const Bar = ({ data, shadow = false }) => {
+const Bar = ({ 
+  data, 
+  shadow = false,
+  mintick = 300,
+  maxtick = 800,
+  stepSize = 100,
+}) => {
   const chartContainer = useRef(null);
   const [, setChartInstance] = useState(null);
 
@@ -31,6 +37,11 @@ const Bar = ({ data, shadow = false }) => {
           },
         });
       }
+
+      barChartOptions.scales.yAxes[0].ticks.stepSize = stepSize;
+      barChartOptions.scales.yAxes[0].ticks.min = mintick;
+      barChartOptions.scales.yAxes[0].ticks.max = maxtick;
+
       const context = chartContainer.current.getContext('2d');
       const newChartInstance = new Chart(context, {
         type: shadow ? 'barWithShadow' : 'bar',

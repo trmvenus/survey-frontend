@@ -17,10 +17,8 @@ import {
 
 import { getCurrentUser } from '../../helpers/Utils';
 import IntlMessages from '../../helpers/IntlMessages';
-import DatatablePagination from '../../components/DatatablePagination';
 import {
   FormikReactSelect,
-  FormikTagsInput,
   FormikDatePicker,
 } from '../form-validations/FormikFields';
 
@@ -37,10 +35,6 @@ const EditProfile = ({
   intl,
   
   editingMode,
-
-  resultItems,
-  loading,
-  error,
 }) => {
   const [currentUser] = useState(getCurrentUser());
 
@@ -50,11 +44,6 @@ const EditProfile = ({
     { value: 'male', label: messages['forms.male'] },
     { value: 'female', label: messages['forms.female'] },
   ];
-  
-  const onSubmit = (values, { setSubmitting}) => {
-
-  }
-
   return (
     <Card>
       <CardBody>
@@ -70,7 +59,7 @@ const EditProfile = ({
             instagram: '',
           }}
           validationSchema={ProfileSchema}
-          onSubmit={onSubmit}
+          // onSubmit={onSubmit}
         >
           {({
             handleSubmit,
@@ -163,19 +152,7 @@ const EditProfile = ({
   );
 };
 
-const mapStateToProps = ({ result }) => {
-  const {
-    resultItems, 
-    loading,
-    error
-  } = result;
-
-  return {
-    resultItems,
-    loading,
-    error,
-  };
-};
+const mapStateToProps = ({  }) => ({});
 
 export default injectIntl(
   connect(mapStateToProps, {

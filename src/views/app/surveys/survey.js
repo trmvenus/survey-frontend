@@ -26,6 +26,10 @@ const ReportsSurvey = React.lazy(() =>
   import(/* webpackChunkName: "reports" */ './reports')
 );
 
+const ReportPage = React.lazy(() =>
+  import(/* webpackChunkName: "results" */ './reports/report')
+);
+
 const LinksSurvey = React.lazy(() =>
   import(/* webpackChunkName: "links" */ './links')
 );
@@ -73,6 +77,11 @@ const Survey = ({ match, getSurveyItemAction }) => {
       <Route
         path={`${match.url}/reports`}
         render={(props) => <ReportsSurvey surveyid={survey_id} {...props} />}
+        exact
+      />
+      <Route
+        path={`${match.url}/reports/:reportid`}
+        render={(props) => <ReportPage surveyid={survey_id} {...props} />}
         exact
       />
       <Route

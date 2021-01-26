@@ -9,7 +9,8 @@ import { Colxx } from '../../components/common/CustomBootstrap';
 import { client } from '../../helpers/client';
 import { getRoleName } from '../../helpers/authHelper';
 
-const DataListView = ({ user, isSelect, collect, onCheckItem }) => {
+const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
+  const user = item;
   
   return (
     <Colxx xxs="12" className="mb-3">
@@ -28,11 +29,11 @@ const DataListView = ({ user, isSelect, collect, onCheckItem }) => {
                 </p>
               </NavLink>
               <p className="mb-1 text-muted text-small w-20 w-sm-100">
-                University 1
+                {user.organization_name}
               </p>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
                 <Moment format="YYYY-MM-DD">
-                  {user.date}
+                  {user.created_at}
                 </Moment>
               </p>
               <div className="w-10 w-sm-100 text-muted custom-control custom-checkbox pl-1 d-flex align-self-center pr-2">

@@ -31,7 +31,7 @@ const loginWithEmailPasswordAsync = async (email, password) =>
   await client
     .get(`/auth/login?email=${email}&password=${password}`)
     .then((user) => user.data)
-    .catch((error) => error)
+    .catch((error) => {throw error.response.data})
 
 function* loginWithEmailPassword({ payload }) {
   const { email, password } = payload.user;
@@ -60,7 +60,7 @@ const registerWithEmailPasswordAsync = async (name, email, password) =>
   await client
     .post('/auth/signup', {name, email, password})
     .then((user) => user.data)
-    .catch((error) => error);
+    .catch((error) => {throw error.response.data});
 
 function* registerWithEmailPassword({ payload }) {
   const { name, email, password } = payload.user;
@@ -93,7 +93,7 @@ const logoutAsync = async (history) => {
   await auth
     .signOut()
     .then((user) => user)
-    .catch((error) => error);
+    .catch((error) => {throw error.response.data});
   history.push(adminRoot);
 };
 
@@ -111,7 +111,7 @@ const forgotPasswordAsync = async (email) => {
   return await auth
     .sendPasswordResetEmail(email)
     .then((user) => user)
-    .catch((error) => error);
+    .catch((error) => {throw error.response.data});
 };
 
 function* forgotPassword({ payload }) {
@@ -136,7 +136,7 @@ const resetPasswordAsync = async (resetPasswordCode, newPassword) => {
   return await auth
     .confirmPasswordReset(resetPasswordCode, newPassword)
     .then((user) => user)
-    .catch((error) => error);
+    .catch((error) => {throw error.response.data});
 };
 
 function* resetPassword({ payload }) {
