@@ -107,12 +107,11 @@ export function* watchForgotPassword() {
   yield takeEvery(FORGOT_PASSWORD, forgotPassword);
 }
 
-const forgotPasswordAsync = async (email) => {
-  return await auth
+const forgotPasswordAsync = async (email) => 
+  await auth
     .sendPasswordResetEmail(email)
     .then((user) => user)
     .catch((error) => {throw error.response.data});
-};
 
 function* forgotPassword({ payload }) {
   const { email } = payload.forgotUserMail;

@@ -42,7 +42,11 @@ const getSurveyByShareRequest = async (payload) =>
 function* getSurveyByShare({payload}) {
   try {
     const response = yield call(getSurveyByShareRequest, payload);
-    yield put(getSurveySuccess(response));
+    if (response.success) {
+      yield put(getSurveySuccess(response.survey));
+    } else {
+      yield put(getSurveyError(response));
+    }
   } catch (error) {
     yield put(getSurveyError(error.response.data));
   }

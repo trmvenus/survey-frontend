@@ -10,7 +10,7 @@ import publicIp from 'public-ip';
 import SurveyPage from '../../containers/surveyjs/SurveyRun';
 
 import {
-  getResultItem, updateResultItem, getSurveyItemShare,
+  getSurveyItemShare, postResultItem,
 } from '../../redux/actions';
 
 import { Colxx, Separator } from '../../components/common/CustomBootstrap';
@@ -24,26 +24,22 @@ const RunSurvey = ({
   surveyItem,
   surveyItemError,
   isSurveyItemLoaded,
-  resultItem,
   resultItemError,
-  isResultItemLoaded,
 
-  getResultItemAction,
-  updateResultItemAction,
   getSurveyItemShareAction,
+  postResultItemAction,
 }) => {
   const [shareId, setShareId] = useState(null);
 
   const handleOnUpdate = async (result, timeSpent, completed=false) => {
     const ip_address = await publicIp.v4();
 
-    if (resultItem && resultItem.id) {
-      updateResultItemAction({
-        id: resultItem.id,
+    if (completed) {
+      postResultItemAction({
+        survey_id: surveyItem.id,
         result,
         time_spent: timeSpent,
         ip_address,
-        completed,
       });
     }
   }  
@@ -63,21 +59,7 @@ const RunSurvey = ({
   }, [shareId]);
 
   useEffect(() => {
-    const getResult = async () => {
-      const ip_address = await publicIp.v4();
-      getResultItemAction({
-        survey_id: surveyItem.survey_id,
-        ip_address,
-      })
-    };
-
-    if (isSurveyItemLoaded && surveyItem) {
-      getResult();
-    }
-  }, [isSurveyItemLoaded, surveyItem]);
-
-  useEffect(() => {
-    if (surveyItemError) {
+    if (surveyItemError && !('success' in surveyItemError)) {
       NotificationManager.warning(surveyItemError.message??surveyItemError, 'Run Survey Error', 3000, null, null, '');
     }
   }, [surveyItemError]);
@@ -93,7 +75,7 @@ const RunSurvey = ({
       <Row>
         <Colxx xxs="12">
           <div className="mb-2">
-            {isSurveyItemLoaded && (
+            {isSurveyItemLoaded && surveyItem && (
             <h1>
               {surveyItem.name}
             </h1>
@@ -104,14 +86,26 @@ const RunSurvey = ({
       </Row>
       <Row>
         <Colxx xxs="12" className="mb-4">
-          {isSurveyItemLoaded && isResultItemLoaded && !surveyItemError && !resultItemError ? (
+          {isSurveyItemLoaded && surveyItem ? (
             <SurveyPage 
               surveyJson={surveyItem.json}
-              resultJson={resultItem.json}
-              timeSpent={resultItem.time_spent}
+              resultJson={{}}
+              timeSpent={0}
               handleOnUpdate={handleOnUpdate} />
           ) : (
-            <div className="loading" />
+            <div className='text-center'>
+            {(surveyItemError.code === 'survey/over-deadline') ? (
+              <h1>The Deadline Has Passed.</h1>
+            ) : (surveyItemError.code === 'survey/inactivate-survey') ? (
+              <h1>This Survey Is Not Active Yet.</h1>
+            ) : (surveyItemError.code === 'survey/not-found-link') ? (
+              <h1>There Is No Such Survey.</h1>
+            ) : (surveyItemError.code === 'survey/deleted-survey') ? (
+              <h1>This Survey Has Already Been Deleted.</h1>
+            ) : (
+              <div className="loading" />
+            )}
+            </div>
           )}
           
         </Colxx>
@@ -125,23 +119,18 @@ const mapStateToProps = ({ survey, result }) => {
   const surveyItemError = survey.error;
   const isSurveyItemLoaded = survey.loading;
 
-  const resultItem = result.resultItem;
   const resultItemError = result.error;
-  const isResultItemLoaded = !result.loading;
-
+  
   return {
     surveyItem,
     surveyItemError,
     isSurveyItemLoaded,
-    resultItem,
     resultItemError,
-    isResultItemLoaded,
   };
 };
 export default injectIntl(
   connect(mapStateToProps, {
-    getResultItemAction: getResultItem,
-    updateResultItemAction: updateResultItem,
     getSurveyItemShareAction: getSurveyItemShare,
+    postResultItemAction: postResultItem,
   })(RunSurvey)
 );

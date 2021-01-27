@@ -25,11 +25,12 @@ const ForgotPassword = ({
   error,
   forgotPasswordAction,
 }) => {
-  const [email] = useState('demo@coloredstrategies.com');
+  const [email] = useState('');
 
   const onForgotPassword = (values) => {
     if (!loading) {
       if (values.email !== '') {
+        console.log(history);
         forgotPasswordAction(values, history);
       }
     }
@@ -63,11 +64,11 @@ const ForgotPassword = ({
       <Colxx xxs="12" md="10" className="mx-auto my-auto">
         <Card className="auth-card">
           <div className="position-relative image-side ">
-            <p className="text-white h2">MAGIC IS IN THE DETAILS</p>
-            <p className="white mb-0">
+            <p className="text-white h2">SURVEY WIZARD</p>
+            <p className="white mb-0 h5">
               Please use your e-mail to reset your password. <br />
               If you are not a member, please{' '}
-              <NavLink to="/user/register" className="white">
+              <NavLink to="/user/register" className='text-warning'>
                 register
               </NavLink>
               .

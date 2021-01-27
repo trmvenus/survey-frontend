@@ -148,7 +148,7 @@ const TopNav = ({
 
   const handleSearchInputKeyPress = (e) => {
     if (e.key === 'Enter') {
-      search();
+      // search();
     }
   };
 

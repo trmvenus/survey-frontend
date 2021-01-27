@@ -31,7 +31,7 @@ const data = [
         id: 'mysurveys-parent',
         icon: 'simple-icon-layers',
         label: 'menu.mysurveys',
-        to: `${adminRoot}/surveys/`,
+        to: `${adminRoot}/surveys`,
         subs: [
         ],
       },

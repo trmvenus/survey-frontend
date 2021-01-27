@@ -15,7 +15,7 @@ const TopnavEasyAccess = () => {
           right
           id="iconMenuDropdown"
         >
-          <NavLink to="/app/dashboard" className="icon-menu-item">
+          <NavLink to="/app/dashboards" className="icon-menu-item">
             <i className="iconsminds-shop-4 d-block" />{' '}
             <IntlMessages id="menu.dashboards" />
           </NavLink>
@@ -27,7 +27,7 @@ const TopnavEasyAccess = () => {
             <i className="simple-icon-calculator d-block" />{' '}
             <IntlMessages id="menu.surveys" />
           </NavLink>
-          <NavLink to="/app/settings/account" className="icon-menu-item">
+          <NavLink to="#" className="icon-menu-item">
             <i className="iconsminds-speach-bubble d-block" />{' '}
             <IntlMessages id="menu.chat" />
           </NavLink>

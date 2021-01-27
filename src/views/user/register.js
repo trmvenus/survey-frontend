@@ -48,9 +48,9 @@ const validateName = (value) => {
 }
 
 const Register = ({ history, loading, error, registerUserAction }) => {
-  const [name] = useState('Sarah Kortney');
-  const [email] = useState('demo@gogo.com');
-  const [password] = useState('gogo123');
+  const [name] = useState('');
+  const [email] = useState('');
+  const [password] = useState('');
 
   useEffect(() => {
     if (error) {
@@ -74,10 +74,10 @@ const Register = ({ history, loading, error, registerUserAction }) => {
         <Card className="auth-card">
           <div className="position-relative image-side ">
             <p className="text-white h2">SURVEY WIZARD</p>
-            <p className="white mb-0">
+            <p className="white mb-0 h5">
               Please use this form to register. <br />
               If you are a member, please{' '}
-              <NavLink to="/user/login">
+              <NavLink to="/user/login" className='text-warning'>
                 login
               </NavLink>
               .

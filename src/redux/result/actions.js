@@ -8,6 +8,9 @@ import {
   RESULT_LIST_UPDATE_ITEM,
   RESULT_LIST_UPDATE_ITEM_SUCCESS,
   RESULT_LIST_UPDATE_ITEM_ERROR,
+  RESULT_LIST_POST_ITEM,
+  RESULT_LIST_POST_ITEM_SUCCESS,
+  RESULT_LIST_POST_ITEM_ERROR,
 } from '../actions';
 
 export const getResultList = (payload) => ({
@@ -37,6 +40,21 @@ export const getResultItemSuccess = (item) => ({
 
 export const getResultItemError = (error) => ({
   type: RESULT_LIST_GET_ITEM_ERROR,
+  payload: error,
+});
+
+export const postResultItem = (payload) => ({
+  type: RESULT_LIST_POST_ITEM,
+  payload: payload,
+});
+
+export const postResultItemSuccess = (item) => ({
+  type: RESULT_LIST_POST_ITEM_SUCCESS,
+  payload: item,
+});
+
+export const postResultItemError = (error) => ({
+  type: RESULT_LIST_POST_ITEM_ERROR,
   payload: error,
 });
 
