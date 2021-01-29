@@ -7,6 +7,7 @@ import {
   LOGOUT_USER,
   FORGOT_PASSWORD,
   RESET_PASSWORD,
+  GET_CURRENT_USER,
 } from '../actions';
 
 import {
@@ -18,9 +19,11 @@ import {
   forgotPasswordError,
   resetPasswordSuccess,
   resetPasswordError,
+  getCurrentUserSuccess,
+  getCurrentUserError,
 } from './actions';
 
-import { adminRoot, currentUser } from "../../constants/defaultValues"
+import { adminRoot } from "../../constants/defaultValues"
 import { setCurrentUser } from '../../helpers/Utils';
 
 export function* watchLoginUser() {
@@ -32,6 +35,7 @@ const loginWithEmailPasswordAsync = async (email, password) =>
     .get(`/auth/login?email=${email}&password=${password}`)
     .then((user) => user.data)
     .catch((error) => {throw error.response.data})
+
 
 function* loginWithEmailPassword({ payload }) {
   const { email, password } = payload.user;
@@ -48,6 +52,7 @@ function* loginWithEmailPassword({ payload }) {
       yield put(loginUserError(loginUser.message));
     }
   } catch (error) {
+    console.log(error);
     yield put(loginUserError(error));
   }
 }
@@ -108,9 +113,9 @@ export function* watchForgotPassword() {
 }
 
 const forgotPasswordAsync = async (email) => 
-  await auth
-    .sendPasswordResetEmail(email)
-    .then((user) => user)
+  await client
+    .get(`/auth/forgot-password?email=${email}`)
+    .then((res) => res.data)
     .catch((error) => {throw error.response.data});
 
 function* forgotPassword({ payload }) {
@@ -132,9 +137,9 @@ export function* watchResetPassword() {
 }
 
 const resetPasswordAsync = async (resetPasswordCode, newPassword) => {
-  return await auth
-    .confirmPasswordReset(resetPasswordCode, newPassword)
-    .then((user) => user)
+  return await client
+    .post('/auth/reset-password', {resetPasswordCode, newPassword})
+    .then((res) => res.data)
     .catch((error) => {throw error.response.data});
 };
 
@@ -156,6 +161,28 @@ function* resetPassword({ payload }) {
   }
 }
 
+
+export function* watchGetCurrentUser() {
+  yield takeEvery(GET_CURRENT_USER, getCurrentUser);
+}
+
+const getCurrentUserAsync = async () => 
+  await client
+    .get('/auth/me')
+    .then(res => res.data)
+    .catch(error => {throw error.response.data});
+
+
+function* getCurrentUser() {
+  try {
+    const user = yield call(getCurrentUserAsync);
+    setCurrentUser(user);
+    yield put(getCurrentUserSuccess(user));
+  } catch (error) {
+    yield put(getCurrentUserError(error));
+  }
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchLoginUser),
@@ -163,5 +190,6 @@ export default function* rootSaga() {
     fork(watchRegisterUser),
     fork(watchForgotPassword),
     fork(watchResetPassword),
+    fork(watchGetCurrentUser),
   ]);
 }

@@ -92,11 +92,6 @@ const SurveyReportTable = ({
     }
   }, [error]);
 
-  useEffect(() => {
-    console.log("reportItems => ");
-    console.log(reportItems);
-  }, [reportItems])
-
   return (
     <div className="mb-4">
       {(isLoaded) ? (

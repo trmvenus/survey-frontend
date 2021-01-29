@@ -6,15 +6,12 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Input,
   Label,
 } from 'reactstrap';
-import Select from 'react-select';
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 
 import { FormikReactSelect, FormikCustomRadioGroup } from '../../containers/form-validations/FormikFields';
-import CustomSelectInput from '../../components/common/CustomSelectInput';
 import IntlMessages from '../../helpers/IntlMessages';
 import { addUser } from '../../redux/user/actions';
 import { getRoleName, UserRole } from '../../helpers/authHelper';
@@ -173,10 +170,8 @@ const AddNewModal = ({
   );
 };
 
-const mapStateToProps = ({  }) => {
-  return {
-  };
-};
+const mapStateToProps = ({}) => { return {} };
+
 export default connect(mapStateToProps, {
     addUserAction: addUser,
   })(AddNewModal);

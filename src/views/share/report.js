@@ -144,7 +144,7 @@ const ReportPage = ({
             reportData
           });
         } else {
-          console.log(reportData.message);
+          console.error(reportData.message);
         }
       }
 

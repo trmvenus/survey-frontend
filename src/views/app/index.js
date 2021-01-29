@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import AppLayout from '../../layout/AppLayout';
 import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
-import { getOrganizationList, getPillarList } from '../../redux/actions';
+import { getCurrentUser, getOrganizationList, getPillarList, getSurveyList } from '../../redux/actions';
 
 const Dashboards = React.lazy(() => 
   import(/* webpackChunkName: "viwes-dashboard" */ './dashboards')
@@ -24,15 +24,20 @@ const BlankPage = React.lazy(() =>
 
 const App = ({ 
   match,
+  getCurrentUserAction,
   getPillarListAction,
   getOrganizationListAction,
+  getSurveyListAction,
 }) => {
 
   useEffect(() => {
+    getCurrentUserAction();
+
+    getSurveyListAction();
+
     getPillarListAction();
 
     getOrganizationListAction();
-
   }, []);
   
   return (
@@ -56,7 +61,7 @@ const App = ({
             <ProtectedRoute
               path={`${match.url}/admin`}
               component={AdminSettings}
-              // roles={[UserRole.Admin]}
+              roles={[UserRole.Admin]}
             />
             <Route
               path={`${match.url}/blank-page`}
@@ -76,6 +81,8 @@ const mapStateToProps = ({ menu }) => {
 };
 
 export default withRouter(connect(mapStateToProps, {
+  getCurrentUserAction: getCurrentUser,
   getPillarListAction: getPillarList,
   getOrganizationListAction: getOrganizationList,
+  getSurveyListAction: getSurveyList,
 })(App));

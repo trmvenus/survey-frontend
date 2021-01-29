@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
-import { Redirect, Switch } from 'react-router-dom';
-import { ProtectedRoute, UserRole } from '../../../helpers/authHelper';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 const DashboardDefault = React.lazy(() =>
   import(/* webpackChunkName: "dashboard-default" */ './default')
@@ -11,10 +10,9 @@ const Dashboards = ({ match }) => (
     <Switch>
       <Redirect exact from={`${match.url}/`} to={`${match.url}/default`} />
 
-      <ProtectedRoute
+      <Route
         path={`${match.url}/default`}
-        component={DashboardDefault}
-        roles={[UserRole.Admin, UserRole.Editor]}
+        render={(props) => <DashboardDefault {...props} />}
       />
 
       <Redirect to="/error" />

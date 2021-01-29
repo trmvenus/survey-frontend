@@ -1,21 +1,24 @@
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import { Card, CardBody, Badge, CustomInput, NavItem, Collapse } from 'reactstrap';
+import { Card, CardBody, CustomInput, NavItem, Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import TimeAgo from 'react-timeago';
+import classnames from 'classnames';
 
 import IntlMessages from '../../helpers/IntlMessages';
 import { Colxx } from '../common/CustomBootstrap';
 import { adminRoot } from '../../constants/defaultValues';
 import { shareSurveyItem } from '../../redux/actions';
+import { getCurrentUser } from '../../helpers/Utils';
 
 const SurveyListItem = ({ 
   item, 
   handleCheckChange, 
   isSelected,
 
-  shareSurveyItemAction,
+  shareSurveyItemAction,  
 }) => {
+  const [currentUser] = useState(getCurrentUser());
   const [collapse, setCollapse] = useState(false);
 
   const handleShareSurvey = () => {
@@ -68,37 +71,73 @@ const SurveyListItem = ({
         <Collapse isOpen={collapse}>
           <div className="card-body pt-1">
             <ul className="list-unstyled list-group flex-sm-row flex-column">
-              <NavItem>
+              <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
+                {(currentUser.p_view) ? (
                 <NavLink to={`${adminRoot}/surveys/${item.id}/run`} location={{}}>
                   <i className="simple-icon-control-play" />
                   <IntlMessages id="survey.run" />
                 </NavLink>
+                ) : (
+                <>
+                  <i className="simple-icon-control-play" />
+                  <IntlMessages id="survey.run" />
+                </>
+                )}
               </NavItem>
-              <NavItem>
+              <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_edit})}>
+                {(currentUser.p_edit) ? (
                 <NavLink to={`${adminRoot}/surveys/${item.id}/edit`} location={{}}>
                   <i className="simple-icon-pencil" />
                   <IntlMessages id="survey.edit" />
                 </NavLink>
+                ) : (
+                <>
+                  <i className="simple-icon-pencil" />
+                  <IntlMessages id="survey.edit" />
+                </>
+                )}
               </NavItem>
-              <NavItem>
+              <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
+                {(currentUser.p_view) ? (
                 <NavLink to={`${adminRoot}/surveys/${item.id}/results`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-list" />
                   <IntlMessages id="survey.results" />
                 </NavLink>
+                ) : (
+                <>
+                  <i className="simple-icon-list" />
+                  <IntlMessages id="survey.results" />
+                </>
+                )}
               </NavItem>
-              <NavItem>
+              <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
+                {(currentUser.p_view) ? (
                 <NavLink to={`${adminRoot}/surveys/${item.id}/reports`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-chart" />
                   <IntlMessages id="survey.reports" />
                 </NavLink>
+                ) : (
+                <>
+                  <i className="simple-icon-chart" />
+                  <IntlMessages id="survey.reports" />
+                </>
+                )}
               </NavItem>
-              <NavItem>
+              <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
+                {(currentUser.p_view) ? (
                 <NavLink to={`${adminRoot}/surveys/${item.id}/links`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-link" />
                   <IntlMessages id="survey.links" />
                 </NavLink>
+                ) : (
+                <>
+                  <i className="simple-icon-link" />
+                  <IntlMessages id="survey.links" />
+                </>
+                )}
               </NavItem>
-              <NavItem>
+              <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_edit})}>
+                {(currentUser.p_edit) ? (
                 <NavLink to="#" onClick={() => {handleShareSurvey()}} location={{}}>
                   <i className="simple-icon-share" />
                   {item.is_share ? (
@@ -107,12 +146,29 @@ const SurveyListItem = ({
                     <IntlMessages id="survey.share" />
                   )}
                 </NavLink>
+                ) : (
+                <>
+                  <i className="simple-icon-share" />
+                  {item.is_share ? (
+                    <IntlMessages id="survey.unshare" />
+                  ) : (
+                    <IntlMessages id="survey.share" />
+                  )}
+                </>
+                )}
               </NavItem>
-              <NavItem>
+              <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_edit})}>
+                {(currentUser.p_edit) ? (
                 <NavLink to="#" onClick={() => {}} location={{}}>
                   <i className="simple-icon-settings" />
                   <IntlMessages id="survey.settings" />
                 </NavLink>
+                ) : (
+                <>
+                  <i className="simple-icon-settings" />
+                  <IntlMessages id="survey.settings" />
+                </>
+                )}
               </NavItem>
             </ul>
           </div>

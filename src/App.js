@@ -65,7 +65,7 @@ class App extends React.Component {
                   <ProtectedRoute
                     path={adminRoot}
                     component={ViewApp}
-                    roles={[UserRole.Admin, UserRole.Editor]}
+                    roles={[UserRole.Admin, UserRole.User, UserRole.OrgAdmin]}
                   />
                   <Route
                     path="/user"
@@ -96,10 +96,9 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = ({ authUser, settings }) => {
-  const { currentUser } = authUser;
+const mapStateToProps = ({ settings }) => {
   const { locale } = settings;
-  return { currentUser, locale };
+  return { locale };
 };
 const mapActionsToProps = {};
 

@@ -12,6 +12,9 @@ import {
   RESET_PASSWORD,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
+  GET_CURRENT_USER,
+  GET_CURRENT_USER_SUCCESS,
+  GET_CURRENT_USER_ERROR,
 } from '../actions';
 
 export const loginUser = (user, history) => ({
@@ -70,3 +73,15 @@ export const logoutUser = (history) => ({
   type: LOGOUT_USER,
   payload: { history },
 });
+
+export const getCurrentUser = () => ({
+  type: GET_CURRENT_USER,
+});
+export const getCurrentUserSuccess = (user) => ({
+  type: GET_CURRENT_USER_SUCCESS,
+  payload: user,
+});
+export const getCurrentUserError = (error) => ({
+  type: GET_CURRENT_USER_ERROR,
+  payload: error,
+})

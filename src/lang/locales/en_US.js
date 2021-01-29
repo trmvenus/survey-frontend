@@ -28,6 +28,9 @@ module.exports = {
   'user.reset-password-button': 'RESET',
   'user.buy': 'BUY',
   'user.username': 'Username',
+  'user.new-password-again': 'New Password Again',
+  'user.new-password': 'New Password',
+  'user.reset-password': 'Reset Password',
   'user.role': 'Role',
   'user.organization': 'Organization',
   'user.add-new-modal-title': 'Add New User',
@@ -240,6 +243,7 @@ module.exports = {
   'survey.copy': 'Copy',
   'survey.delete-title': 'Delete Surveys',
   'survey.copy-title': 'Copy Surveys',
+  'survey.disabled': 'Not Allowed',
 
   /* 06.02. Summary */
   'summary.total-responses': 'Total Responses',

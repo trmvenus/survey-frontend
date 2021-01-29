@@ -13,12 +13,10 @@ import {
   addContainerClassname,
   changeDefaultClassnames,
   changeSelectedMenuHasSubItems,
-  getSurveyList,
 } from '../../redux/actions';
 
 import { adminRoot } from "../../constants/defaultValues";
 import menuItems from '../../constants/menu';
-import { currentUser } from '../../constants/defaultValues';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -273,7 +271,6 @@ class Sidebar extends Component {
     this.handleWindowResize();
     this.handleProps();
     this.setSelectedLiActive(this.setHasSubItemStatus);
-    this.props.getSurveyListAction();
   }
 
   componentWillUnmount() {
@@ -557,6 +554,5 @@ export default withRouter(
     addContainerClassname,
     changeDefaultClassnames,
     changeSelectedMenuHasSubItems,
-    getSurveyListAction: getSurveyList,
   })(Sidebar)
 );

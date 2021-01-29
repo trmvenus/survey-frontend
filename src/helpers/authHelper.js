@@ -7,9 +7,11 @@ import { getCurrentUser } from './Utils';
 import { isAuthGuardActive } from '../constants/defaultValues';
 
 const ProtectedRoute = ({ component: Component, roles = undefined, ...rest }) => {
+    
     const setComponent = (props) => {
         if (isAuthGuardActive) {
             const currentUser = getCurrentUser();
+
             if (currentUser) {
                 if (roles) {
                     if (roles.includes(currentUser.role)) {

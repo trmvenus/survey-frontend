@@ -20,8 +20,11 @@ const validateNewPassword = (values) => {
 const ResetPassword = ({
   location,
   history,
+
+  storeNewPassword,
   loading,
   error,
+
   resetPasswordAction,
 }) => {
   const [newPassword] = useState('');
@@ -37,7 +40,7 @@ const ResetPassword = ({
         null,
         ''
       );
-    } else if (!loading && newPassword === 'success')
+    } else if (!loading && storeNewPassword === 'success') {
       NotificationManager.success(
         'Please login with your new password.',
         'Reset Password Success',
@@ -46,17 +49,18 @@ const ResetPassword = ({
         null,
         ''
       );
-  }, [error, loading, newPassword]);
+    }
+  }, [error, loading, storeNewPassword]);
 
   const onResetPassword = (values) => {
     if (!loading) {
       const params = new URLSearchParams(location.search);
-      const oobCode = params.get('oobCode');
-      if (oobCode) {
+      const token = params.get('token');
+      if (token) {
         if (values.newPassword !== '') {
           resetPasswordAction({
             newPassword: values.newPassword,
-            resetPasswordCode: oobCode,
+            resetPasswordCode: token,
             history,
           });
         }
@@ -164,7 +168,12 @@ const ResetPassword = ({
 
 const mapStateToProps = ({ authUser }) => {
   const { newPassword, resetPasswordCode, loading, error } = authUser;
-  return { newPassword, resetPasswordCode, loading, error };
+  return { 
+    storeNewPassword: newPassword, 
+    resetPasswordCode, 
+    loading, 
+    error 
+  };
 };
 
 export default connect(mapStateToProps, {

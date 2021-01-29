@@ -12,13 +12,15 @@ import {
   RESET_PASSWORD,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
+  GET_CURRENT_USER,
+  GET_CURRENT_USER_SUCCESS,
+  GET_CURRENT_USER_ERROR,
 } from '../actions';
 import { getCurrentUser } from '../../helpers/Utils';
-import { isAuthGuardActive, currentUser } from '../../constants/defaultValues';
 
 
 const INIT_STATE = {
-  currentUser: isAuthGuardActive ? currentUser : getCurrentUser(),
+  currentUser: getCurrentUser(),
   forgotUserMail: '',
   newPassword: '',
   resetPasswordCode: '',
@@ -39,6 +41,7 @@ export default (state = INIT_STATE, action) => {
         currentUser: null,
         error: action.payload.message,
       };
+
     case FORGOT_PASSWORD:
       return { ...state, loading: true, error: '' };
     case FORGOT_PASSWORD_SUCCESS:
@@ -55,6 +58,7 @@ export default (state = INIT_STATE, action) => {
         forgotUserMail: '',
         error: action.payload.message,
       };
+
     case RESET_PASSWORD:
       return { ...state, loading: true, error: '' };
     case RESET_PASSWORD_SUCCESS:
@@ -73,6 +77,7 @@ export default (state = INIT_STATE, action) => {
         resetPasswordCode: '',
         error: action.payload.message,
       };
+
     case REGISTER_USER:
       return { ...state, loading: true, error: '' };
     case REGISTER_USER_SUCCESS:
@@ -84,8 +89,17 @@ export default (state = INIT_STATE, action) => {
         currentUser: null,
         error: action.payload.message,
       };
+
     case LOGOUT_USER:
       return { ...state, currentUser: null, error: '' };
+
+    case GET_CURRENT_USER:
+      return { ...state, };
+    case GET_CURRENT_USER_SUCCESS:
+      return { ...state, currentUser: action.payload };
+    case GET_CURRENT_USER_ERROR:
+      return { ...state, error: action.payload };
+
     default:
       return { ...state };
   }

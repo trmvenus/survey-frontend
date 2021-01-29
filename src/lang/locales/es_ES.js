@@ -28,6 +28,9 @@ module.exports = {
   'user.reset-password-button': 'REINICIAR',
   'user.buy': 'COMPRAR',
   'user.username': 'Nombre de Usuario',
+  'user.new-password-again': 'New Password Again',
+  'user.new-password': 'New Password ',
+  'user.reset-password': 'Reset Password',
   'user.role': 'Rol',
   'user.organization': 'Organización',
   'user.add-new-modal-title': 'Add New Usuario',
@@ -243,6 +246,7 @@ module.exports = {
   'survey.copy': 'Copiar',
   'survey.delete-title': 'Borrar Encuestas',
   'survey.copy-title': 'Copiar Encuestas',
+  'survey.disabled': 'No Permitido',
 
   /* 06.02. Summary */
   'summary.total-responses': 'Respuestas Totales',

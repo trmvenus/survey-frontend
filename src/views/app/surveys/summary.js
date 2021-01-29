@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { 
@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import Moment from 'react-moment';
 import { NavLink } from 'react-router-dom';
+import classnames from 'classnames';
 
 import { adminRoot } from '../../../constants/defaultValues';
 import IntlMessages from '../../../helpers/IntlMessages';
@@ -26,6 +27,7 @@ import { NotificationManager } from '../../../components/common/react-notificati
 import { getPagesCount, getQuestionsCount } from '../../../helpers/surveyHelper';
 import ResponsesChartCard from '../../../containers/summary/ResponsesChartCard';
 import { savePDF } from '../../../helpers/export';
+import { getCurrentUser } from '../../../helpers/Utils';
 
 
 const SummarySurvey = ({ 
@@ -38,6 +40,7 @@ const SummarySurvey = ({
  }) => {
 
   const { messages } = intl;
+  const [currentUser] = useState(getCurrentUser());
 
   const exportToPDF = () => {
     if (isLoaded) {
@@ -125,46 +128,94 @@ const SummarySurvey = ({
           <Card>
             <CardBody >
               <ul className="list-unstyled list-group flex-column">
-                <NavItem className="text-one p-2">
+                <NavItem className={"text-one p-2 " + classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
+                  {(currentUser.p_view) ? (
                   <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/run`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-control-play mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.run"/></span>
                   </NavLink>
+                  ) : (
+                  <>
+                    <i className="simple-icon-control-play mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.run"/></span>
+                    <span className="text-one float-right">&nbsp;(<IntlMessages id="survey.disabled"/>)</span>
+                  </>
+                  )}
                 </NavItem>
-                <Separator class="mb-3"/>
-                <NavItem className="text-one p-2">
+                <Separator className="mb-1"/>
+                <NavItem className={"text-one p-2 " + classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_edit})}>
+                  {(currentUser.p_edit) ? (
                   <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/edit`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-pencil mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.edit"/></span>
                   </NavLink>
+                  ) : (
+                  <>
+                    <i className="simple-icon-pencil mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.edit"/></span>
+                    <span className="text-one float-right">&nbsp;(<IntlMessages id="survey.disabled"/>)</span>
+                  </>
+                  )}
                 </NavItem>
-                <Separator class="mb-3"/>
-                <NavItem className="text-one p-2">
+                <Separator className="mb-1"/>
+                <NavItem className={"text-one p-2 " + classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
+                  {(currentUser.p_view) ? (
                   <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/results`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-list mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.results"/></span>
                   </NavLink>
+                  ) : (
+                  <>
+                    <i className="simple-icon-list mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.results"/></span>
+                    <span className="text-one float-right">&nbsp;(<IntlMessages id="survey.disabled"/>)</span>
+                  </>
+                  )}
                 </NavItem>
-                <Separator class="mb-3"/>
-                <NavItem className="text-one p-2">
+                <Separator className="mb-1"/>
+                <NavItem className={"text-one p-2 " + classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
+                  {(currentUser.p_view) ? (
                   <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/reports`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-chart mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.reports"/></span>
                   </NavLink>
+                  ) : (
+                  <>
+                    <i className="simple-icon-chart mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.reports"/></span>
+                    <span className="text-one float-right">&nbsp;(<IntlMessages id="survey.disabled"/>)</span>
+                  </>
+                  )}
                 </NavItem>
-                <Separator class="mb-3"/>
-                <NavItem className="text-one p-2">
+                <Separator className="mb-1"/>
+                <NavItem className={"text-one p-2 " + classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
+                  {(currentUser.p_view) ? (
                   <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/links`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-link mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.links"/></span>
                   </NavLink>
+                  ) : (
+                  <>
+                    <i className="simple-icon-link mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.links"/></span>
+                    <span className="text-one float-right">&nbsp;(<IntlMessages id="survey.disabled"/>)</span>
+                  </>
+                  )}
                 </NavItem>
-                <Separator class="mb-3"/>
-                <NavItem className="text-one p-2">
+                <Separator className="mb-1"/>
+                <NavItem className={"text-one p-2 " + classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_edit})}>
+                  {(currentUser.p_edit) ? (
                   <NavLink to={`#`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-settings mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.settings"/></span>
                   </NavLink>
+                  ) : (
+                  <>
+                    <i className="simple-icon-settings mr-3" />  
+                    <span className="text-one"><IntlMessages id="survey.settings"/></span>
+                    <span className="text-one float-right">&nbsp;(<IntlMessages id="survey.disabled"/>)</span>
+                  </>
+                  )}
                 </NavItem>
               </ul>
             </CardBody>

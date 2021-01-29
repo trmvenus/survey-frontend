@@ -88,8 +88,6 @@ const SurveyCreator = ({
 
     // surveyCreator..currentLocale = locale;
 
-    console.log(surveyCreator);
-
     surveyCreator.toolbox.removeItem("panel");
     surveyCreator.toolbox.removeItem("paneldynamic");
     surveyCreator.toolbox.removeItem("matrixdynamic");

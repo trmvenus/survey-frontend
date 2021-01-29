@@ -71,7 +71,6 @@ export default (state = INIT_STATE, action) => {
     case USER_LIST_CHANGE_ORGANIZATION:
       return { ...state, };
     case USER_LIST_CHANGE_ORGANIZATION_SUCCESS:
-      console.log(action.payload);
       return { 
         ...state, 
         users: state.users.map(user => 
