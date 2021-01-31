@@ -10,7 +10,7 @@ Table of Contents
 
 module.exports = {
   /* 01.General */
-  'general.copyright': 'Gogo React © Todos los derechos reservados.',
+  'general.copyright': 'SurveyWizard © Todos los derechos reservados.',
 
   "unauthorized.title": "Unauthorized Access Attempt",
   "unauthorized.detail": "You are not authorized to view the page you are trying to access.",
@@ -125,6 +125,7 @@ module.exports = {
   'menu.wizard': 'Mago',
   'menu.dashboard': 'Tablero',
   'menu.mysurveys': 'Mi Encuestas',
+  'menu.sharedsurveys': 'Encuestas Compartidas',
   'menu.surveys': 'Encuestas',
   'menu.list': 'Listas',
   'menu.run': 'Correr',
@@ -140,11 +141,16 @@ module.exports = {
   'menu.users': 'Usuarios',
   'menu.summary': 'Resumen',
   'menu.organizations': 'Organizaciones',
+  'menu.mydashboard': 'Mi Tableros',
+  'menu.websitedashboard': 'Sitio web',
 
   /* 04.Error  */
-  'layouts.error-title': 'Vaya, parece que ha ocurrido un error!',
-  'layouts.error-code': 'Código de error',  
-  'layouts.go-back-home': 'REGRESAR A INICIO',
+  'dashboards.survey': 'Encuesta',
+  'dashboards.surveys': 'Encuestas',  
+  'dashboards.activated-surveys': 'Encuestas Activadas',
+  'dashboards.completed-responses': 'Respuestas Completadas',
+  'dashboards.daily-survey-created': 'Encuesta Diaria Creada',
+  'dashboards.daily-total-responses': 'Total de Respuestas Diarias',
 
   /* 05.Esquemas */
   'pages.add-new': 'AGREGAR NUEVO',
@@ -233,6 +239,7 @@ module.exports = {
   'survey.orderby': 'Ordenar por : ',
   'survey.all-surveys': 'Todas las Encuestas',
   'survey.completed-surveys': 'Encuestas Completadas',
+  'survey.shared-surveys': 'Encuestas Compartidas',
   'survey.categories': 'Categorías',
   'survey.active-surveys': 'Encuestas Activas',
   'survey.labels': 'Etiquetas',
@@ -333,6 +340,18 @@ module.exports = {
   'link.send-emails': 'Enviar Email',
   'link.already-sent': 'Ya Enviado',
   'link.email-sending-success-message': 'El correo electrónico se envió correctamente.',
+
+  /* 06.06. Settings */
+  'settings.active': 'Activo',
+  'settings.share': 'Compartir',
+  'settings.multi-response': 'Respuesta Múltiple',
+  'settings.active-description': 'Si la encuesta no está activada, los usuarios no pueden ejecutar la encuesta.',
+  'settings.share-description': 'Compartir una encuesta permite a otros usuarios ejecutar la encuesta.',
+  'settings.multi-responses-description': 'Si se permiten varias respuestas, un usuario puede ejecutar la encuesta varias veces.',
+
+  /* 06.07. Run */
+  'run.not-active': 'Esta encuesta aún no está activa.',
+  'run.already-posted': 'Ya ha publicado esta encuesta.',
 
   /* 07.IU */
 

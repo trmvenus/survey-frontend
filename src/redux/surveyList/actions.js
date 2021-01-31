@@ -18,6 +18,12 @@ import {
   SURVEY_LIST_SHARE_ITEM,
   SURVEY_LIST_SHARE_ITEM_SUCCESS,
   SURVEY_LIST_SHARE_ITEM_ERROR,
+  SURVEY_LIST_ACTIVE_ITEM,
+  SURVEY_LIST_ACTIVE_ITEM_SUCCESS,
+  SURVEY_LIST_ACTIVE_ITEM_ERROR,
+  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM,
+  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS,
+  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR,
 } from '../actions';
 
 export const getSurveyList = () => ({
@@ -110,5 +116,35 @@ export const shareSurveyItemSuccess = (item) => ({
 
 export const shareSurveyItemError = (error) => ({
   type: SURVEY_LIST_SHARE_ITEM_ERROR,
+  payload: error,
+});
+
+export const activeSurveyItem = (payload) => ({
+  type: SURVEY_LIST_ACTIVE_ITEM,
+  payload: payload,
+});
+
+export const activeSurveyItemSuccess = (item) => ({
+  type: SURVEY_LIST_ACTIVE_ITEM_SUCCESS,
+  payload: item,
+});
+
+export const activeSurveyItemError = (error) => ({
+  type: SURVEY_LIST_ACTIVE_ITEM_ERROR,
+  payload: error,
+});
+
+export const setMultiResponsesSurveyItem = (payload) => ({
+  type: SURVEY_LIST_SET_MULTI_RESPONSES_ITEM,
+  payload: payload,
+});
+
+export const setMultiResponsesSurveyItemSuccess = (item) => ({
+  type: SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS,
+  payload: item,
+});
+
+export const setMultiResponsesSurveyItemError = (error) => ({
+  type: SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR,
   payload: error,
 });

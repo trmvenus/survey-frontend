@@ -5,6 +5,10 @@ const MySurveyList = React.lazy(() =>
   import(/* webpackChunkName: "mysurveys" */ './mysurveys')
 );
 
+const SharedSurveyList = React.lazy(() =>
+  import(/* webpackChunkName: "sharedsurveys" */ './sharedsurveys')
+);
+
 const Survey = React.lazy(() =>
   import(/* webpackChunkName: "run" */ './survey')
 );
@@ -16,6 +20,10 @@ const Surveys = ({ match }) => (
       <Route
         path={`${match.url}/mysurveys`}
         render={(props) => <MySurveyList {...props} />}
+      />
+      <Route
+        path={`${match.url}/sharedsurveys`}
+        render={(props) => <SharedSurveyList {...props} />}
       />
       <Route
         path={`${match.url}/:surveyid`}

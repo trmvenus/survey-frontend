@@ -105,7 +105,8 @@ const logoutAsync = async (history) => {
 function* logout({ payload }) {
   const { history } = payload;
   setCurrentUser();
-  yield call(logoutAsync, history);
+  history.push('/user/login');
+  // yield call(logoutAsync, history);
 }
 
 export function* watchForgotPassword() {

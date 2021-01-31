@@ -95,7 +95,7 @@ const ResponsesChartCard = ({ className = '', controls = true, dates=[], }) => {
       </CardBody>
 
       <div className="chart card-body pt-0">
-        <AreaChart shadow data={areaChartData} />
+        <AreaChart shadow data={areaChartData} mintick={0} maxtick={20} />
       </div>
     </Card>
   );

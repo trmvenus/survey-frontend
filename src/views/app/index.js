@@ -4,7 +4,13 @@ import { connect } from 'react-redux';
 
 import AppLayout from '../../layout/AppLayout';
 import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
-import { getCurrentUser, getOrganizationList, getPillarList, getSurveyList } from '../../redux/actions';
+import { 
+  getCurrentUser, 
+  getOrganizationList, 
+  getPillarList, 
+  getSurveyList,
+  getSharedSurveyList,
+} from '../../redux/actions';
 
 const Dashboards = React.lazy(() => 
   import(/* webpackChunkName: "viwes-dashboard" */ './dashboards')
@@ -27,13 +33,16 @@ const App = ({
   getCurrentUserAction,
   getPillarListAction,
   getOrganizationListAction,
-  getSurveyListAction,
+  getMySurveyListAction,
+  getSharedSurveyListAction,
 }) => {
 
   useEffect(() => {
     getCurrentUserAction();
 
-    getSurveyListAction();
+    getMySurveyListAction();
+
+    getSharedSurveyListAction();
 
     getPillarListAction();
 
@@ -84,5 +93,6 @@ export default withRouter(connect(mapStateToProps, {
   getCurrentUserAction: getCurrentUser,
   getPillarListAction: getPillarList,
   getOrganizationListAction: getOrganizationList,
-  getSurveyListAction: getSurveyList,
+  getMySurveyListAction: getSurveyList,
+  getSharedSurveyListAction: getSharedSurveyList,
 })(App));

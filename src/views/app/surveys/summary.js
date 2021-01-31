@@ -37,7 +37,7 @@ const SummarySurvey = ({
   surveyItem,
   error,
   isLoaded,
- }) => {
+}) => {
 
   const { messages } = intl;
   const [currentUser] = useState(getCurrentUser());
@@ -45,6 +45,16 @@ const SummarySurvey = ({
   const exportToPDF = () => {
     if (isLoaded) {
       savePDF(surveyItem.name, surveyItem.json);
+    }
+  }
+
+  const handleClickRun = (event) => {
+    if (surveyItem && surveyItem.is_active) {
+      NotificationManager.info(messages['run.not-active'], 'Cannot Run Survey', 3000, null, null, '');
+      event.preventDefault();
+    } else if (surveyItem.is_multi_responses === false && surveyItem.myresponses > 0) {
+      NotificationManager.info(messages['run.already-posted'], 'Cannot Run Survey', 3000, null, null, '');
+      event.preventDefault();
     }
   }
 
@@ -130,7 +140,7 @@ const SummarySurvey = ({
               <ul className="list-unstyled list-group flex-column">
                 <NavItem className={"text-one p-2 " + classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
                   {(currentUser.p_view) ? (
-                  <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/run`} onClick={() => {}} location={{}}>
+                  <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/run`} onClick={handleClickRun} location={{}}>
                     <i className="simple-icon-control-play mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.run"/></span>
                   </NavLink>
@@ -205,7 +215,7 @@ const SummarySurvey = ({
                 <Separator className="mb-1"/>
                 <NavItem className={"text-one p-2 " + classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_edit})}>
                   {(currentUser.p_edit) ? (
-                  <NavLink to={`#`} onClick={() => {}} location={{}}>
+                  <NavLink to={`${adminRoot}/surveys/${surveyItem.id}/settings`} onClick={() => {}} location={{}}>
                     <i className="simple-icon-settings mr-3" />  
                     <span className="text-one"><IntlMessages id="survey.settings"/></span>
                   </NavLink>

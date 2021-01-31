@@ -14,7 +14,7 @@ const EditSurvey = React.lazy(() =>
   import(/* webpackChunkName: "edit" */ './edit')
 );
 
-const ResultsSurvey = React.lazy(() =>
+const SurveyResults = React.lazy(() =>
   import(/* webpackChunkName: "results" */ './results')
 );
 
@@ -22,7 +22,7 @@ const ResultPage = React.lazy(() =>
   import(/* webpackChunkName: "results" */ './results/result')
 );
 
-const ReportsSurvey = React.lazy(() =>
+const SurveyReports = React.lazy(() =>
   import(/* webpackChunkName: "reports" */ './reports')
 );
 
@@ -30,12 +30,16 @@ const ReportPage = React.lazy(() =>
   import(/* webpackChunkName: "results" */ './reports/report')
 );
 
-const LinksSurvey = React.lazy(() =>
+const SurveyLinks = React.lazy(() =>
   import(/* webpackChunkName: "links" */ './links')
 );
 
-const SummarySurvey = React.lazy(() => 
-  import(/* webpackChunkName: "links" */ './summary')
+const SurveySettings = React.lazy(() =>
+  import(/* webpackChunkName: "settings" */ './settings')
+);
+
+const SurveySummary = React.lazy(() => 
+  import(/* webpackChunkName: "summary" */ './summary')
 );
 
 const Survey = ({ match, getSurveyItemAction }) => {
@@ -51,7 +55,7 @@ const Survey = ({ match, getSurveyItemAction }) => {
     <Switch>
       <Route
         path={`${match.url}`}
-        render={(props) => <SummarySurvey surveyid={survey_id} {...props} />}
+        render={(props) => <SurveySummary surveyid={survey_id} {...props} />}
         exact
       />
       <Route
@@ -66,7 +70,7 @@ const Survey = ({ match, getSurveyItemAction }) => {
       />
       <Route
         path={`${match.url}/results`}
-        render={(props) => <ResultsSurvey surveyid={survey_id} {...props} />}
+        render={(props) => <SurveyResults surveyid={survey_id} {...props} />}
         exact
       />
       <Route
@@ -76,7 +80,7 @@ const Survey = ({ match, getSurveyItemAction }) => {
       />
       <Route
         path={`${match.url}/reports`}
-        render={(props) => <ReportsSurvey surveyid={survey_id} {...props} />}
+        render={(props) => <SurveyReports surveyid={survey_id} {...props} />}
         exact
       />
       <Route
@@ -86,7 +90,12 @@ const Survey = ({ match, getSurveyItemAction }) => {
       />
       <Route
         path={`${match.url}/links`}
-        render={(props) => <LinksSurvey surveyid={survey_id} {...props} />}
+        render={(props) => <SurveyLinks surveyid={survey_id} {...props} />}
+        exact
+      />
+      <Route
+        path={`${match.url}/settings`}
+        render={(props) => <SurveySettings surveyid={survey_id} {...props} />}
         exact
       />
       <Redirect to="/error" />

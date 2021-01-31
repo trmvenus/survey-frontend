@@ -10,7 +10,7 @@ Table of Contents
 
 module.exports = {
   /* 01.General */
-  'general.copyright': 'Gogo React © 2018 All Rights Reserved.',
+  'general.copyright': 'SurveyWizard © 2021 All Rights Reserved.',
 
   "unauthorized.title": "Unauthorized Access Attempt",
   "unauthorized.detail": "You are not authorized to view the page you are trying to access.",
@@ -125,6 +125,7 @@ module.exports = {
   'menu.wizard': 'Wizard',
   'menu.dashboard': 'Dashboard',
   'menu.mysurveys': 'My Surveys',
+  'menu.sharedsurveys': 'Shared Surveys',
   'menu.surveys': 'Surveys',
   'menu.list': 'List',
   'menu.run': 'Run',
@@ -140,13 +141,24 @@ module.exports = {
   'menu.users': 'Users',
   'menu.summary': 'Summary',
   'menu.organizations': 'Organizations',
+  'menu.mydashboard': 'My Dashboard',
+  'menu.websitedashboard': 'Website Dashboard',
 
-  /* 04.Error Page */
+  /* 04.Dashboards */
+  'dashboards.survey': 'Survey',
+  'dashboards.surveys': 'Surveys',
+  'dashboards.activated-surveys': 'Activated Surveys',
+  'dashboards.responses': 'Responses',
+  'dashboards.response': 'Response',
+  'dashboards.completed-responses': 'Completed Responses',
+  'dashboards.daily-survey-created': 'Daily Survey Created',
+  'dashboards.daily-total-responses': 'Daily Total Responses',
+
+  /* 05.Pages */
   'pages.error-title': 'Ooops... looks like an error occurred!',
   'pages.error-code': 'Error code',
   'pages.go-back-home': 'GO BACK HOME',
 
-  /* 05.Pages */
   'pages.add-new': 'ADD NEW',
   'pages.add-new-modal-title': 'Add New Item',
   'pages.display-options': 'Display Options',
@@ -230,6 +242,7 @@ module.exports = {
   'survey.orderby': 'Order By : ',
   'survey.all-surveys': 'All Surveys',
   'survey.completed-surveys': 'Completed Surveys',
+  'survey.shared-surveys': 'Shared Surveys',
   'survey.categories': 'Categories',
   'survey.active-surveys': 'Active Surveys',
   'survey.labels': 'Labels',
@@ -330,6 +343,18 @@ module.exports = {
   'link.send-emails': 'Send Emails',
   'link.already-sent': 'Already Sent',
   'link.email-sending-success-message': 'The email has been sent successfully.',
+
+  /* 06.06. Settings */
+  'settings.active': 'Active',
+  'settings.share': 'Share',
+  'settings.multi-responses': 'Multi Responses',
+  'settings.active-description': 'If the survey is not active, users cannot run the survey.',
+  'settings.share-description': 'Sharing a survey allows other users to run the survey.',
+  'settings.multi-responses-description': 'If multiple responses are allowed, one user can run the survey multiple times.',
+
+  /* 06.07. Run */
+  'run.not-active': 'This survey is not active yet.',
+  'run.already-posted': 'You have already posted this survey.',
 
   /* 07.UI */
 

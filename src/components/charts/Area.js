@@ -4,7 +4,13 @@ import { Chart } from 'chart.js';
 
 import { areaChartOptions } from './config';
 
-const Area = ({ data, shadow = false }) => {
+const Area = ({ 
+  data, 
+  shadow = false,
+  mintick = 50,
+  maxtick = 70,
+  stepSize = 5,
+}) => {
   const chartContainer = useRef(null);
   const [, setChartInstance] = useState(null);
 
@@ -30,6 +36,11 @@ const Area = ({ data, shadow = false }) => {
           },
         });
       }
+
+      areaChartOptions.scales.yAxes[0].ticks.stepSize = stepSize;
+      areaChartOptions.scales.yAxes[0].ticks.min = mintick;
+      areaChartOptions.scales.yAxes[0].ticks.max = maxtick;
+
       const context = chartContainer.current.getContext('2d');
       const newChartInstance = new Chart(context, {
         type: shadow ? 'lineWithShadow' : 'line',

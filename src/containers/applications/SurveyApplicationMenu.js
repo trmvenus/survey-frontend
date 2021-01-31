@@ -69,20 +69,20 @@ const SurveyApplicationMenu = ({
               className={classnames({
                 active:
                   filter &&
-                  filter.column === 'status' &&
-                  filter.value === 'ACTIVE',
+                  filter.column === 'is_active' &&
+                  filter.value === true,
               })}
             >
               <NavLink
                 to="#"
                 location={{}}
-                onClick={() => addFilter('status', 'ACTIVE')}
+                onClick={() => addFilter('is_active', true)}
               >
                 <i className="simple-icon-refresh" />
                 <IntlMessages id="survey.active-surveys" />
                 <span className="float-right">
                   {loading &&
-                    surveyItems.filter((x) => x.status === 'ACTIVE').length}
+                    allSurveyItems.filter((x) => x.is_active === true).length}
                 </span>
               </NavLink>
             </NavItem>
@@ -90,20 +90,20 @@ const SurveyApplicationMenu = ({
               className={classnames({
                 active:
                   filter &&
-                  filter.column === 'status' &&
-                  filter.value === 'COMPLETED',
+                  filter.column === 'is_share' &&
+                  filter.value === true,
               })}
             >
               <NavLink
                 to="#"
                 location={{}}
-                onClick={() => addFilter('status', 'COMPLETED')}
+                onClick={() => addFilter('is_share', true)}
               >
                 <i className="simple-icon-check" />
-                <IntlMessages id="survey.completed-surveys" />
+                <IntlMessages id="survey.shared-surveys" />
                 <span className="float-right">
                   {loading &&
-                    surveyItems.filter((x) => x.status === 'COMPLETED').length}
+                    allSurveyItems.filter((x) => x.is_share === true).length}
                 </span>
               </NavLink>
             </NavItem>

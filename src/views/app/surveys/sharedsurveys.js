@@ -18,19 +18,14 @@ import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 
 import {
-  getSurveyList,
-  getSurveyListWithOrder,
-  getSurveyListSearch,
-  selectedSurveyItemsChange,
-  deleteSurveyItems,
-  copySurveyItems,
+  getSharedSurveyListWithOrder,
+  getSharedSurveyListSearch,
+  selectedSharedSurveyItemsChange,
+  copySharedSurveyItems,
 } from '../../../redux/actions';
 
-import SurveyListItem from '../../../components/applications/SurveyListItem';
-import AddNewSurveyModal from '../../../containers/applications/AddNewSurveyModal';
-import DeleteSurveyModal from '../../../containers/applications/DeleteSurveyModal';
+import SharedSurveyListItem from '../../../components/applications/SharedSurveyListItem';
 import CopySurveyModal from '../../../containers/applications/CopySurveyModal';
-import SurveyApplicationMenu from '../../../containers/applications/SurveyApplicationMenu';
 
 const getIndex = (value, arr, prop) => {
   for (let i = 0; i < arr.length; i += 1) {
@@ -41,36 +36,25 @@ const getIndex = (value, arr, prop) => {
   return -1;
 };
 
-const MySurveyList = ({ 
+const SharedSurveyList = ({ 
   match,
   intl,
-  surveyItems,
+  sharedSurveyItems,
   searchKeyword,
-  loading,
+  isSharedSurveysLoaded,
   orderColumn,
   orderColumns,
   selectedItems,
 
-  getSurveyListWithOrderAction,
-  getSurveyListSearchAction,
-  selectedSurveyItemsChangeAction,
-  deleteSurveyItemsAction,
-  copySurveyItemsAction,
+  getSharedSurveyListWithOrderAction,
+  getSharedSurveyListSearchAction,
+  selectedSharedSurveyItemsChangeAction,
+  copySharedSurveyItemsAction,
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [copyModalOpen, setCopyModalOpen] = useState(false);
   const [dropdownSplitOpen, setDropdownSplitOpen] = useState(false);
   const [lastChecked, setLastChecked] = useState(null);
   const [displayOptionsIsOpen, setDisplayOptionsIsOpen] = useState(false);
-
-  useEffect(() => {
-    document.body.classList.add('right-menu');
-
-    return () => {
-      document.body.classList.remove('right-menu');
-    };
-  }, []);
 
   const handleCheckChange = (event, id) => {
     if (lastChecked == null) {
@@ -83,10 +67,10 @@ const MySurveyList = ({
     } else {
       selectedList.push(id);
     }
-    selectedSurveyItemsChangeAction(selectedList);
+    selectedSharedSurveyItemsChangeAction(selectedList);
 
     if (event.shiftKey) {
-      let items = surveyItems;
+      let items = sharedSurveyItems;
       const start = getIndex(id, items, 'id');
       const end = getIndex(lastChecked, items, 'id');
       items = items.slice(Math.min(start, end), Math.max(start, end) + 1);
@@ -96,29 +80,23 @@ const MySurveyList = ({
         })
       );
       selectedList = Array.from(new Set(selectedList));
-      selectedSurveyItemsChangeAction(selectedList);
+      selectedSharedSurveyItemsChangeAction(selectedList);
     }
   };
 
   const handleChangeSelectAll = () => {
-    if (loading) {
-      if (selectedItems.length >= surveyItems.length) {
-        selectedSurveyItemsChangeAction([]);
+    if (isSharedSurveysLoaded) {
+      if (selectedItems.length >= sharedSurveyItems.length) {
+        selectedSharedSurveyItemsChangeAction([]);
       } else {
-        selectedSurveyItemsChangeAction(surveyItems.map((x) => x.id));
+        selectedSharedSurveyItemsChangeAction(sharedSurveyItems.map((x) => x.id));
       }
     }
   };
 
-  const handleDeleteSelectedItems = () => {
-    if (loading) {
-      deleteSurveyItemsAction({ids: selectedItems});
-    }
-  };
-
   const handleCopySelectedItems = (withResponses) => {
-    if (loading) {
-      copySurveyItemsAction({ids: selectedItems, with: withResponses});
+    if (isSharedSurveysLoaded) {
+      copySharedSurveyItemsAction({ids: selectedItems, with: withResponses});
     }
   };
 
@@ -126,23 +104,15 @@ const MySurveyList = ({
 
   return (
     <>
-      <Row className="app-row survey-app">
+      <Row className="survey-app">
         <Colxx xxs="12">
           <div className="mb-2">
             <h1>
-              <IntlMessages id="menu.mysurveys" />
+              <IntlMessages id="menu.sharedsurveys" />
             </h1>
 
-            {(loading) && (
+            {(isSharedSurveysLoaded) && (
               <div className="text-zero top-right-button-container">
-                <Button
-                  color="primary"
-                  size="lg"
-                  className="top-right-button mr-1"
-                  onClick={() => setModalOpen(true)}
-                >
-                  <IntlMessages id="survey.add-new" />
-                </Button>
                 <ButtonDropdown
                   isOpen={dropdownSplitOpen}
                   toggle={() => setDropdownSplitOpen(!dropdownSplitOpen)}
@@ -152,7 +122,7 @@ const MySurveyList = ({
                       className="custom-checkbox mb-0 d-inline-block"
                       type="checkbox"
                       id="checkAll"
-                      checked={selectedItems.length >= surveyItems.length}
+                      checked={selectedItems.length >= sharedSurveyItems.length}
                       onClick={() => handleChangeSelectAll()}
                       onChange={() => handleChangeSelectAll()}
                       label={
@@ -168,9 +138,6 @@ const MySurveyList = ({
                     className="dropdown-toggle-split btn-lg"
                   />
                   <DropdownMenu right>
-                    <DropdownItem onClick={() => selectedItems.length > 0 ? setDeleteModalOpen(true) : {}}>
-                      <IntlMessages id="survey.delete" />
-                    </DropdownItem>
                     <DropdownItem onClick={() => selectedItems.length > 0 ? setCopyModalOpen(true) : {}}>
                       <IntlMessages id="survey.copy" />
                     </DropdownItem>
@@ -210,7 +177,7 @@ const MySurveyList = ({
                       return (
                         <DropdownItem
                           key={index}
-                          onClick={() => getSurveyListWithOrderAction(o.column)}
+                          onClick={() => getSharedSurveyListWithOrderAction(o.column)}
                         >
                           {o.label}
                         </DropdownItem>
@@ -227,7 +194,7 @@ const MySurveyList = ({
                     defaultValue={searchKeyword}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
-                        getSurveyListSearchAction(e.target.value);
+                        getSharedSurveyListSearchAction(e.target.value);
                       }
                     }}
                   />
@@ -239,36 +206,23 @@ const MySurveyList = ({
           <Separator className="mb-5" />
 
           <Row>
-            {loading ? (
-              surveyItems.map((item, index) => (
-                <SurveyListItem
+            {isSharedSurveysLoaded ? (
+              sharedSurveyItems.map((item, index) => (
+                <SharedSurveyListItem
                   key={`todo_item_${index}`}
                   item={item}
                   handleCheckChange={handleCheckChange}
                   isSelected={
-                    loading ? selectedItems.includes(item.id) : false
+                    isSharedSurveysLoaded ? selectedItems.includes(item.id) : false
                   }
                 />
               ))
             ) : (
-              <div className="loading" />
+              <div className="isSharedSurveysLoaded" />
             )}
           </Row>
         </Colxx>
       </Row>
-      
-      {loading && <SurveyApplicationMenu />}
-
-      <AddNewSurveyModal
-        toggleModal={() => setModalOpen(!modalOpen)}
-        modalOpen={modalOpen}
-      />
-
-      <DeleteSurveyModal
-        toggleModal={() => setDeleteModalOpen(!deleteModalOpen)}
-        modalOpen={deleteModalOpen}
-        handleClickYes={handleDeleteSelectedItems}
-      />
 
       <CopySurveyModal
         toggleModal={() => setCopyModalOpen(!copyModalOpen)}
@@ -280,31 +234,21 @@ const MySurveyList = ({
   )
 };
 
-const mapStateToProps = ({ surveyListApp }) => {
-  const {
-    surveyItems,
-    searchKeyword,
-    loading,
-    orderColumn,
-    orderColumns,
-    selectedItems,
-  } = surveyListApp;
-
+const mapStateToProps = ({ sharedSurvey }) => {
   return {
-    surveyItems,
-    searchKeyword,
-    loading,
-    orderColumn,
-    orderColumns,
-    selectedItems,
+    sharedSurveyItems: sharedSurvey.surveyItems,
+    isSharedSurveysLoaded: sharedSurvey.isLoaded,
+    // searchKeyword,
+    orderColumn: sharedSurvey.orderColumn,
+    orderColumns: sharedSurvey.orderColumns,
+    selectedItems: sharedSurvey.selectedItems,
   };
 };
 export default injectIntl(
   connect(mapStateToProps, {
-    getSurveyListWithOrderAction: getSurveyListWithOrder,
-    getSurveyListSearchAction: getSurveyListSearch,
-    selectedSurveyItemsChangeAction: selectedSurveyItemsChange,
-    deleteSurveyItemsAction: deleteSurveyItems,
-    copySurveyItemsAction: copySurveyItems,
-  })(MySurveyList)
+    getSharedSurveyListWithOrderAction: getSharedSurveyListWithOrder,
+    getSharedSurveyListSearchAction: getSharedSurveyListSearch,
+    selectedSharedSurveyItemsChangeAction: selectedSharedSurveyItemsChange,
+    copySharedSurveyItemsAction: copySharedSurveyItems,
+  })(SharedSurveyList)
 );

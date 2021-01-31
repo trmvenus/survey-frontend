@@ -17,6 +17,7 @@ import "select2/dist/js/select2.js";
 import "jquery-bar-rating";
 
 import "pretty-checkbox/dist/pretty-checkbox.css";
+import { modules } from "react-data-export";
 
 //import "icheck/skins/square/blue.css";
 window["$"] = window["jQuery"] = $;
@@ -53,7 +54,9 @@ const SurveyPage = ({
 	const model = new Survey.Model(surveyJson);
 	model.data = resultJson;	
 	model.timeSpent = timeSpent;
-	model.pages[0].timeSpent = timeSpent;
+	if (model.pages && model.pages.length > 0) {
+		model.pages[0].timeSpent = timeSpent;
+	}
 	model.locale = locale;
 	model.mode = mode;
 

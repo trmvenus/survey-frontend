@@ -10,8 +10,13 @@ const data = [
     subs: [
       {
         icon: 'simple-icon-briefcase',
-        label: 'menu.default',
-        to: `${adminRoot}/dashboards/default`,
+        label: 'menu.mydashboard',
+        to: `${adminRoot}/dashboards/mydashboard`,
+      },
+      {
+        icon: 'simple-icon-briefcase',
+        label: 'menu.websitedashboard',
+        to: `${adminRoot}/dashboards/websitedashboard`,
       },
     ],
   },
@@ -26,6 +31,12 @@ const data = [
         icon: 'simple-icon-paper-plane',
         label: 'menu.mysurveys',
         to: `${adminRoot}/surveys/mysurveys`,
+      },
+      {
+        id: 'mysurveys',
+        icon: 'simple-icon-share-alt',
+        label: 'menu.sharedsurveys',
+        to: `${adminRoot}/surveys/sharedsurveys`,
       },
       {
         id: 'mysurveys-parent',

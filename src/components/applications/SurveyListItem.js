@@ -1,17 +1,21 @@
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import { Card, CardBody, CustomInput, NavItem, Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import TimeAgo from 'react-timeago';
 import classnames from 'classnames';
 
 import IntlMessages from '../../helpers/IntlMessages';
+import { NotificationManager } from '../common/react-notifications';
 import { Colxx } from '../common/CustomBootstrap';
 import { adminRoot } from '../../constants/defaultValues';
 import { shareSurveyItem } from '../../redux/actions';
 import { getCurrentUser } from '../../helpers/Utils';
 
 const SurveyListItem = ({ 
+  intl, 
+
   item, 
   handleCheckChange, 
   isSelected,
@@ -20,6 +24,18 @@ const SurveyListItem = ({
 }) => {
   const [currentUser] = useState(getCurrentUser());
   const [collapse, setCollapse] = useState(false);
+
+  const { messages } = intl;
+
+  const handleClickRun = (event) => {
+    if (item && item.is_active) {
+      NotificationManager.info(messages['run.not-active'], 'Cannot Run Survey', 3000, null, null, '');
+      event.preventDefault();
+    } else if (item.is_multi_responses === false && item.myresponses > 0) {
+      NotificationManager.info(messages['run.already-posted'], 'Cannot Run Survey', 3000, null, null, '');
+      event.preventDefault();
+    }
+  }
 
   const handleShareSurvey = () => {
     shareSurveyItemAction({id: item.id})
@@ -73,7 +89,7 @@ const SurveyListItem = ({
             <ul className="list-unstyled list-group flex-sm-row flex-column">
               <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_view})}>
                 {(currentUser.p_view) ? (
-                <NavLink to={`${adminRoot}/surveys/${item.id}/run`} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/${item.id}/run`} onClick={handleClickRun} location={{}}>
                   <i className="simple-icon-control-play" />
                   <IntlMessages id="survey.run" />
                 </NavLink>
@@ -159,7 +175,7 @@ const SurveyListItem = ({
               </NavItem>
               <NavItem className={classnames({'text-muted luci-cursor-not-allowed': !currentUser.p_edit})}>
                 {(currentUser.p_edit) ? (
-                <NavLink to="#" onClick={() => {}} location={{}}>
+                <NavLink to={`${adminRoot}/surveys/${item.id}/settings`} onClick={() => {}} location={{}}>
                   <i className="simple-icon-settings" />
                   <IntlMessages id="survey.settings" />
                 </NavLink>
@@ -183,8 +199,9 @@ const mapStateToProps = ({  }) => {
   };
 };
 
-export default 
+export default injectIntl(
   connect(mapStateToProps, {
     shareSurveyItemAction: shareSurveyItem
-  })(React.memo(SurveyListItem));
+  })(React.memo(SurveyListItem))
+);
 

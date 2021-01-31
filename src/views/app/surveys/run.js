@@ -16,6 +16,7 @@ import {
 
 import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import { NotificationManager } from '../../../components/common/react-notifications';
+import IntlMessages from '../../../helpers/IntlMessages';
 
 
 const RunSurvey = ({ 
@@ -48,7 +49,6 @@ const RunSurvey = ({
   }
 
   useEffect(() => {
-
     const getResult = async () => {
       const ip_address = await publicIp.v4();
       getResultItemAction({
@@ -91,11 +91,19 @@ const RunSurvey = ({
       <Row>
         <Colxx xxs="12" className="mb-4">
           {isSurveyItemLoaded && isResultItemLoaded && !surveyItemError && !resultItemError ? (
-            <SurveyPage 
-              surveyJson={surveyItem.json}
-              resultJson={resultItem.json}
-              timeSpent={resultItem.time_spent}
-              handleOnUpdate={handleOnUpdate} />
+            (surveyItem.is_multi_responses === false && surveyItem.myresponses > 0) ? (
+              <div className='text-center'>
+                <label className='h3'>
+                  <IntlMessages id='run.already-posted' />
+                </label>
+              </div>
+            ) : (
+              <SurveyPage 
+                surveyJson={surveyItem.json}
+                resultJson={resultItem.json}
+                timeSpent={resultItem.time_spent}
+                handleOnUpdate={handleOnUpdate} />
+            )
           ) : (
             <div className="loading" />
           )}

@@ -18,6 +18,12 @@ import {
   SURVEY_LIST_SHARE_ITEM,
   SURVEY_LIST_SHARE_ITEM_SUCCESS,
   SURVEY_LIST_SHARE_ITEM_ERROR,
+  SURVEY_LIST_ACTIVE_ITEM,
+  SURVEY_LIST_ACTIVE_ITEM_SUCCESS,
+  SURVEY_LIST_ACTIVE_ITEM_ERROR,
+  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM,
+  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR,
+  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS,
 } from '../actions';
 
 const INIT_STATE = {
@@ -181,18 +187,46 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
       };
-
     case SURVEY_LIST_SHARE_ITEM_SUCCESS:
       return {
         ...state,
         surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_share: !item.is_share} : item),
-      }
-
+      };
     case SURVEY_LIST_SHARE_ITEM_ERROR:
       return {
         ...state,
         error: action.payload,
-      }
+      };
+
+    case SURVEY_LIST_ACTIVE_ITEM:
+      return {
+        ...state,
+      };
+    case SURVEY_LIST_ACTIVE_ITEM_SUCCESS:
+      return {
+        ...state,
+        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_active: !item.is_active} : item),
+      };
+    case SURVEY_LIST_ACTIVE_ITEM_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case SURVEY_LIST_SET_MULTI_RESPONSES_ITEM:
+      return {
+        ...state,
+      };
+    case SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS:
+      return {
+        ...state,
+        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_multi_responses: !item.is_multi_responses} : item),
+      };
+    case SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+      };
 
     default:
       return { ...state };
