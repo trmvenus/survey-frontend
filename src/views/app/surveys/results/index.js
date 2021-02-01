@@ -18,21 +18,32 @@ import { NotificationManager } from '../../../../components/common/react-notific
 import Breadcrumb from '../../../../containers/navs/Breadcrumb';
 import SurveyResultTable from '../../../../containers/results/SurveyResultTable';
 
+// Helpers
+import IntlMessages from '../../../../helpers/IntlMessages';
+
 const ResultsSurvey = ({ 
   match,
   surveyid,
 
-  error,
+  surveyItem,
+  surveyItemError,
+  resultItemError,
   
   getResultListAction,
 }) => {
 
   useEffect(() => {
-    if (error) {
-      NotificationManager.warning(error.message??error, 'Get Results Error', 3000, null, null, '');
+    if (resultItemError) {
+      NotificationManager.warning(resultItemError.message??resultItemError, 'Get Results Error', 3000, null, null, '');
     }
-  }, [error]);
+  }, [resultItemError]);
   
+  useEffect(() => {
+    if (surveyItemError) {
+      NotificationManager.warning(surveyItemError.message??surveyItemError, 'Links Error', 3000, null, null, '');
+    }
+  }, [surveyItemError]);
+
   useEffect(() => {
     getResultListAction({id: surveyid});
   }, [getResultListAction]);
@@ -42,7 +53,14 @@ const ResultsSurvey = ({
       <Row>
         <Colxx xxs="12">
           <div className="mb-2">
-            <Breadcrumb heading="survey.results" match={match} />
+            <h1>
+              <IntlMessages id="survey.results" />:&nbsp;
+              {surveyItem && (
+                <span className="text-primary">{surveyItem.name}</span>
+              )}
+            </h1>
+            
+            <Breadcrumb match={match} />
           </div>
           <Separator className="mb-5" />
         </Colxx>
@@ -56,13 +74,13 @@ const ResultsSurvey = ({
   )
 };
 
-const mapStateToProps = ({ result }) => {
-  const {
-    error
-  } = result;
-
+const mapStateToProps = ({ survey, result }) => {
   return {
-    error,
+    surveyItem: survey.surveyItem,
+    surveyItemError : survey.error,
+    isSurveyItemLoaded: survey.loading,
+
+    resultItemError : result.error,
   };
 };
 

@@ -40,6 +40,7 @@ const RunSurvey = ({
         result,
         time_spent: timeSpent,
         ip_address,
+        link_id: shareId,
       });
     }
   }  

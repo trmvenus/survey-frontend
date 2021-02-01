@@ -127,10 +127,6 @@ const LinksSurvey = ({
     setDeleteModalOpen(true);
   }
 
-  const handleAddManualData = () => {
-
-  }
-
   const handleDeleteLink = () => {
     if (selectedWebLink) {
       deleteWebLinkItemAction({id: selectedWebLink.id});
@@ -145,11 +141,12 @@ const LinksSurvey = ({
       <Row>
         <Colxx xxs="12">
           <div className="mb-2">
-            {surveyItem && (
             <h1>
-              <IntlMessages id="survey.links" />:&nbsp;<span className="text-primary">{surveyItem.name}</span>
+              <IntlMessages id="survey.links" />:&nbsp;
+              {surveyItem && (
+                <span className="text-primary">{surveyItem.name}</span>
+              )}
             </h1>
-            )}
             <Breadcrumb match={match} />
           </div>
           <Separator className="mb-5" />
@@ -270,7 +267,7 @@ const LinksSurvey = ({
                 </Colxx>
                 <Colxx md={4} sm={6}>
                   <NavLink to={`${adminRoot}/surveys/${surveyid}/manual`} location={{}}>
-                    <Button color="outline-primary" block size="lg" className="mb-2" onClick={handleAddManualData}>
+                    <Button color="outline-primary" block size="lg" className="mb-2">
                       <i className="iconsminds-pen" />&nbsp;&nbsp;&nbsp;
                       <IntlMessages id='link.manual-data-entry' />
                     </Button>

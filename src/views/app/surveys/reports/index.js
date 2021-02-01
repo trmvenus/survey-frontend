@@ -83,7 +83,10 @@ const ReportsSurvey = ({
         <Colxx xxs="12">
           <div className="mb-2">
             <h1>
-              <IntlMessages id="survey.reports" />
+              <IntlMessages id="survey.reports" />:&nbsp;
+              {surveyItem && (
+                <span className="text-primary">{surveyItem.name}</span>
+              )}
             </h1>
             {(isSurveyLoaded) && (
               <div className="text-zero top-right-button-container">
@@ -152,7 +155,6 @@ const ReportsSurvey = ({
 };
 
 const mapStateToProps = ({ settings, survey, }) => {
-
   return {
     locale: settings.locale,
 

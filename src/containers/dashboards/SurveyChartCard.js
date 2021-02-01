@@ -57,7 +57,7 @@ const SurveyChartCard = ({
   }
 
   let stepSize = Math.floor((maxTick-minTick) / 4) + 1;
-  stepSize = stepSize < 5 ? 5 : stepSize;
+  stepSize = stepSize < 2 ? 2 : stepSize;
   maxTick = minTick + stepSize * 4;
 
   const surveyChartData = {

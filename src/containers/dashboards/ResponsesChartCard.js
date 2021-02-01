@@ -48,7 +48,7 @@ const ResponsesChartCard = ({dates}) => {
     }
   
     stepSize1 = Math.floor((maxTick1-minTick1) / 4) + 1;
-    stepSize1 = stepSize1 < 5 ? 5 : stepSize1;
+    stepSize1 = stepSize1 < 2 ? 2 : stepSize1;
     maxTick1 = minTick1 + stepSize1 * 4;
   
     responsesChartData1 = {
