@@ -47,16 +47,9 @@ const addEmailLinkItemRequest = async (item) => {
   const uploadForm = new FormData();
 
   uploadForm.append("file", item.contacts_file);
-  uploadForm.append("survey_id", item.survey_id);
-  uploadForm.append("name", item.name);
-  uploadForm.append("link_id", item.link_id);
-  uploadForm.append("sender_name", item.sender_name);
-  uploadForm.append("sender_email", item.sender_email);
-  uploadForm.append("email_content", item.email_content);
-  uploadForm.append("close_quota", item.close_quota);
-  uploadForm.append("close_date", item.close_date);
+  uploadForm.append("item", JSON.stringify({...item, contacts_file: null}));
 
-  await client
+  return await client
     .postForm('/link/email', uploadForm)
     .then((res) => res.data)
     .catch((error) => {throw error.response.data});

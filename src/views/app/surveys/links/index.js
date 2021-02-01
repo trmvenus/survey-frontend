@@ -203,7 +203,7 @@ const LinksSurvey = ({
           )}
 
 
-          {isEmailLinkItemLoaded ? (
+          {isEmailLinkItemLoaded && emailLinkItems ? (
             <>
             {emailLinkItems && emailLinkItems.map((emailLink, i) => (
               <Card className="mb-3" key={i}>

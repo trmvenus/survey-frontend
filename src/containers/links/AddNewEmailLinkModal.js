@@ -87,11 +87,7 @@ const AddNewEmailLinkModal = ({
 
   const { messages } = intl;
 
-  const [file, setFile] = useState(null);
-
   const addNewEmailLink = (values) => {
-    console.log(values);
-    // return;
     if (emailLink !== null) {
       updateEmailLinkItemAction(emailLink.id, {
         name: values.name,
