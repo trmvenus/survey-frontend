@@ -11,6 +11,9 @@ import {
   RESULT_LIST_POST_ITEM,
   RESULT_LIST_POST_ITEM_SUCCESS,
   RESULT_LIST_POST_ITEM_ERROR,
+  RESULT_LIST_POST_MANUAL_ITEM,
+  RESULT_LIST_POST_MANUAL_ITEM_SUCCESS,
+  RESULT_LIST_POST_MANUAL_ITEM_ERROR,
 } from '../actions';
 
 export const getResultList = (payload) => ({
@@ -70,5 +73,20 @@ export const updateResultItemSuccess = (item) => ({
 
 export const updateResultItemError = (error) => ({
   type: RESULT_LIST_UPDATE_ITEM_ERROR,
+  payload: error,
+});
+
+export const postManualResultItem = (item) => ({
+  type: RESULT_LIST_POST_MANUAL_ITEM,
+  payload: item,
+});
+
+export const postManualResultItemSuccess = (payload) => ({
+  type: RESULT_LIST_POST_MANUAL_ITEM_SUCCESS,
+  payload: payload,
+});
+
+export const postManualResultItemError = (error) => ({
+  type: RESULT_LIST_POST_MANUAL_ITEM_ERROR,
   payload: error,
 });

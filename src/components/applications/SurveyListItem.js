@@ -28,7 +28,7 @@ const SurveyListItem = ({
   const { messages } = intl;
 
   const handleClickRun = (event) => {
-    if (item && item.is_active) {
+    if (item && item.is_active === false) {
       NotificationManager.info(messages['run.not-active'], 'Cannot Run Survey', 3000, null, null, '');
       event.preventDefault();
     } else if (item.is_multi_responses === false && item.myresponses > 0) {

@@ -223,8 +223,6 @@ const ResponsesChartCard = ({dates}) => {
         </div>
       </CardBody>
 
-{(console.log(showMode))}
-
       <div className="chart card-body pt-0">
         {(showMode === 'this-week') ? (
           <AreaChart 

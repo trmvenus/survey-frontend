@@ -28,7 +28,7 @@ const SurveyResultTable = ({
       },
       {
         Header: 'Respondent',
-        accessor: 'username',
+        accessor: 'respondent_name',
         cellClass: 'list-item-heading w-20  w-xs-100 align-middle',
         Cell: (props) => <NavLink to={`./results/${props.row.values.id}`} location={{}}>{props.value}</NavLink>,
       },
@@ -55,6 +55,12 @@ const SurveyResultTable = ({
         accessor: 'ip_address',
         cellClass: 'text-muted  w-10  w-xs-100 align-middle',
         Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: 'Way',
+        accessor: 'is_manual',
+        cellClass: 'text-muted  w-10  w-xs-100 align-middle',
+        Cell: (props) => <>{props.value ? 'Manual' : 'Direct'}</>,
       },
       {
         Header: 'Action',

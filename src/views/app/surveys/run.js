@@ -90,11 +90,17 @@ const RunSurvey = ({
       </Row>
       <Row>
         <Colxx xxs="12" className="mb-4">
-          {isSurveyItemLoaded && isResultItemLoaded && !surveyItemError && !resultItemError ? (
+          {isSurveyItemLoaded && isResultItemLoaded && surveyItem && resultItem ? (
             (surveyItem.is_multi_responses === false && surveyItem.myresponses > 0) ? (
               <div className='text-center'>
                 <label className='h3'>
                   <IntlMessages id='run.already-posted' />
+                </label>
+              </div>
+            ) : ((surveyItem.is_active === false) ? (
+              <div className='text-center'>
+                <label className='h3'>
+                  <IntlMessages id='run.not-active' />
                 </label>
               </div>
             ) : (
@@ -103,7 +109,7 @@ const RunSurvey = ({
                 resultJson={resultItem.json}
                 timeSpent={resultItem.time_spent}
                 handleOnUpdate={handleOnUpdate} />
-            )
+            ))
           ) : (
             <div className="loading" />
           )}

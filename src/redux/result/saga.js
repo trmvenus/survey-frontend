@@ -2,7 +2,13 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { client } from '../../helpers/client';
 
-import { RESULT_LIST_UPDATE_ITEM, RESULT_LIST_GET_LIST, RESULT_LIST_GET_ITEM, RESULT_LIST_POST_ITEM } from '../actions';
+import { 
+  RESULT_LIST_UPDATE_ITEM, 
+  RESULT_LIST_GET_LIST, 
+  RESULT_LIST_GET_ITEM, 
+  RESULT_LIST_POST_ITEM, 
+  RESULT_LIST_POST_MANUAL_ITEM, 
+} from '../actions';
 
 import {
   getResultListSuccess,
@@ -13,7 +19,13 @@ import {
   updateResultItemError,
   postResultItemSuccess,
   postResultItemError,
+  postManualResultItemSuccess,
+  postManualResultItemError,
 } from './actions';
+
+export function* watchGetList() {
+  yield takeEvery(RESULT_LIST_GET_LIST, getResultListItems);
+}
 
 const getResultListRequest = async (payload) =>
   await client
@@ -30,10 +42,10 @@ function* getResultListItems({payload}) {
   }
 }
 
-export function* watchGetList() {
-  yield takeEvery(RESULT_LIST_GET_LIST, getResultListItems);
-}
 
+export function* watchGetItem() {
+  yield takeEvery(RESULT_LIST_GET_ITEM, getResultItem);
+}
 
 const getResultItemRequest = async (payload) => {
   if (payload.survey_id) {
@@ -59,17 +71,16 @@ function* getResultItem({payload}) {
   }
 }
 
-export function* watchGetItem() {
-  yield takeEvery(RESULT_LIST_GET_ITEM, getResultItem);
-}
 
+export function* watchPostItem() {
+  yield takeEvery(RESULT_LIST_POST_ITEM, postResultItem);
+}
 
 const postResultItemRequest = async (payload) => 
   await client
     .post(`/result`, payload)
     .then((res) => res.data)
     .catch((error) => {throw error.response.data});  
-
 
 function* postResultItem({payload}) {
   try {
@@ -80,17 +91,16 @@ function* postResultItem({payload}) {
   }
 }
 
-export function* watchPostItem() {
-  yield takeEvery(RESULT_LIST_POST_ITEM, postResultItem);
-}
 
+export function* watchUpdateItem() {
+  yield takeEvery(RESULT_LIST_UPDATE_ITEM, updateResultItem);
+}
 
 const updateResultItemRequest = async (payload) => 
   await client
     .put(`/result`, payload)
     .then((res) => res.data)
     .catch((error) => {throw error.response.data});  
-
 
 function* updateResultItem({payload}) {
   try {
@@ -101,11 +111,32 @@ function* updateResultItem({payload}) {
   }
 }
 
-export function* watchUpdateItem() {
-  yield takeEvery(RESULT_LIST_UPDATE_ITEM, updateResultItem);
+
+export function* watchPostManualItem() {
+  yield takeEvery(RESULT_LIST_POST_MANUAL_ITEM, postManualResultItem);
 }
 
+const postManualResultItemAsync = async (payload) =>
+  await client
+    .post(`/result/manual`, payload)
+    .then(res => res.data)
+    .catch(error => {throw error.response.data});
+
+function* postManualResultItem({payload}) {
+  try {
+    const response = yield call(postManualResultItemAsync, payload);
+    yield put(postManualResultItemSuccess(response));
+  } catch (error) {
+    yield put(postManualResultItemError(error));
+  }
+}
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(watchGetItem), fork(watchPostItem), fork(watchUpdateItem)]);
+  yield all([
+    fork(watchGetList), 
+    fork(watchGetItem), 
+    fork(watchPostItem), 
+    fork(watchUpdateItem),
+    fork(watchPostManualItem),
+  ]);
 }

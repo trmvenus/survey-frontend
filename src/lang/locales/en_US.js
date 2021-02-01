@@ -143,6 +143,7 @@ module.exports = {
   'menu.organizations': 'Organizations',
   'menu.mydashboard': 'My Dashboard',
   'menu.websitedashboard': 'Website Dashboard',
+  'menu.manual': 'Manual',
 
   /* 04.Dashboards */
   'dashboards.survey': 'Survey',
@@ -328,6 +329,7 @@ module.exports = {
   'link.add-title': 'Add More Links',
   'link.web-link': 'Web Link',
   'link.email-link': 'Email Link',
+  'link.manual-data-entry': 'Manual Data Entry',
   'link.add-new-web-title': 'Add New Web Link',
   'link.add-new-email-title': 'Add New Email Link',
   'link.survey-url': 'Survey Url',
@@ -355,6 +357,9 @@ module.exports = {
   /* 06.07. Run */
   'run.not-active': 'This survey is not active yet.',
   'run.already-posted': 'You have already posted this survey.',
+
+  /* 06.08. Manual */
+  'manual.name-error': 'Name is required.',
 
   /* 07.UI */
 
@@ -546,6 +551,7 @@ module.exports = {
   'forms.gender': "Gender",
   'forms.male': "Male",
   'forms.female': "Female",
+  'forms.respondent-name': 'Respondent Name',
 
   /* 07.11.Form Components */
   'form-components.custom-inputs': 'Custom Inputs',

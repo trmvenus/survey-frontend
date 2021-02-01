@@ -49,7 +49,7 @@ const SummarySurvey = ({
   }
 
   const handleClickRun = (event) => {
-    if (surveyItem && surveyItem.is_active) {
+    if (surveyItem && surveyItem.is_active === false) {
       NotificationManager.info(messages['run.not-active'], 'Cannot Run Survey', 3000, null, null, '');
       event.preventDefault();
     } else if (surveyItem.is_multi_responses === false && surveyItem.myresponses > 0) {

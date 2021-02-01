@@ -143,6 +143,7 @@ module.exports = {
   'menu.organizations': 'Organizaciones',
   'menu.mydashboard': 'Mi Tableros',
   'menu.websitedashboard': 'Sitio web',
+  'menu.manual': 'Manual',
 
   /* 04.Error  */
   'dashboards.survey': 'Encuesta',
@@ -325,6 +326,7 @@ module.exports = {
   'link.add-title': 'Agregar Más Enlaces',
   'link.web-link': 'Web Enlaces',
   'link.email-link': 'Email Enlaces',
+  'link.manual-data-entry': 'Entrada de Datos Manual',
   'link.add-new-web-title': 'Agregar Nuevo Web Enlace',
   'link.add-new-email-title': 'Agregar Nuevo Email Enlace',
   'link.survey-url': 'Url de la Encuesta',
@@ -352,6 +354,9 @@ module.exports = {
   /* 06.07. Run */
   'run.not-active': 'Esta encuesta aún no está activa.',
   'run.already-posted': 'Ya ha publicado esta encuesta.',
+
+  /* 06.08. Manual */
+  'manual.name-error': 'Se requiere el nombre.',
 
   /* 07.IU */
 
@@ -544,6 +549,7 @@ module.exports = {
   'forms.gender': "Género",
   'forms.male': "Masculino",
   'forms.female': "Femenino",
+  'forms.respondent-name': 'Nombre del Encuestado',
 
   /* 07.11.Componentes */
   'form-components.custom-inputs': 'Entrada Personalizada',

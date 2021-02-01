@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import classnames from 'classnames';
 
@@ -26,7 +27,7 @@ import IntlMessages from '../../../../helpers/IntlMessages';
 import Button from 'reactstrap/lib/Button';
 import AddNewWebLinkModal from '../../../../containers/links/AddNewWebLinkModal';
 import { getWebLinkList, deleteWebLinkItem, getEmailLinkList, deleteEmailLinkItem, sendEmailLink, } from '../../../../redux/actions';
-import { shareSurveyPath } from '../../../../constants/defaultValues';
+import { adminRoot, shareSurveyPath } from '../../../../constants/defaultValues';
 import AddNewEmailLinkModal from '../../../../containers/links/AddNewEmailLinkModal';
 
 
@@ -124,6 +125,10 @@ const LinksSurvey = ({
     setSelectedEmailLink(emailLink);
     setSelectedWebLink(null);
     setDeleteModalOpen(true);
+  }
+
+  const handleAddManualData = () => {
+
   }
 
   const handleDeleteLink = () => {
@@ -251,17 +256,25 @@ const LinksSurvey = ({
                 <IntlMessages id='link.add-title' />
               </CardTitle>
               <Row>
-                <Colxx sm={6}>
+                <Colxx md={4} sm={6}>
                   <Button color="outline-primary" block size="lg" className="mb-2" onClick={handleAddWebLink}>
                     <i className="simple-icon-link" />&nbsp;&nbsp;&nbsp;
                     <IntlMessages id='link.web-link' />
                   </Button>
                 </Colxx>
-                <Colxx sm={6}>
+                <Colxx md={4} sm={6}>
                   <Button color="outline-primary" block size="lg" className="mb-2" onClick={handleAddEmailLink}>
                     <i className="iconsminds-mail" />&nbsp;&nbsp;&nbsp;
                     <IntlMessages id='link.email-link' />
                   </Button>
+                </Colxx>
+                <Colxx md={4} sm={6}>
+                  <NavLink to={`${adminRoot}/surveys/${surveyid}/manual`} location={{}}>
+                    <Button color="outline-primary" block size="lg" className="mb-2" onClick={handleAddManualData}>
+                      <i className="iconsminds-pen" />&nbsp;&nbsp;&nbsp;
+                      <IntlMessages id='link.manual-data-entry' />
+                    </Button>
+                  </NavLink>
                 </Colxx>
               </Row>
             </CardBody>
