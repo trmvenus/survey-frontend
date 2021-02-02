@@ -38,6 +38,7 @@ import TopnavNotifications from './Topnav.Notifications';
 import TopnavDarkSwitch from './Topnav.DarkSwitch';
 
 import { getDirection, setDirection } from '../../helpers/Utils';
+import IntlMessages from '../../helpers/IntlMessages';
 
 const TopNav = ({
   intl,
@@ -178,6 +179,10 @@ const TopNav = ({
     setIsInFullScreen(!isFS);
   };
 
+  const handleClickAccount = () => {
+    history.push('/app/settings/account');
+  }
+
   const handleLogout = () => {
     logoutUserAction(history);
   };
@@ -298,8 +303,10 @@ const TopNav = ({
                 <img alt="Profile" src="/assets/img/profiles/default.jpg" />
               </span>
             </DropdownToggle>
-            <DropdownMenu className="mt-3" right>
-              <DropdownItem>Account</DropdownItem>
+            <DropdownMenu className="mt-3" right> 
+              <DropdownItem onClick={handleClickAccount}>
+                <IntlMessages id='menu.account' />
+              </DropdownItem>
               <DropdownItem>Features</DropdownItem>
               <DropdownItem>History</DropdownItem>
               <DropdownItem>Support</DropdownItem>

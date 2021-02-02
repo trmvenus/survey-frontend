@@ -132,7 +132,7 @@ module.exports = {
   'menu.edit': 'Edit',
   'menu.save': 'Save',
   'menu.settings': 'Settings',
-  'menu.account': 'Account Settings',
+  'menu.account': 'Account',
   'menu.results': 'Results',
   'menu.reports': 'Reports',
   'menu.links': 'Links',

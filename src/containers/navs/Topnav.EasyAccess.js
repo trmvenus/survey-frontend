@@ -23,9 +23,13 @@ const TopnavEasyAccess = () => {
             <i className="simple-icon-user d-block" />{' '}
             <IntlMessages id="menu.profile" />
           </NavLink>
-          <NavLink to="/app/surveys" className="icon-menu-item">
+          <NavLink to="/app/surveys/mysurveys" className="icon-menu-item">
             <i className="simple-icon-calculator d-block" />{' '}
-            <IntlMessages id="menu.surveys" />
+            <IntlMessages id="menu.mysurveys" />
+          </NavLink>
+          <NavLink to="/app/surveys/sharedsurveys" className="icon-menu-item">
+            <i className="simple-icon-share-alt d-block" />{' '}
+            <IntlMessages id="menu.sharedsurveys" />
           </NavLink>
           <NavLink to="#" className="icon-menu-item">
             <i className="iconsminds-speach-bubble d-block" />{' '}
