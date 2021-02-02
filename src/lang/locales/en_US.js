@@ -289,6 +289,7 @@ module.exports = {
   'report.open-end': 'Open End',
   'report.question-score': 'Question Score',
   'report.pillar': 'Pillar',
+  'report.benchmarking': 'Benchmarking',
   'report.condition-filter': 'Condition Filter',
   'report.question': 'Question',
   'report.operator': 'Operator',
@@ -298,6 +299,10 @@ module.exports = {
   'report.horizontal-question': 'Horizontal Question',
   'report.vertical-question': 'Vertical Question',
   'report.open-end-question': 'Open-End Question',
+  'report.survey1': 'Survey 1',
+  'report.survey2': 'Survey 2',
+  'report.element1': 'Element 1',
+  'report.element2': 'Element 2',
   'report.view': 'View',
   'report.filter': 'Filter',
   'report.customize': 'Customize',
@@ -344,6 +349,7 @@ module.exports = {
   'link.message-text': 'Message Text',
   'link.send-emails': 'Send Emails',
   'link.already-sent': 'Already Sent',
+  'link.sent': 'Sent',
   'link.email-sending-success-message': 'The email has been sent successfully.',
 
   /* 06.06. Settings */

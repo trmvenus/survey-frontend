@@ -15,13 +15,12 @@ import 'rc-switch/assets/index.css';
 import AddNewSectionModal from './AddNewSectionModal';
 
 // Components
-import { Colxx } from '../../components/common/CustomBootstrap';
 import CustomSelectInput from '../../components/common/CustomSelectInput';
 import { NotificationManager } from '../../components/common/react-notifications';
 
 // Helpers
 import IntlMessages from '../../helpers/IntlMessages';
-import { getChoiceOptions, getCrossTabQuestionOptions, getOpenEndQuestionOptions, getQuestionOptions, getSummaryQuestions } from '../../helpers/surveyHelper';
+import { getChoiceOptions, getCrossTabQuestionOptions, getOpenEndQuestionOptions, getQuestionOptions, getScorableQuestionOptions, getSummaryQuestions } from '../../helpers/surveyHelper';
 
 // Redux
 import { updateReportItem, updateReportSection, } from '../../redux/actions';
@@ -33,13 +32,17 @@ const CustomizeTab = ({
   questions,
   surveyid,
 
+  surveyItem,
+  surveyItems,
   reportItem,
   pillarItems,
+  locale,
 
   updateReportItemAction,
   updateReportSectionAction,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [surveys, setSurveys] = useState([]);
 
   const [listSummaryQuestion, setListSummaryQuestion] = useState([]);
   const [listPillarQuestion, setListPillarQuestion] = useState([]);
@@ -57,8 +60,20 @@ const CustomizeTab = ({
 
   const pillarOptions = pillarItems ? pillarItems.map(item => ({value: item.id, label: item.name})) : [];
 
+  const scorableQuestionOptions = getScorableQuestionOptions(surveyItem.json, locale);
+
+  const getSecondScorableQuestionOptions = (survey2_id) => {
+    const surveyItem2 = surveyItems.find(item => item.id === survey2_id);
+
+    if (surveyItem2) {
+      return getScorableQuestionOptions(surveyItem2.json, locale);
+    } else {
+      return [];
+    }
+  }
+
   const handleChangeInvisibles = (section, value) => {
-    const index = section.content.invisibles.findIndex(item => item.value === value);
+    const index = section.content.invisibles.findIndex(item => item === value);
     if (index === -1) {
       section.content.invisibles.push(value);
     } else {
@@ -76,6 +91,12 @@ const CustomizeTab = ({
       getSummaryQuestions(questions).map((question, i) => ({id: i+1, value: question.name, label: question.title}))
     );
   }, [questions]);
+
+  useEffect(() => {
+    if (surveyItem && surveyItems) {
+      setSurveys(surveyItems.map(item => ({value: item.id, label: item.name})));
+    }
+  }, [surveyItem, surveyItems]);
 
   const getOption = (options, value) => {
     for (let page of options) {
@@ -238,6 +259,62 @@ const CustomizeTab = ({
                 </ReactSortable>
                 </>
               )}
+              {(section.type === REPORT_TYPE.BENCHMARKING) && (
+                <>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.survey1" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <Select
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    value={{value: surveyItem.id, label: surveyItem.name}}
+                    options={[{value: surveyItem.id, label: surveyItem.name}]}
+                    isDisabled={true}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.element1" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <Select
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    value={getOption(scorableQuestionOptions, section.content.element1)}
+                    options={scorableQuestionOptions}
+                    onChange={(option) => {section.content.element1 = option.value; updateReportSectionAction(section)}}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.survey2" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <Select
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    value={getOption(surveys, section.content.survey2)}
+                    options={surveys}
+                    onChange={(option) => {section.content.survey2 = option.value; updateReportSectionAction(section)}}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.element2" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <Select
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    value={getOption(getSecondScorableQuestionOptions(section.content.survey2), section.content.element2)}
+                    options={getSecondScorableQuestionOptions(section.content.survey2)}
+                    onChange={(option) => {section.content.element2 = option.value; updateReportSectionAction(section)}}
+                  />
+                </FormGroup>
+                </>
+              )}
             </CardBody>
           </Card>
         )
@@ -253,10 +330,13 @@ const CustomizeTab = ({
   )
 }
 
-const mapStateToProps = ({ report, pillar }) => {
+const mapStateToProps = ({ survey, surveyListApp, report, pillar, settings }) => {
   return {
+    surveyItem: survey.surveyItem,
+    surveyItems: surveyListApp.allSurveyItems,
     reportItem: report.reportItem,
     pillarItems: pillar.pillarItems,
+    locale: settings.locale,
   };
 };
 

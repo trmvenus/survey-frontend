@@ -286,6 +286,7 @@ module.exports = {
   'report.open-end': 'Open End',
   'report.question-score': 'Question Score',
   'report.pillar': 'Pillar',
+  'report.benchmarking': 'Benchmarking',
   'report.condition-filter': 'Filtro de Condición',
   'report.question': 'Pregunta',
   'report.operator': 'Operador',
@@ -295,6 +296,10 @@ module.exports = {
   'report.horizontal-question': 'Horizontal Pregunta',
   'report.vertical-question': 'Vertical Pregunta',
   'report.open-end-question': 'Open-End Pregunta',
+  'report.survey1': 'Encuesta 1',
+  'report.survey2': 'Encuesta 2',
+  'report.element1': 'Elemento 1',
+  'report.element2': 'Elemento 2',
   'report.view': 'Ver',
   'report.filter': 'Filtro',
   'report.customize': 'Personalizar',
@@ -341,6 +346,7 @@ module.exports = {
   'link.message-text': 'Mensaje de Texto',
   'link.send-emails': 'Enviar Email',
   'link.already-sent': 'Ya Enviado',
+  'link.sent': 'Expedido',
   'link.email-sending-success-message': 'El correo electrónico se envió correctamente.',
 
   /* 06.06. Settings */

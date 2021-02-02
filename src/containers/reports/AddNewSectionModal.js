@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import {
@@ -18,7 +18,7 @@ import { addReportSection } from '../../redux/actions';
 
 // Helpers
 import IntlMessages from '../../helpers/IntlMessages';
-import { getCrossTabQuestionOptions, getOpenEndQuestionOptions, } from '../../helpers/surveyHelper';
+import { getCrossTabQuestionOptions, getOpenEndQuestionOptions, getScorableQuestionOptions, } from '../../helpers/surveyHelper';
 
 // Component
 import { NotificationManager } from '../../components/common/react-notifications';
@@ -52,6 +52,21 @@ const ReportSchema = Yup.object().shape({
       is: val => val && val.value === REPORT_TYPE.PILLAR,
       then: Yup.string().required('Pillar is required!'),
     }),
+  survey2: Yup.string()
+    .when('type', {
+      is: val => val && val.value === REPORT_TYPE.BENCHMARKING,
+      then: Yup.string().required('Survey 2 is required!'),
+    }),
+  element1: Yup.string()
+    .when('type', {
+      is: val => val && val.value === REPORT_TYPE.BENCHMARKING,
+      then: Yup.string().required('Element 1 is required!'),
+    }),
+  element2: Yup.string()
+    .when('type', {
+      is: val => val && val.value === REPORT_TYPE.BENCHMARKING,
+      then: Yup.string().required('Element 2 is required!'),
+    }),
 });
 
 const AddNewSectionModal = ({
@@ -61,11 +76,18 @@ const AddNewSectionModal = ({
   toggleModal,
   questions = [],
 
+  surveyItem,
+  isSurveyItemLoaded,
+  surveyItems,
+  isSurveyItemsLoaded,
   pillarItems,
   pillarError,
+  locale,
 
   addReportSectionAction,
 }) => {
+
+  const [surveys, setSurveys] = useState([]);
 
   const { messages } = intl;
 
@@ -75,43 +97,61 @@ const AddNewSectionModal = ({
     { value: REPORT_TYPE.OPEN_END, label: messages['report.open-end'], },
     { value: REPORT_TYPE.PILLAR, label: messages['report.pillar'], },
     { value: REPORT_TYPE.QUESTION_SCORE, label: messages['report.question-score'], },
+    { value: REPORT_TYPE.BENCHMARKING, label: messages['report.benchmarking'], },
   ];
 
   useEffect(() => {
     if (pillarError) {
-      NotificationManager.warning(pillarError.message??pillarError, 'Get Pillar Error', 3000, null, null, '');
+      NotificationManager.warning(pillarError.message ?? pillarError, 'Get Pillar Error', 3000, null, null, '');
     }
   }, [pillarError]);
 
-  const addNewSection = (values, {setValues}) => {
+  useEffect(() => {
+    if (surveyItem && surveyItems) {
+      setSurveys(surveyItems.map(item => ({ value: item.id, label: item.name })));
+    }
+  }, [isSurveyItemLoaded, isSurveyItemsLoaded, surveyItem, surveyItems]);
+
+  const addNewSection = (values, { setValues }) => {
     const section = {
       type: values.type.value,
       content: {},
     }
-    switch(values.type.value) {
+
+    switch (values.type.value) {
       case REPORT_TYPE.SUMMARY:
         section.content = {
           invisibles: [],
         };
         break;
-  
+
       case REPORT_TYPE.CROSS_TAB:
         section.content = {
           horizontal: values.horizontalQuestion.value,
           vertical: values.verticalQuestion.value,
         };
         break;
-  
+
       case REPORT_TYPE.OPEN_END:
         section.content = {
           openend: values.openEndQuestion.value,
         };
         break;
-  
+
       case REPORT_TYPE.PILLAR:
         section.content = {
           invisibles: [],
           pillar: values.pillar.value,
+        };
+        break;
+
+      case REPORT_TYPE.BENCHMARKING:
+        console.log(values);
+        section.content = {
+          survey1: values.survey1.value,
+          element1: values.element1.value,
+          survey2: values.survey2.value,
+          element2: values.element2.value,
         };
         break;
     }
@@ -124,6 +164,10 @@ const AddNewSectionModal = ({
       verticalQuestion: '',
       openEndQuestion: '',
       pillar: '',
+      survey1: '',
+      element1: '',
+      survey2: '',
+      element2: '',
     })
 
     toggleModal();
@@ -133,6 +177,18 @@ const AddNewSectionModal = ({
 
   const oeQuestionOptions = getOpenEndQuestionOptions(questions);
 
+  const scorableQuestionOptions = getScorableQuestionOptions(surveyItem.json, locale);
+
+  const getSecondScorableQuestionOptions = (survey2_id) => {
+    const surveyItem2 = surveyItems.find(item => item.id === survey2_id);
+
+    if (surveyItem2) {
+      return getScorableQuestionOptions(surveyItem2.json, locale);
+    } else {
+      return [];
+    }
+  }
+
   return (
     <Formik
       initialValues={{
@@ -141,6 +197,10 @@ const AddNewSectionModal = ({
         verticalQuestion: '',
         openEndQuestion: '',
         pillar: '',
+        survey1: '',
+        element1: '',
+        survey2: '',
+        element2: '',
       }}
       validationSchema={ReportSchema}
       onSubmit={addNewSection}
@@ -158,7 +218,7 @@ const AddNewSectionModal = ({
           isOpen={modalOpen}
           toggle={toggleModal}
           wrapClassName="modal-right"
-          backdrop="static" 
+          backdrop="static"
         >
           <Form>
             <ModalHeader toggle={toggleModal}>
@@ -190,64 +250,64 @@ const AddNewSectionModal = ({
               )}
               {(values.type.value == REPORT_TYPE.CROSS_TAB) && (
                 <>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="report.horizontal-question" />{' '}<span className='luci-primary-color'>*</span>
-                  </Label>
-                  <FormikReactSelect
-                    name="horizontalQuestion"
-                    id="horizontalQuestion"
-                    value={values.horizontalQuestion}
-                    options={ctQuestionOptions}
-                    onChange={setFieldValue}
-                    onBlur={setFieldTouched}
-                  />
-                  {errors.horizontalQuestion && touched.horizontalQuestion ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.horizontalQuestion}
-                    </div>
-                  ) : null}
-                </FormGroup>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="report.vertical-question" />{' '}<span className='luci-primary-color'>*</span>
-                  </Label>
-                  <FormikReactSelect
-                    name="verticalQuestion"
-                    id="verticalQuestion"
-                    value={values.verticalQuestion}
-                    options={ctQuestionOptions}
-                    onChange={setFieldValue}
-                    onBlur={setFieldTouched}
-                  />
-                  {errors.verticalQuestion && touched.verticalQuestion ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.verticalQuestion}
-                    </div>
-                  ) : null}
-                </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="report.horizontal-question" />{' '}<span className='luci-primary-color'>*</span>
+                    </Label>
+                    <FormikReactSelect
+                      name="horizontalQuestion"
+                      id="horizontalQuestion"
+                      value={values.horizontalQuestion}
+                      options={ctQuestionOptions}
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                    />
+                    {errors.horizontalQuestion && touched.horizontalQuestion ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.horizontalQuestion}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="report.vertical-question" />{' '}<span className='luci-primary-color'>*</span>
+                    </Label>
+                    <FormikReactSelect
+                      name="verticalQuestion"
+                      id="verticalQuestion"
+                      value={values.verticalQuestion}
+                      options={ctQuestionOptions}
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                    />
+                    {errors.verticalQuestion && touched.verticalQuestion ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.verticalQuestion}
+                      </div>
+                    ) : null}
+                  </FormGroup>
                 </>
               )}
               {(values.type.value == REPORT_TYPE.OPEN_END) && (
                 <>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="report.open-end-question" />{' '}<span className='luci-primary-color'>*</span>
-                  </Label>
-                  <FormikReactSelect
-                    name="openEndQuestion"
-                    id="openEndQuestion"
-                    value={values.openEndQuestion}
-                    options={oeQuestionOptions}
-                    onChange={setFieldValue}
-                    onBlur={setFieldTouched}
-                  />
-                  {errors.openEndQuestion && touched.openEndQuestion ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.openEndQuestion}
-                    </div>
-                  ) : null}
-                </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="report.open-end-question" />{' '}<span className='luci-primary-color'>*</span>
+                    </Label>
+                    <FormikReactSelect
+                      name="openEndQuestion"
+                      id="openEndQuestion"
+                      value={values.openEndQuestion}
+                      options={oeQuestionOptions}
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                    />
+                    {errors.openEndQuestion && touched.openEndQuestion ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.openEndQuestion}
+                      </div>
+                    ) : null}
+                  </FormGroup>
                 </>
               )}
               {(values.type.value == REPORT_TYPE.PILLAR) && (
@@ -259,7 +319,7 @@ const AddNewSectionModal = ({
                     name="pillar"
                     id="pillar"
                     value={values.pillar}
-                    options={pillarItems.map(item => ({value: item.id, label: item.name}))}
+                    options={pillarItems.map(item => ({ value: item.id, label: item.name }))}
                     onChange={setFieldValue}
                     onBlur={setFieldTouched}
                   />
@@ -272,6 +332,78 @@ const AddNewSectionModal = ({
               )}
               {(values.type.value == REPORT_TYPE.QUESTION_SCORE) && (
                 <>
+                </>
+              )}
+              {(values.type.value == REPORT_TYPE.BENCHMARKING) && (
+                <>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="report.survey1" />{' '}<span className='luci-primary-color'>*</span>
+                    </Label>
+                    <FormikReactSelect
+                      name="survey1"
+                      id="survey1"
+                      value={{ value: surveyItem.id, label: surveyItem.name }}
+                      options={[{ value: surveyItem.id, label: surveyItem.name }]}
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                      disabled
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="report.element1" />{' '}<span className='luci-primary-color'>*</span>
+                    </Label>
+                    <FormikReactSelect
+                      name="element1"
+                      id="element1"
+                      value={values.element1}
+                      options={scorableQuestionOptions}
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                    />
+                    {errors.element1 && touched.element1 ? (
+                      <div className="invaligetSecondScorableQuestionOptionsd-feedback d-block">
+                        {errors.element1}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="report.survey2" />{' '}<span className='luci-primary-color'>*</span>
+                    </Label>
+                    <FormikReactSelect
+                      name="survey2"
+                      id="survey2"
+                      value={values.survey2}
+                      options={surveys}
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                    />
+                    {errors.survey2 && touched.survey2 ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.survey2}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="report.element2" />{' '}<span className='luci-primary-color'>*</span>
+                    </Label>
+                    <FormikReactSelect
+                      name="element2"
+                      id="element2"
+                      value={values.element2}
+                      options={getSecondScorableQuestionOptions(values.survey2.value)}
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                    />
+                    {errors.element2 && touched.element2 ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.element2}
+                      </div>
+                    ) : null}
+                  </FormGroup>
                 </>
               )}
             </ModalBody>
@@ -290,11 +422,19 @@ const AddNewSectionModal = ({
   );
 };
 
-const mapStateToProps = ({ pillar, }) => {
+const mapStateToProps = ({ survey, surveyListApp, pillar, settings, }) => {
   return {
+    surveyItem: survey.surveyItem,
+    isSurveyItemLoaded: survey.loading,
+
+    surveyItems: surveyListApp.allSurveyItems,
+    isSurveyItemsLoaded: survey.loading,
+
     pillarItems: pillar.pillarItems,
     pillarError: pillar.error,
     isPillarsLoaded: pillar.loading,
+
+    locale: settings.locale,
   };
 };
 

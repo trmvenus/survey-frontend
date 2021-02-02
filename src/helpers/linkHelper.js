@@ -13,7 +13,7 @@ export const getDefaultEmailLinkContent = (link_id) => {
   <p>Hello, {FirstName}.</p>
   <p>{enter your message here}</p>
   <p>
-    <a href="${window.location.origin}/run?id=${link_id}">
+    <a href="${window.location.origin}/share/run?id=${link_id}">
       Click here to run the survey.
     </a>
   </p>

@@ -1,3 +1,5 @@
+import { element } from "prop-types";
+
 const getTitle = (item, locale) => {
 	if ("title" in item) {
 		const title = item.title;
@@ -121,7 +123,10 @@ const getChoicesOfQuestion = (element, locale) => {
 					labelTrue.score = element.labelTrue.score;
 				}
 			} else {
-				labelTrue.text = "YES"
+				labelTrue.text = "YES";
+				if (element.score) {
+					labelTrue.score = element.score;
+				}
 			}
 			choices.push(labelTrue);
 
@@ -129,10 +134,13 @@ const getChoicesOfQuestion = (element, locale) => {
 			if ("labelFalse" in element) {
 				labelFalse.text = getLabel(element.labelFalse, "NO", locale);
 				if (typeof element.labelFalse !== "string" && "score" in element.labelFalse) {
-					labelFalse.score = 0;
+					labelFalse.score = element.labelFalse;
 				}
 			} else {
-				labelFalse.text = "NO"
+				labelFalse.text = "NO";
+				if (element.score) {
+					labelFalse.score = 0;
+				}
 			}
 			choices.push(labelFalse);
 			break;
@@ -266,6 +274,32 @@ export const getOpenEndQuestionOptions = (questions) => {
 	return oeQuestionOptions;
 }
 
+export const getScorableQuestionOptions = (surveyjson, locale) => {
+	const scorableQuestionOptions = [];
+	if ("pages" in surveyjson) {
+		for (let page of surveyjson.pages) {
+			const pageOptions = [];
+			if ("elements" in page) {
+				for (let element of page.elements) {
+					if (element.score > 0 || hasScore(element)) {
+						pageOptions.push({
+							label: getTitle(element, locale),
+							value: element.name,
+						})
+					}
+				}
+			}
+
+			scorableQuestionOptions.push({
+				label: getTitle(page, locale),
+				options: pageOptions,
+			});
+		}
+	}
+
+	return scorableQuestionOptions;
+}
+
 const getColumnsOfMatrx = (element, locale) => {
 	const columns = [];
 	if (element.type == "matrix") {
@@ -375,6 +409,36 @@ export const hasScore = (element) => {
 	let score = 0;
 	switch (element.type) {
 		case "boolean":
+			if ('score' in element) {
+				score = element.score;
+			}
+			break;
+		case "rating":
+			if (!element.score || !("choices" in element.score)) {
+				break;
+			}
+		case "radiogroup":
+		case "dropdown":
+		case "imagepicker":
+		case "checkbox":
+			for (let choice of element.choices) {
+				if (typeof choice == "object" && "score" in choice) {
+					score = (score < choice.score ? choice.score : score);
+				}
+			}
+			break;
+
+	}
+	return score !== 0;
+}
+
+export const setScore = (element) => {
+	let score = 0;
+	switch (element.type) {
+		case "boolean":
+			if ('score' in element) {
+				score = element.score;
+			}
 			break;
 		case "rating":
 			if (!element.score || !("choices" in element.score)) {
@@ -393,7 +457,272 @@ export const hasScore = (element) => {
 
 	}
 	element.score = score;
-	return element.score != 0;
+	return element.score !== 0;
+}
+
+const getMultipleChoiceQuestionReport = (element, results, locale) => {
+	const question = {};
+	question.name = element.name;
+	question.title = getTitle(element, locale);
+	question.type = element.type;
+	question.responses = 0;
+
+	question.choices = getChoicesOfQuestion(element);
+
+	for (let result of results) {
+		result = result.json;
+		if (element.name in result) {
+			var selecteditems = result[element.name];
+			for (let selecteditem of selecteditems) {
+				const pos = question.choices.findIndex(x => x.value === selecteditem);
+				if (pos != -1) {
+					question.choices[pos].count++;
+					question.responses++;
+				}
+			}
+		}
+	}
+
+	var hasScore = false;
+	var maxScore = 0;
+	for (let choice of question.choices) {
+		if ("score" in choice) {
+			hasScore = true;
+			maxScore = (maxScore < choice.score ? choice.score : maxScore);
+		}
+	}
+
+	if (hasScore) {
+		question.totalscore = 0;
+		question.maxscore = maxScore * question.responses;
+		for (let choice of question.choices) {
+			if ("score" in choice) {
+				question.totalscore += choice.count * choice.score;
+			}
+		}
+		question.score = (question.totalscore * 100 / question.maxscore).toFixed(2);
+	}
+
+	return question;
+}
+
+const getSingleChoiceQuestionReport = (element, results, locale) => {
+	const question = {};
+	question.name = element.name;
+	question.title = getTitle(element, locale);
+	question.type = element.type;
+	question.responses = 0;
+
+	question.choices = getChoicesOfQuestion(element);
+
+	for (let result of results) {
+		result = result.json;
+		if (element.name in result) {
+			const pos = question.choices.findIndex(x => x.value === result[element.name]);
+			if (pos != -1) {
+				question.choices[pos].count++;
+				question.responses++;
+			}
+		}
+	}
+
+	var hasScore = false;
+	var maxScore = 0;
+	for (let choice of question.choices) {
+		if ("score" in choice) {
+			hasScore = true;
+			maxScore = (maxScore < choice.score ? choice.score : maxScore);
+		}
+	}
+
+	if (hasScore) {
+		question.totalscore = 0;
+		question.maxscore = maxScore * question.responses;
+		for (let choice of question.choices) {
+			if ("score" in choice) {
+				question.totalscore += choice.count * choice.score;
+			}
+		}
+		question.score = (question.totalscore * 100 / question.maxscore).toFixed(2);
+	}
+
+	return question;
+}
+
+const getMaxtrixQuestionReport = (element, results, locale) => {
+	const question = {};
+	question.name = element.name;
+	question.title = getTitle(element, locale);
+	question.type = element.type;
+	question.responses = 0;
+
+	question.columns = getColumnsOfMatrx(element, locale);
+	question.rows = getRowsOfMatrix(element, locale);
+
+	for (let result of results) {
+		result = result.json;
+		if (element.name in result) {
+			var res = result[element.name];
+			for (let row of question.rows) {
+				if (row.value in res) {
+					const pos = question.columns.findIndex(x => x.value == res[row.value]);
+
+					if (pos != -1) {
+						row.counts[pos]++;
+						row.responses++;
+					}
+				}
+			}
+			question.responses++;
+		}
+	}
+
+	var hasScore = false;
+	var maxScore = 0;
+	for (let column of question.columns) {
+		if ("score" in column) {
+			hasScore = true;
+			maxScore = (maxScore < column.score ? column.score : maxScore);
+		}
+	}
+
+	if (hasScore) {
+		question.totalscore = 0;
+		question.maxscore = 0;
+		for (let row of question.rows) {
+			row.totalscore = 0;
+			row.maxscore = maxScore * row.responses;
+			for (var i = 0; i < question.columns.length; i++) {
+				let column = question.columns[i];
+				if ("score" in column) {
+					row.totalscore += row.counts[i] * column.score;
+				}
+			}
+
+			question.totalscore += row.totalscore;
+			question.maxscore += row.maxscore;
+
+			if (row.maxscore != 0) {
+				row.score = ((row.totalscore * 100) / row.maxscore).toFixed(2);
+			}
+		}
+
+		if (question.maxscore != 0) {
+			question.score = ((question.totalscore * 100) / question.maxscore).toFixed(2);
+		}
+	}
+
+	return question;
+}
+
+const getMaxtrixDropdownQuestionReport = (element, results, locale) => {
+	const question = {};
+	question.name = element.name;
+	question.title = getTitle(element, locale);
+	question.type = element.type;
+	question.responses = 0;
+
+	question.columns = getColumnsOfMatrxDropDown(element, locale);
+	question.rows = getRowsOfMatrix(element, locale);
+	question.choices = getChoicesOfMatrix(element, locale);
+
+	for (let choice of question.choices) {
+		choice.count = [];
+		for (let i = 0; i < question.rows.length; i++) {
+			choice.count[i] = Array(question.columns.length).fill(0);
+		}
+	}
+
+	for (let result of results) {
+		result = result.json;
+		if (element.name in result) {
+			var res = result[element.name];
+			for (let i = 0; i < question.rows.length; i++) {
+				const row = question.rows[i];
+				if (row.value in res) {
+					var rowres = res[row.value];
+
+					for (let j = 0; j < question.columns.length; j++) {
+						const col = question.columns[j];
+						if (col.value in rowres) {
+							const pos = question.choices.findIndex(x => x.value == rowres[col.value]);
+
+							question.choices[pos].count[i][j]++;
+						}
+					}
+				}
+			}
+			question.responses++;
+		}
+	}
+
+	var hasScore = false;
+	var maxScore = 0;
+	for (let choice of question.choices) {
+		if ("score" in choice) {
+			hasScore = true;
+			maxScore = (maxScore < choice.score ? choice.score : maxScore);
+		}
+	}
+
+	if (hasScore) {
+		question.totalscore = 0;
+		question.maxscore = 0;
+		for (let choice of question.choices) {
+			if ("score" in choice) {
+				let sum = 0;
+				for (let i = 0; i < question.rows.length; i++) {
+					for (let j = 0; j < question.columns.length; j++) {
+						sum += choice.count[i][j];
+					}
+				}
+
+				choice.totalscore = choice.score * sum;
+
+				question.totalscore += choice.totalscore;
+			}
+		}
+
+		question.maxscore = maxScore * question.rows.length * question.columns.length * question.responses;
+
+		if (question.maxscore != 0) {
+			question.score = ((question.totalscore * 100) / question.maxscore).toFixed(2);
+		}
+	}
+
+	return question;
+}
+
+const getChoicableQuestionReport = (element, results, locale) => {
+	let question = {};
+
+	switch (element.type) {
+		case "checkbox":
+			question = getMultipleChoiceQuestionReport(element, results, locale);
+			break;
+
+		case "radiogroup":
+		case "dropdown":
+		case "imagepicker":
+		case "rating":
+		case "boolean":
+			question = getSingleChoiceQuestionReport(element, results, locale);
+			break;
+
+		case "matrix":
+			question = getMaxtrixQuestionReport(element, results, locale);
+			break;
+
+		case 'matrixdropdown':
+			question = getMaxtrixDropdownQuestionReport(element, results, locale);
+
+			break;
+		default:
+			question = null;
+			break;
+	}
+
+	return question;
 }
 
 export const genSummaryReport = function (surveyjson, results, content, locale) {
@@ -420,224 +749,9 @@ export const genSummaryReport = function (surveyjson, results, content, locale) 
 
 						element.title = getTitle(element, locale);
 
-						var question = {};
-						question.name = element.name;
-						question.title = element.title;
-						question.type = element.type;
-						question.responses = 0;
+						const question = getChoicableQuestionReport(element, results, locale);
 
-						var isEmpty = false;
-
-						switch (element.type) {
-							case "checkbox":
-								question.choices = getChoicesOfQuestion(element);
-
-								for (let result of results) {
-									result = result.json;
-									if (element.name in result) {
-										var selecteditems = result[element.name];
-										for (let selecteditem of selecteditems) {
-											var pos = question.choices.findIndex(x => x.value === selecteditem);
-											if (pos != -1) {
-												question.choices[pos].count++;
-												question.responses++;
-											}
-										}
-									}
-								}
-
-								var hasScore = false;
-								var maxScore = 0;
-								for (let choice of question.choices) {
-									if ("score" in choice) {
-										hasScore = true;
-										maxScore = (maxScore < choice.score ? choice.score : maxScore);
-									}
-								}
-
-								if (hasScore) {
-									question.totalscore = 0;
-									question.maxscore = maxScore * question.responses;
-									for (let choice of question.choices) {
-										if ("score" in choice) {
-											question.totalscore += choice.count * choice.score;
-										}
-									}
-									question.score = (question.totalscore * 100 / question.maxscore).toFixed(2);
-								}
-
-								break;
-							case "radiogroup":
-							case "dropdown":
-							case "imagepicker":
-							case "rating":
-							case "boolean":
-								question.choices = getChoicesOfQuestion(element);
-
-								for (let result of results) {
-									result = result.json;
-									if (element.name in result) {
-										var pos = question.choices.findIndex(x => x.value === result[element.name]);
-										if (pos != -1) {
-											question.choices[pos].count++;
-											question.responses++;
-										}
-									}
-								}
-
-								var hasScore = false;
-								var maxScore = 0;
-								for (let choice of question.choices) {
-									if ("score" in choice) {
-										hasScore = true;
-										maxScore = (maxScore < choice.score ? choice.score : maxScore);
-									}
-								}
-
-								if (hasScore) {
-									question.totalscore = 0;
-									question.maxscore = maxScore * question.responses;
-									for (let choice of question.choices) {
-										if ("score" in choice) {
-											question.totalscore += choice.count * choice.score;
-										}
-									}
-									question.score = (question.totalscore * 100 / question.maxscore).toFixed(2);
-								}
-								break;
-							case "matrix":
-								question.columns = getColumnsOfMatrx(element, locale);
-								question.rows = getRowsOfMatrix(element, locale);
-
-								for (let result of results) {
-									result = result.json;
-									if (element.name in result) {
-										var res = result[element.name];
-										for (let row of question.rows) {
-											if (row.value in res) {
-												pos = question.columns.findIndex(x => x.value == res[row.value]);
-
-												if (pos != -1) {
-													row.counts[pos]++;
-													row.responses++;
-												}
-											}
-										}
-										question.responses++;
-									}
-								}
-
-								var hasScore = false;
-								var maxScore = 0;
-								for (let column of question.columns) {
-									if ("score" in column) {
-										hasScore = true;
-										maxScore = (maxScore < column.score ? column.score : maxScore);
-									}
-								}
-
-								if (hasScore) {
-									question.totalscore = 0;
-									question.maxscore = 0;
-									for (let row of question.rows) {
-										row.totalscore = 0;
-										row.maxscore = maxScore * row.responses;
-										for (var i = 0; i < question.columns.length; i++) {
-											let column = question.columns[i];
-											if ("score" in column) {
-												row.totalscore += row.counts[i] * column.score;
-											}
-										}
-
-										question.totalscore += row.totalscore;
-										question.maxscore += row.maxscore;
-
-										if (row.maxscore != 0) {
-											row.score = ((row.totalscore * 100) / row.maxscore).toFixed(2);
-										}
-									}
-
-									if (question.maxscore != 0) {
-										question.score = ((question.totalscore * 100) / question.maxscore).toFixed(2);
-									}
-								}
-								break;
-							case 'matrixdropdown':
-								question.columns = getColumnsOfMatrxDropDown(element, locale);
-								question.rows = getRowsOfMatrix(element, locale);
-								question.choices = getChoicesOfMatrix(element, locale);
-
-								for (let choice of question.choices) {
-									choice.count = [];
-									for (let i = 0; i < question.rows.length; i++) {
-										choice.count[i] = Array(question.columns.length).fill(0);
-									}
-								}
-
-								for (let result of results) {
-									result = result.json;
-									if (element.name in result) {
-										var res = result[element.name];
-										for (let i = 0; i < question.rows.length; i++) {
-											const row = question.rows[i];
-											if (row.value in res) {
-												var rowres = res[row.value];
-
-												for (let j = 0; j < question.columns.length; j++) {
-													const col = question.columns[j];
-													if (col.value in rowres) {
-														pos = question.choices.findIndex(x => x.value == rowres[col.value]);
-
-														question.choices[pos].count[i][j]++;
-													}
-												}
-											}
-										}
-										question.responses++;
-									}
-								}
-
-								var hasScore = false;
-								var maxScore = 0;
-								for (let choice of question.choices) {
-									if ("score" in choice) {
-										hasScore = true;
-										maxScore = (maxScore < choice.score ? choice.score : maxScore);
-									}
-								}
-
-								if (hasScore) {
-									question.totalscore = 0;
-									question.maxscore = 0;
-									for (let choice of question.choices) {
-										if ("score" in choice) {
-											let sum = 0;
-											for (let i = 0; i < question.rows.length; i++) {
-												for (let j = 0; j < question.columns.length; j++) {
-													sum += choice.count[i][j];
-												}
-											}
-
-											choice.totalscore = choice.score * sum;
-
-											question.totalscore += choice.totalscore;
-										}
-									}
-
-									question.maxscore = maxScore * question.rows.length * question.columns.length * question.responses;
-
-									if (question.maxscore != 0) {
-										question.score = ((question.totalscore * 100) / question.maxscore).toFixed(2);
-									}
-								}
-
-								break;
-							default:
-								isEmpty = true;
-								break;
-						}
-
-						if (!isEmpty) {
+						if (question) {
 							questions.push(question);
 						}
 					}
@@ -687,12 +801,12 @@ export const genSummaryReport = function (surveyjson, results, content, locale) 
 			maxscore: maxscore
 		};
 	} catch (e) {
-		console.log("Error occurred while writing cross-tab report");
-		console.log(e);
+		const message = "Error occurred while writing summary report";
+		console.log(message);
 
 		return {
 			result: "error",
-			message: "Error occurred while writing open-end report"
+			message: message,
 		}
 	}
 }
@@ -781,12 +895,12 @@ export const genCrossTabReport = (surveyjson, results, content, locale) => {
 			totalresponse: totalresponse
 		}
 	} catch (e) {
-		console.log("Error occurred while writing cross-tab report");
-		console.log(e);
+		const message = "Error occurred while writing cross-tab report";
+		console.log(message);
 
 		return {
 			result: "error",
-			message: "Error occurred while writing open-end report"
+			message: message,
 		}
 	}
 }
@@ -823,12 +937,12 @@ export const genOpenEndReport = (surveyjson, results, content, locale) => {
 			}
 		}
 	} catch (e) {
-		console.log("Error occurred while writing open-end report");
-		console.log(e);
+		const message = "Error occurred while writing open-end report";
+		console.log(message);
 
 		return {
 			result: "error",
-			message: "Error occurred while writing open-end report"
+			message: message,
 		}
 	}
 
@@ -847,7 +961,7 @@ export const genQuestionScoreReport = (surveyjson, results, content, locale) => 
 				if ("elements" in page) {
 					for (let element of page.elements) {
 						if (["boolean", "radiogroup", "dropdown", "imagepicker", "rating", "checkbox"].includes(element.type)) {
-							if (hasScore(element)) {
+							if (setScore(element)) {
 								var responses = 0;
 								var pointsobtained = 0;
 								var totalpoints = 0;
@@ -922,12 +1036,12 @@ export const genQuestionScoreReport = (surveyjson, results, content, locale) => 
 			}
 		}
 	} catch (e) {
-		console.log("Error occurred while writing question-score report");
-		console.log(e);
+		const message = "Error occurred while writing question-score report";
+		console.log(message);
 
 		return {
 			result: "error",
-			message: "Error occurred while writing open-end report"
+			message: message,
 		}
 	}
 
@@ -935,6 +1049,58 @@ export const genQuestionScoreReport = (surveyjson, results, content, locale) => 
 		result: "success",
 		questions: questions
 	};
+}
+
+export const genBenchmarkingReport = (surveyjson1, results1, surveyjson2, results2, content, locale) => {
+	try {
+		let question1 = null;
+		if ("pages" in surveyjson1) {
+			for (let page of surveyjson1.pages) {
+				if ("elements" in page) {
+					for (let element of page.elements) {
+						if (element.name === content.element1) {
+							question1 = getChoicableQuestionReport(element, results1, locale);
+							break;
+						}
+					}
+				}
+
+				if (question1)
+					break;
+			}
+		}
+
+		let question2 = null;
+		if ("pages" in surveyjson2) {
+			for (let page of surveyjson2.pages) {
+				if ("elements" in page) {
+					for (let element of page.elements) {
+						if (element.name === content.element2) {
+							question2 = getChoicableQuestionReport(element, results2, locale);
+							break;
+						}
+					}
+				}
+
+				if (question2)
+					break;
+			}
+		}
+
+		return {
+			result: "success",
+			question1,
+			question2,
+		}
+	} catch (e) {
+		console.log("Error occurred while writing benchmarking report");
+		console.log(e);
+
+		return {
+			result: "error",
+			message: "Error occurred while writing benchmarking report"
+		}
+	}
 }
 
 export const getAllQuestions = (surveyjson, locale) => {

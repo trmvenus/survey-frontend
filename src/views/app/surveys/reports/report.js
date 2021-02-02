@@ -28,23 +28,28 @@ import {
   genCrossTabReport, 
   genOpenEndReport, 
   genQuestionScoreReport, 
-  getQuestions 
+  getQuestions, 
+  genBenchmarkingReport
 } from '../../../../helpers/surveyHelper';
+import { client } from '../../../../helpers/client';
 
 // Containers
 import Breadcrumb from '../../../../containers/navs/Breadcrumb';
+import FilterTab from '../../../../containers/reports/FilterTab';
+import CustomizeTab from '../../../../containers/reports/CustomizeTab';
+import ShareTab from '../../../../containers/reports/ShareTab';
+import SummaryCard from '../../../../containers/reports/SummaryCard';
+import CrossTabCard from '../../../../containers/reports/CrossTabCard';
+import OpenEndCard from '../../../../containers/reports/OpenEndCard';
+import QuestionScoreCard from '../../../../containers/reports/QuestionScoreCard';
 
 // Components
 import { Colxx } from '../../../../components/common/CustomBootstrap';
 import { NotificationManager } from '../../../../components/common/react-notifications';
-import SummaryCard from '../../../../containers/reports/SummaryCard';
-import FilterTab from '../../../../containers/reports/FilterTab';
-import CustomizeTab from '../../../../containers/reports/CustomizeTab';
-import CrossTabCard from '../../../../containers/reports/CrossTabCard';
-import OpenEndCard from '../../../../containers/reports/OpenEndCard';
-import QuestionScoreCard from '../../../../containers/reports/QuestionScoreCard';
+
+// Constants
 import { REPORT_TYPE } from '../../../../constants/surveyValues';
-import ShareTab from '../../../../containers/reports/ShareTab';
+import BenchmarkingCard from '../../../../containers/reports/BenchmarkingCard';
 
 const ReportPage = ({ 
   match,
@@ -54,6 +59,9 @@ const ReportPage = ({
   surveyItem,
   surveyItemError,
   isSurveyItemLoaded,
+  surveyItems,
+  surveyItemsError,
+  isSurveyItemsLoaded,
   reportItem,
   reportItemError,
   isReportItemLoaded,
@@ -96,6 +104,12 @@ const ReportPage = ({
   }, [surveyItemError]);
 
   useEffect(() => {
+    if (surveyItemsError) {
+      NotificationManager.warning(surveyItemsError.message??surveyItemsError, 'Run Survey Error', 3000, null, null, '');
+    }
+  }, [surveyItemsError]);
+
+  useEffect(() => {
     if (reportItemError) {
       NotificationManager.warning(reportItemError.message??reportItemError, 'Run Survey Error', 3000, null, null, '');
     }
@@ -122,48 +136,67 @@ const ReportPage = ({
   }, [report_id, surveyid, getReportItemAction, getResultItemsAction, getPillarItemsAction]);
 
   useEffect(() => {
-    if (isSurveyItemLoaded && isReportItemLoaded && isResultItemsLoaded && isPillarItemsLoaded
-      && surveyItem && reportItem && resultItems && pillarItems) {
-
-      const surveyJson = surveyItem.json;
-
-      const filter = reportItem.filter;
-      const sections = reportItem.sections;
-
-      const results = (filter.conditionFilter === true || filter.dateFilter === true) ? 
-                        filterResults(resultItems, filter) :
-                        resultItems;
-
-      const reportRes = [];
-
-      for (let section of sections) {
-        const type = section.type;
-        const content = section.content;
-        
-        let reportData = {};
-
-        if (type === REPORT_TYPE.SUMMARY || type === REPORT_TYPE.PILLAR) {
-          reportData = genSummaryReport(surveyJson, results, content, locale);
-        } else if(type === REPORT_TYPE.CROSS_TAB) {
-          reportData = genCrossTabReport(surveyJson, results, content, locale);
-        } else if (type === REPORT_TYPE.OPEN_END) {
-          reportData = genOpenEndReport(surveyJson, results, content, locale);
-        } else if (type === REPORT_TYPE.QUESTION_SCORE) {
-          reportData = genQuestionScoreReport(surveyJson, results, content, locale);
+    const generateReport = async () => {
+      if (isSurveyItemLoaded && isSurveyItemsLoaded && isReportItemLoaded && isResultItemsLoaded && isPillarItemsLoaded
+        && surveyItem && surveyItems && reportItem && resultItems && pillarItems) {
+  
+        const surveyJson = {...surveyItem.json};
+  
+        const filter = reportItem.filter;
+        const sections = reportItem.sections;
+  
+        const results = (filter.conditionFilter === true || filter.dateFilter === true) ? 
+                          filterResults(resultItems, filter) :
+                          resultItems;
+  
+        const reportRes = [];
+  
+        for (let section of sections) {
+          const type = section.type;
+          const content = section.content;
+          
+          let reportData = {};
+  
+          if (type === REPORT_TYPE.SUMMARY || type === REPORT_TYPE.PILLAR) {
+            reportData = genSummaryReport(surveyJson, results, content, locale);
+          } else if(type === REPORT_TYPE.CROSS_TAB) {
+            reportData = genCrossTabReport(surveyJson, results, content, locale);
+          } else if (type === REPORT_TYPE.OPEN_END) {
+            reportData = genOpenEndReport(surveyJson, results, content, locale);
+          } else if (type === REPORT_TYPE.QUESTION_SCORE) {
+            reportData = genQuestionScoreReport(surveyJson, results, content, locale);
+          } else if (type === REPORT_TYPE.BENCHMARKING) {
+            const surveyItem2 = surveyItems.find(item => item.id === content.survey2);
+            if (surveyItem2) {
+              const resultItems2 = await client.get(`/result/list?survey=${content.survey2}`)
+                .then(res => res.data)
+                .catch(err => null);
+  
+              if (resultItems2) {
+                const results2 = (filter.conditionFilter === true || filter.dateFilter === true) ? 
+                  filterResults(resultItems2, filter) :
+                  resultItems2;
+  
+                  reportData = genBenchmarkingReport(surveyJson, results, {... surveyItem2.json}, resultItems2, content, locale);
+              }
+            }
+          }
+  
+          if (reportData.result === 'success') {
+            reportRes.push({
+              type,
+              reportData
+            });
+          } else if (reportData.result === 'error') {
+            console.error(reportData.message);
+          }
         }
-
-        if (reportData.result === 'success') {
-          reportRes.push({
-            type,
-            reportData
-          });
-        } else {
-          console.error(reportData.message);
-        }
+  
+        setReportResults(reportRes);
       }
-
-      setReportResults(reportRes);
     }
+
+    generateReport();
   }, [isSurveyItemLoaded, isReportItemLoaded, isResultItemsLoaded, isPillarItemsLoaded]);
 
   useEffect(() => {
@@ -279,6 +312,9 @@ const ReportPage = ({
                 {(reportResult.type === REPORT_TYPE.QUESTION_SCORE) && (
                   <QuestionScoreCard reportData={reportResult.reportData} />
                 )}
+                {(reportResult.type === REPORT_TYPE.BENCHMARKING) && (
+                  <BenchmarkingCard reportData={reportResult.reportData} />
+                )}
                 </React.Fragment>
               ))}
             </TabPane>
@@ -307,11 +343,15 @@ const ReportPage = ({
   )
 };
 
-const mapStateToProps = ({ survey, report, result, pillar, settings }) => {
+const mapStateToProps = ({ survey, surveyListApp, report, result, pillar, settings }) => {
   return {
     surveyItem: survey.surveyItem,
     surveyItemError : survey.error,
     isSurveyItemLoaded: survey.loading,
+
+    surveyItems: surveyListApp.allSurveyItems,
+    surveyItemsError: surveyListApp.error,
+    isSurveyItemsLoaded: survey.loading,
 
     reportItem : report.reportItem,
     reportItemError: report.error,

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {injectIntl} from 'react-intl';
 import {
@@ -19,7 +19,7 @@ import { addReportItem } from '../../redux/actions';
 
 // Helpers
 import IntlMessages from '../../helpers/IntlMessages';
-import { getQuestionOptions, getCrossTabQuestionOptions, getOpenEndQuestionOptions, getChoiceOptions } from '../../helpers/surveyHelper';
+import { getQuestionOptions, getCrossTabQuestionOptions, getOpenEndQuestionOptions, getChoiceOptions, getScorableQuestionOptions } from '../../helpers/surveyHelper';
 
 // Component
 import { Colxx } from '../../components/common/CustomBootstrap';
@@ -84,6 +84,21 @@ const ReportSchema = Yup.object().shape({
       is: val => val && val.value === REPORT_TYPE.PILLAR,
       then: Yup.string().required('Pillar is required!'),
     }),
+  survey2: Yup.string()
+    .when('type', {
+      is: val => val && val.value === REPORT_TYPE.BENCHMARKING,
+      then: Yup.string().required('Survey 2 is required!'),
+    }),
+  element1: Yup.string()
+    .when('type', {
+      is: val => val && val.value === REPORT_TYPE.BENCHMARKING,
+      then: Yup.string().required('Element 1 is required!'),
+    }),
+  element2: Yup.string()
+    .when('type', {
+      is: val => val && val.value === REPORT_TYPE.BENCHMARKING,
+      then: Yup.string().required('Element 2 is required!'),
+    }),
 });
 
 const AddNewReportModal = ({
@@ -94,13 +109,16 @@ const AddNewReportModal = ({
   questions = [],
   surveyid,
 
+  surveyItem,
+  surveyItems,
   pillarItems,
   pillarError,
-  isPillarsLoaded,
+  locale,
 
   addReportItemAction,
 }) => {
 
+  const [surveys, setSurveys] = useState([]);
   const { messages } = intl;
 
   const types = [
@@ -109,6 +127,7 @@ const AddNewReportModal = ({
     { value: REPORT_TYPE.OPEN_END, label: messages['report.open-end'], },
     { value: REPORT_TYPE.PILLAR, label: messages['report.pillar'], },
     { value: REPORT_TYPE.QUESTION_SCORE, label: messages['report.question-score'], },
+    { value: REPORT_TYPE.BENCHMARKING, label: messages['report.benchmarking'], },
   ];
 
   useEffect(() => {
@@ -117,7 +136,13 @@ const AddNewReportModal = ({
     }
   }, [pillarError]);
 
-  const addNewItem = (values) => {
+  useEffect(() => {
+    if (surveyItem && surveyItems) {
+      setSurveys(surveyItems.map(item => ({ value: item.id, label: item.name })));
+    }
+  }, [surveyItem, surveyItems]);
+
+  const addNewItem = (values, { setValues }) => {
     addReportItemAction({
       ...values,
       type: values.type.value ?? null,
@@ -128,10 +153,33 @@ const AddNewReportModal = ({
       verticalQuestion: values.verticalQuestion.value ?? null,
       openEndQuestion: values.openEndQuestion.value ?? null,
       pillar: values.pillar.value ?? null,
+      survey1: values.survey1.value ?? null,
+      element1: values.element1.value ?? null,
+      survey2: values.survey2.value ?? null,
+      element2: values.element2.value ?? null,
       survey: surveyid,
     });
 
     toggleModal();
+
+    setValues({
+      name: '',
+      type: '',
+      conditionQuestion: '',
+      conditionOperator: '',
+      conditionOption: '',
+      dateFilter: false,
+      startDate: '',
+      endDate: '',
+      horizontalQuestion: '',
+      verticalQuestion: '',
+      openEndQuestion: '',
+      pillar: '',
+      survey1: '',
+      element1: '',
+      survey2: '',
+      element2: '',
+    });
   };
 
   const questionOptions = getQuestionOptions(questions);
@@ -139,6 +187,18 @@ const AddNewReportModal = ({
   const ctQuestionOptions = getCrossTabQuestionOptions(questions);
 
   const oeQuestionOptions = getOpenEndQuestionOptions(questions);
+
+  const scorableQuestionOptions = getScorableQuestionOptions(surveyItem.json, locale);
+
+  const getSecondScorableQuestionOptions = (survey2_id) => {
+    const surveyItem2 = surveyItems.find(item => item.id === survey2_id);
+
+    if (surveyItem2) {
+      return getScorableQuestionOptions(surveyItem2.json, locale);
+    } else {
+      return [];
+    }
+  }
 
   const operatorOptions = [
     { value: 'equal', label: 'Is Equal To' },
@@ -161,6 +221,10 @@ const AddNewReportModal = ({
         verticalQuestion: '',
         openEndQuestion: '',
         pillar: '',
+        survey1: '',
+        element1: '',
+        survey2: '',
+        element2: '',
       }}
       validationSchema={ReportSchema}
       onSubmit={addNewItem}
@@ -307,6 +371,78 @@ const AddNewReportModal = ({
               )}
               {(values.type.value == REPORT_TYPE.QUESTION_SCORE) && (
                 <>
+                </>
+              )}
+              {(values.type.value == REPORT_TYPE.BENCHMARKING) && (
+                <>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.survey1" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <FormikReactSelect
+                    name="survey1"
+                    id="survey1"
+                    value={{ value: surveyItem.id, label: surveyItem.name }}
+                    options={[{ value: surveyItem.id, label: surveyItem.name }]}
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                    disabled
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.element1" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <FormikReactSelect
+                    name="element1"
+                    id="element1"
+                    value={values.element1}
+                    options={scorableQuestionOptions}
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                  />
+                  {errors.element1 && touched.element1 ? (
+                    <div className="invaligetSecondScorableQuestionOptionsd-feedback d-block">
+                      {errors.element1}
+                    </div>
+                  ) : null}
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.survey2" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <FormikReactSelect
+                    name="survey2"
+                    id="survey2"
+                    value={values.survey2}
+                    options={surveys}
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                  />
+                  {errors.survey2 && touched.survey2 ? (
+                    <div className="invalid-feedback d-block">
+                      {errors.survey2}
+                    </div>
+                  ) : null}
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.element2" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <FormikReactSelect
+                    name="element2"
+                    id="element2"
+                    value={values.element2}
+                    options={getSecondScorableQuestionOptions(values.survey2.value)}
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                  />
+                  {errors.element2 && touched.element2 ? (
+                    <div className="invalid-feedback d-block">
+                      {errors.element2}
+                    </div>
+                  ) : null}
+                </FormGroup>
                 </>
               )}
 
@@ -472,11 +608,13 @@ const AddNewReportModal = ({
   );
 };
 
-const mapStateToProps = ({ pillar, }) => {
+const mapStateToProps = ({ pillar, survey, surveyListApp, settings, }) => {
   return {
+    surveyItem: survey.surveyItem,
+    surveyItems: surveyListApp.allSurveyItems,
     pillarItems: pillar.pillarItems,
     pillarError: pillar.error,
-    isPillarsLoaded: pillar.loading,
+    locale: settings.locale,
   };
 };
 

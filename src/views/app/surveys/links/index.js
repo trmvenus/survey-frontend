@@ -158,24 +158,33 @@ const LinksSurvey = ({
             <>
             {webLinkItems && webLinkItems.map((webLink, i) => (
               <Card className="mb-3" key={i}>
-                <div className="position-absolute card-top-buttons">
+                <div className="position-absolute card-top-buttons d-flex">
                   <CopyToClipboard 
                     text={shareSurveyPath+webLink.link_id}
                   >
-                    <Button color="outline-primary" className="mr-3">
-                      <i className="iconsminds-file-clipboard"/>&nbsp;&nbsp;
-                      <IntlMessages id="report.copy-url" />
+                    <Button color="outline-primary" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex">
+                      <i className="iconsminds-file-clipboard d-none d-sm-block"/>&nbsp;&nbsp;
+                      <span className="d-none d-sm-block">
+                        <IntlMessages id="report.copy-url" />
+                      </span>
+                      <span className="d-block d-sm-none">
+                        <IntlMessages id="survey.copy" />
+                      </span>
                     </Button>
                   </CopyToClipboard>
                   
-                  <Button color="outline-success" className="mr-3" onClick={() => handleEditWebLink(webLink)}>
-                      <i className="simple-icon-pencil"/>&nbsp;&nbsp;
-                    <IntlMessages id="menu.edit" />
+                  <Button color="outline-success" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex" onClick={() => handleEditWebLink(webLink)}>
+                    <i className="iconsminds-pen d-none d-sm-block"/>&nbsp;&nbsp;
+                    <span>
+                      <IntlMessages id="menu.edit" />
+                    </span>
                   </Button>
 
-                  <Button color="outline-danger" onClick={() => handleDeleteWebLink(webLink)}>
-                      <i className="simple-icon-trash"/>&nbsp;&nbsp;
-                    <IntlMessages id="pages.delete" />
+                  <Button color="outline-danger" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 d-flex" onClick={() => handleDeleteWebLink(webLink)}>
+                    <i className="iconsminds-trash-with-men d-none d-sm-block"/>&nbsp;&nbsp;
+                    <span>
+                      <IntlMessages id="pages.delete" />
+                    </span>
                   </Button>
                 </div>
                 <CardBody>
@@ -207,27 +216,50 @@ const LinksSurvey = ({
             <>
             {emailLinkItems && emailLinkItems.map((emailLink, i) => (
               <Card className="mb-3" key={i}>
-                <div className="position-absolute card-top-buttons">
+                <div className="position-absolute card-top-buttons d-flex">
                   {emailLink.is_sent ? (
-                  <Button color="outline-primary" className="mr-3" disabled >
-                    <i className="iconsminds-mail-send"/>&nbsp;&nbsp;
-                    <IntlMessages id="link.already-sent" />
+                  <Button color="outline-primary" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex" disabled>
+                    <i className="iconsminds-mail-send d-none d-sm-block"/>&nbsp;&nbsp;
+                    <span className="d-none d-sm-block">
+                      <IntlMessages id="link.already-sent" />
+                    </span>
+                    <span className="d-block d-sm-none">
+                      <IntlMessages id="link.sent" />
+                    </span>
                   </Button>
                   ) : (
-                  <Button color="outline-primary" className="mr-3" onClick={() => handleSendEmail(emailLink)}>
-                    <i className="iconsminds-mail-send"/>&nbsp;&nbsp;
-                    <IntlMessages id="link.send-emails" />
+                  <Button 
+                    color="outline-primary" 
+                    className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex" 
+                    onClick={() => handleSendEmail(emailLink)}
+                  >
+                    <i className="iconsminds-mail-send d-none d-sm-block"/>&nbsp;&nbsp;
+                    <span className="d-none d-sm-block">
+                      <IntlMessages id="link.send-emails" />
+                    </span>
+                    <span className="d-block d-sm-none">
+                      <IntlMessages id="pages.send" />
+                    </span>
                   </Button>
                   )}
                   
-                  <Button color="outline-success" className="mr-3" onClick={() => handleEditEmailLink(emailLink)}>
-                      <i className="simple-icon-pencil"/>&nbsp;&nbsp;
+                  <Button 
+                    color="outline-success" 
+                    className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex" 
+                    onClick={() => handleEditEmailLink(emailLink)}
+                  >
+                    <i className="iconsminds-pen d-none d-sm-block"/>&nbsp;&nbsp;
                     <IntlMessages id="menu.edit" />
                   </Button>
 
-                  <Button color="outline-danger" onClick={() => handleDeleteEmailLink(emailLink)}>
-                      <i className="simple-icon-trash"/>&nbsp;&nbsp;
-                    <IntlMessages id="pages.delete" />
+                  <Button
+                    color="outline-danger" 
+                    className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 d-flex" 
+                    onClick={() => handleDeleteEmailLink(emailLink)}>
+                    <i className="iconsminds-trash-with-men d-none d-sm-block"/>&nbsp;&nbsp;
+                    <span>
+                      <IntlMessages id="pages.delete" />
+                    </span>
                   </Button>
                 </div>
                 <CardBody>
