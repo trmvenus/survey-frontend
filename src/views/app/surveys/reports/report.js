@@ -29,7 +29,8 @@ import {
   genOpenEndReport, 
   genQuestionScoreReport, 
   getQuestions, 
-  genBenchmarkingReport
+  genBenchmarkingReport,
+  genTrendReport
 } from '../../../../helpers/surveyHelper';
 import { client } from '../../../../helpers/client';
 
@@ -42,6 +43,8 @@ import SummaryCard from '../../../../containers/reports/SummaryCard';
 import CrossTabCard from '../../../../containers/reports/CrossTabCard';
 import OpenEndCard from '../../../../containers/reports/OpenEndCard';
 import QuestionScoreCard from '../../../../containers/reports/QuestionScoreCard';
+import BenchmarkingCard from '../../../../containers/reports/BenchmarkingCard';
+import TrendCard from '../../../../containers/reports/TrendCard';
 
 // Components
 import { Colxx } from '../../../../components/common/CustomBootstrap';
@@ -49,7 +52,6 @@ import { NotificationManager } from '../../../../components/common/react-notific
 
 // Constants
 import { REPORT_TYPE } from '../../../../constants/surveyValues';
-import BenchmarkingCard from '../../../../containers/reports/BenchmarkingCard';
 
 const ReportPage = ({ 
   match,
@@ -177,9 +179,11 @@ const ReportPage = ({
                   filterResults(resultItems2, filter) :
                   resultItems2;
   
-                  reportData = genBenchmarkingReport(surveyJson, results, {... surveyItem2.json}, resultItems2, content, locale);
+                reportData = genBenchmarkingReport(surveyJson, results, {... surveyItem2.json}, results2, content, locale);
               }
             }
+          } else if (type === REPORT_TYPE.TREND) {
+            reportData = genTrendReport(surveyJson, results, content, locale);
           }
   
           if (reportData.result === 'success') {
@@ -314,6 +318,9 @@ const ReportPage = ({
                 )}
                 {(reportResult.type === REPORT_TYPE.BENCHMARKING) && (
                   <BenchmarkingCard reportData={reportResult.reportData} />
+                )}
+                {(reportResult.type === REPORT_TYPE.TREND) && (
+                  <TrendCard reportData={reportResult.reportData} />
                 )}
                 </React.Fragment>
               ))}

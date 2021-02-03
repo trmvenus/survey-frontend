@@ -221,6 +221,7 @@ module.exports = {
   'pages.questions': 'Preguntas',
   'pages.createdon': 'Creado en',
   'pages.move-to-organization': 'Mover a la Organización',
+  'pages.back': 'De vuelta',
 
   /* 06.Survey */
 
@@ -287,6 +288,7 @@ module.exports = {
   'report.question-score': 'Question Score',
   'report.pillar': 'Pillar',
   'report.benchmarking': 'Benchmarking',
+  'report.trend': 'Trend',
   'report.condition-filter': 'Filtro de Condición',
   'report.question': 'Pregunta',
   'report.operator': 'Operador',
@@ -324,6 +326,12 @@ module.exports = {
   'report.reset-link': 'Restablecer Enlace',
   'report.share-tab-title': 'Comparte Reporte',
   'report.share-tab-comment': 'Utilice este enlace a continuación para compartir el informe con alguien.',
+  'report.duration': 'Duración',
+  'report.duration-name': 'Duración Nombre',
+  'report.monthly': 'Mensual',
+  'report.quarterly': 'Trimestral',
+  'report.semi-annually': 'Semi Anualmente',
+  'report.annually': 'Anualmente',
 
   /* 06.04. Result */
 

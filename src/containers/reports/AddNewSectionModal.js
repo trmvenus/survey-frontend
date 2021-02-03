@@ -28,6 +28,7 @@ import { FormikReactSelect } from '../../containers/form-validations/FormikField
 
 // Constants
 import { REPORT_TYPE } from '../../constants/surveyValues';
+import { setDirection } from '../../helpers/Utils';
 
 const ReportSchema = Yup.object().shape({
   type: Yup.object()
@@ -67,6 +68,11 @@ const ReportSchema = Yup.object().shape({
       is: val => val && val.value === REPORT_TYPE.BENCHMARKING,
       then: Yup.string().required('Element 2 is required!'),
     }),
+  durationType: Yup.string()
+    .when('type', {
+      is: val => val && val.value === REPORT_TYPE.TREND,
+      then: Yup.string().required('Duration is required!'),
+    }),
 });
 
 const AddNewSectionModal = ({
@@ -98,6 +104,7 @@ const AddNewSectionModal = ({
     { value: REPORT_TYPE.PILLAR, label: messages['report.pillar'], },
     { value: REPORT_TYPE.QUESTION_SCORE, label: messages['report.question-score'], },
     { value: REPORT_TYPE.BENCHMARKING, label: messages['report.benchmarking'], },
+    { value: REPORT_TYPE.TREND, label: messages['report.trend'], },
   ];
 
   useEffect(() => {
@@ -146,13 +153,18 @@ const AddNewSectionModal = ({
         break;
 
       case REPORT_TYPE.BENCHMARKING:
-        console.log(values);
         section.content = {
           survey1: values.survey1.value,
           element1: values.element1.value,
           survey2: values.survey2.value,
           element2: values.element2.value,
         };
+        break;
+
+      case REPORT_TYPE.TREND:
+        section.content = {
+          durationType: values.durationType.value,
+        }
         break;
     }
 
@@ -168,6 +180,7 @@ const AddNewSectionModal = ({
       element1: '',
       survey2: '',
       element2: '',
+      durationType: '',
     })
 
     toggleModal();
@@ -178,6 +191,13 @@ const AddNewSectionModal = ({
   const oeQuestionOptions = getOpenEndQuestionOptions(questions);
 
   const scorableQuestionOptions = getScorableQuestionOptions(surveyItem.json, locale);
+
+  const durationOptions = [
+    { value: "monthly", label: messages['report.monthly'] },
+    { value: "quarterly", label: messages['report.quarterly'] },
+    { value: "semi-annually", label: messages['report.semi-annually'] },
+    { value: "annually", label: messages['report.annually'] },
+  ];
 
   const getSecondScorableQuestionOptions = (survey2_id) => {
     const surveyItem2 = surveyItems.find(item => item.id === survey2_id);
@@ -201,6 +221,7 @@ const AddNewSectionModal = ({
         element1: '',
         survey2: '',
         element2: '',
+        durationType: '',
       }}
       validationSchema={ReportSchema}
       onSubmit={addNewSection}
@@ -244,11 +265,11 @@ const AddNewSectionModal = ({
                 ) : null}
               </FormGroup>
 
-              {(values.type.value == REPORT_TYPE.SUMMARY) && (
+              {(values.type.value === REPORT_TYPE.SUMMARY) && (
                 <>
                 </>
               )}
-              {(values.type.value == REPORT_TYPE.CROSS_TAB) && (
+              {(values.type.value === REPORT_TYPE.CROSS_TAB) && (
                 <>
                   <FormGroup>
                     <Label>
@@ -288,7 +309,7 @@ const AddNewSectionModal = ({
                   </FormGroup>
                 </>
               )}
-              {(values.type.value == REPORT_TYPE.OPEN_END) && (
+              {(values.type.value === REPORT_TYPE.OPEN_END) && (
                 <>
                   <FormGroup>
                     <Label>
@@ -310,7 +331,7 @@ const AddNewSectionModal = ({
                   </FormGroup>
                 </>
               )}
-              {(values.type.value == REPORT_TYPE.PILLAR) && (
+              {(values.type.value === REPORT_TYPE.PILLAR) && (
                 <FormGroup>
                   <Label>
                     <IntlMessages id="report.pillar" />{' '}<span className='luci-primary-color'>*</span>
@@ -330,11 +351,11 @@ const AddNewSectionModal = ({
                   ) : null}
                 </FormGroup>
               )}
-              {(values.type.value == REPORT_TYPE.QUESTION_SCORE) && (
+              {(values.type.value === REPORT_TYPE.QUESTION_SCORE) && (
                 <>
                 </>
               )}
-              {(values.type.value == REPORT_TYPE.BENCHMARKING) && (
+              {(values.type.value === REPORT_TYPE.BENCHMARKING) && (
                 <>
                   <FormGroup>
                     <Label>
@@ -404,6 +425,23 @@ const AddNewSectionModal = ({
                       </div>
                     ) : null}
                   </FormGroup>
+                </>
+              )}
+              {(values.type.value === REPORT_TYPE.TREND) && (
+                <>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.duration" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <FormikReactSelect
+                    name="durationType"
+                    id="durationType"
+                    value={values.durationType}
+                    options={durationOptions}
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                  />
+                </FormGroup>
                 </>
               )}
             </ModalBody>

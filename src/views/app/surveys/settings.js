@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 import { 
   Row,
+  Button,
   Card,
   CardBody,
   CardTitle,
@@ -46,6 +48,8 @@ const SurveySettings = ({
   const [share, setShare] = useState(false);
   const [multiResponses, setMultiResponses] = useState(false);
 
+  const history = useHistory();
+
   const handleActiveSurvey = (checked) => {
     setActive(checked);
     activeSurveyItemAction({id: surveyid});
@@ -85,6 +89,17 @@ const SurveySettings = ({
               {surveyItem.name}
             </h1>
             )}
+
+            <div className="text-zero top-right-button-container">
+              <Button
+                color='outline-primary'
+                size="lg"
+                className="top-right-button mr-1"
+                onClick={() => history.goBack()}
+                >
+                <IntlMessages id='pages.back' />
+              </Button>
+            </div>
 
             <Breadcrumb match={match} />
           </div>

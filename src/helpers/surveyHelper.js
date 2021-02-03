@@ -1,4 +1,4 @@
-import { element } from "prop-types";
+import { date } from "yup";
 
 const getTitle = (item, locale) => {
 	if ("title" in item) {
@@ -1101,6 +1101,131 @@ export const genBenchmarkingReport = (surveyjson1, results1, surveyjson2, result
 			message: "Error occurred while writing benchmarking report"
 		}
 	}
+}
+
+export const genTrendReport = (surveyjson, results, content, locale) => {
+	var questions = [];
+	try {
+		let minDate = null, maxDate = null;
+		for (let result of results) {
+			const date = new Date(result.created_at);
+			if (minDate === null || minDate > date) minDate = date;
+			if (maxDate === null || maxDate < date) maxDate = date;
+		}
+
+		const dates = [];
+
+		let firstDay, lastDay;
+		if (content.durationType === 'monthly') {
+			let month = minDate.getMonth();
+			let year = minDate.getFullYear();
+
+			do {
+				firstDay = new Date(year, month, 1);
+				lastDay = new Date(year, month+1, 0);
+				dates.push({firstDay, lastDay});
+				month += 1;
+			} while(lastDay < maxDate);
+		} else if (content.durationType === 'quarterly') {
+			let month = (minDate.getMonth() / 3) * 3;
+			let year = minDate.getFullYear();
+	
+			do {
+				firstDay = new Date(year, month, 1);
+				lastDay = new Date(year, month+4, 0);
+				dates.push({firstDay, lastDay});
+				month += 3;
+			} while(lastDay < maxDate);
+		} else if (content.durationType === 'semi-annually') {
+			let year = minDate.getFullYear();
+			let month = minDate.getMonth() < 6 ? 0 : 6;
+	
+			do {
+				firstDay = new Date(year, month, 1);
+				lastDay = new Date(year, month+7, 0);
+				dates.push({firstDay, lastDay});
+				month += 6;
+			} while(lastDay < maxDate);
+		} else {
+			let year = minDate.getFullYear();
+	
+			do {
+				firstDay = new Date(year, 0, 1);
+				lastDay = new Date(year, 11, 31);
+				dates.push({firstDay, lastDay});
+				year += 1;
+			} while(lastDay < maxDate);
+		}
+
+		const monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		const quartName = ['1st Q', '2nd Q', '3rd Q', '4th Q'];
+		const semiName = ['1st Half', '2nd Half'];
+
+		const durations = [];
+		dates.forEach(date => {
+			const filteredResults = results.filter(result => date.firstDay <= new Date(result.created_at) && new Date(result.created_at) <= date.lastDay);
+			
+			if (filteredResults.length > 0) {
+				let name;
+				if (content.durationType === 'monthly') {
+					name = monthName[date.firstDay.getMonth()] + ', ' + date.firstDay.getFullYear();
+				} else if (content.durationType === 'quarterly') {
+					name = quartName[date.firstDay.getMonth()/3] + ', ' + date.firstDay.getFullYear();
+				} else if (content.durationType === 'semi-annually') {
+					name = semiName[date.firstDay.getMonth()/6] + ', ' + date.firstDay.getFullYear();
+				} else {
+					name = date.firstDay.getFullYear();
+				}
+
+				durations.push({ name, filteredResults, });
+			}
+		});
+
+		if ("pages" in surveyjson) {
+			for (let page of surveyjson.pages) {
+				if ("elements" in page) {
+					for (let element of page.elements) {
+						if (element.score > 0 || hasScore(element) === true) {
+							
+							let trendReport = null;
+							for (let duration of durations) {
+								const question = getChoicableQuestionReport(element, duration.filteredResults, locale);
+
+								if (trendReport === null) {
+									trendReport = {
+										name: question.name,
+										title: question.title,
+										type: question.type,
+										responses: [{value: question.responses, label: duration.name}],
+										scores: [{value: question.score, label: duration.name}],
+									}
+								} else {
+									trendReport.responses.push({value: question.responses, label: duration.name});
+									trendReport.scores.push({value: question.score, label: duration.name});
+								}
+							}
+
+							questions.push(trendReport);
+						}
+					}
+				}
+			}
+		}
+	} catch (e) {
+		const message = "Error occurred while writing trend report";
+		console.error(message);
+		console.error(e);
+
+		return {
+			result: "error",
+			message: message,
+		}
+	}
+
+	return {
+		result: "success",
+		questions: questions
+	};
 }
 
 export const getAllQuestions = (surveyjson, locale) => {

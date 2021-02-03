@@ -99,6 +99,11 @@ const ReportSchema = Yup.object().shape({
       is: val => val && val.value === REPORT_TYPE.BENCHMARKING,
       then: Yup.string().required('Element 2 is required!'),
     }),
+  durationType: Yup.string()
+    .when('type', {
+      is: val => val && val.value === REPORT_TYPE.TREND,
+      then: Yup.string().required('Duration is required!'),
+    }),
 });
 
 const AddNewReportModal = ({
@@ -128,6 +133,7 @@ const AddNewReportModal = ({
     { value: REPORT_TYPE.PILLAR, label: messages['report.pillar'], },
     { value: REPORT_TYPE.QUESTION_SCORE, label: messages['report.question-score'], },
     { value: REPORT_TYPE.BENCHMARKING, label: messages['report.benchmarking'], },
+    { value: REPORT_TYPE.TREND, label: messages['report.trend'], },
   ];
 
   useEffect(() => {
@@ -143,20 +149,78 @@ const AddNewReportModal = ({
   }, [surveyItem, surveyItems]);
 
   const addNewItem = (values, { setValues }) => {
+
+    const section = {
+      id: 1,
+      type: values.type.value,
+      content: {},
+    };
+  
+    switch(values.type.value) {
+      case REPORT_TYPE.SUMMARY:
+        section.content = {
+          invisibles: [],
+        };
+        break;
+
+      case REPORT_TYPE.CROSS_TAB:
+        section.content = {
+          horizontal: values.horizontalQuestion.value,
+          vertical: values.verticalQuestion.value,
+        };
+        break;
+
+      case REPORT_TYPE.OPEN_END:
+        section.content = {
+          openend: values.openEndQuestion.value,
+        };
+        break;
+
+      case REPORT_TYPE.PILLAR:
+        section.content = {
+          invisibles: [],
+          pillar: values.pillar.value,
+        };
+        break;
+
+      case REPORT_TYPE.BENCHMARKING:
+        section.content = {
+          survey1: values.survey1.value,
+          element1: values.element1.value,
+          survey2: values.survey2.value,
+          element2: values.element2.value,
+        };
+        break;
+
+      case REPORT_TYPE.TREND:
+        section.content = {
+          durationType: values.durationType.value,
+        }
+        break;
+    }
+
+    var filter = {
+      dateFilter: values.dateFilter,
+      conditionFilter: values.conditionFilter,
+    }
+  
+    if (values.dateFilter) {
+      filter.startDate = values.startDate;
+      filter.endDate = values.endDate;
+    }
+    if (values.conditionFilter) {
+      filter.conditions = [{
+        question: values.conditionQuestion.value,
+        operator: values.conditionOperator.value,
+        option: values.conditionOption.value,
+      }]
+    }
+
     addReportItemAction({
-      ...values,
+      name: values.name,
       type: values.type.value ?? null,
-      conditionQuestion: values.conditionQuestion.value ?? null,
-      conditionOperator: values.conditionOperator.value ?? null,
-      conditionOption: values.conditionOption.value ?? null,
-      horizontalQuestion: values.horizontalQuestion.value ?? null,
-      verticalQuestion: values.verticalQuestion.value ?? null,
-      openEndQuestion: values.openEndQuestion.value ?? null,
-      pillar: values.pillar.value ?? null,
-      survey1: values.survey1.value ?? null,
-      element1: values.element1.value ?? null,
-      survey2: values.survey2.value ?? null,
-      element2: values.element2.value ?? null,
+      section,
+      filter,
       survey: surveyid,
     });
 
@@ -168,6 +232,7 @@ const AddNewReportModal = ({
       conditionQuestion: '',
       conditionOperator: '',
       conditionOption: '',
+      conditionFilter: false,
       dateFilter: false,
       startDate: '',
       endDate: '',
@@ -178,7 +243,7 @@ const AddNewReportModal = ({
       survey1: '',
       element1: '',
       survey2: '',
-      element2: '',
+      durationType: '',
     });
   };
 
@@ -199,6 +264,13 @@ const AddNewReportModal = ({
       return [];
     }
   }
+
+  const durationOptions = [
+    { value: "monthly", label: messages['report.monthly'] },
+    { value: "quarterly", label: messages['report.quarterly'] },
+    { value: "semi-annually", label: messages['report.semi-annually'] },
+    { value: "annually", label: messages['report.annually'] },
+  ];
 
   const operatorOptions = [
     { value: 'equal', label: 'Is Equal To' },
@@ -225,6 +297,7 @@ const AddNewReportModal = ({
         element1: '',
         survey2: '',
         element2: '',
+        durationType: '',
       }}
       validationSchema={ReportSchema}
       onSubmit={addNewItem}
@@ -442,6 +515,23 @@ const AddNewReportModal = ({
                       {errors.element2}
                     </div>
                   ) : null}
+                </FormGroup>
+                </>
+              )}
+              {(values.type.value === REPORT_TYPE.TREND) && (
+                <>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.duration" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <FormikReactSelect
+                    name="durationType"
+                    id="durationType"
+                    value={values.durationType}
+                    options={durationOptions}
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                  />
                 </FormGroup>
                 </>
               )}

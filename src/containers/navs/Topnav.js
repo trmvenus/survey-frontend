@@ -307,9 +307,9 @@ const TopNav = ({
               <DropdownItem onClick={handleClickAccount}>
                 <IntlMessages id='menu.account' />
               </DropdownItem>
-              <DropdownItem>Features</DropdownItem>
+              {/* <DropdownItem>Features</DropdownItem>
               <DropdownItem>History</DropdownItem>
-              <DropdownItem>Support</DropdownItem>
+              <DropdownItem>Support</DropdownItem> */}
               <DropdownItem divider />
               <DropdownItem onClick={() => handleLogout()}>
                 Sign out

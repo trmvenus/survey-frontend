@@ -25,13 +25,11 @@ import Breadcrumb from '../../../../containers/navs/Breadcrumb';
 // Helpers
 import IntlMessages from '../../../../helpers/IntlMessages';
 import Button from 'reactstrap/lib/Button';
-import AddNewWebLinkModal from '../../../../containers/links/AddNewWebLinkModal';
 import { getWebLinkList, deleteWebLinkItem, getEmailLinkList, deleteEmailLinkItem, sendEmailLink, } from '../../../../redux/actions';
 import { adminRoot, shareSurveyPath } from '../../../../constants/defaultValues';
-import AddNewEmailLinkModal from '../../../../containers/links/AddNewEmailLinkModal';
 
 
-const LinksSurvey = ({ 
+const EmailLinkPage = ({ 
   intl,
   match,
   surveyid,
@@ -264,11 +262,11 @@ const LinksSurvey = ({
                 </div>
                 <CardBody>
                   <CardTitle>
-                    <a className="text-bold" href={`./links/emaillink/${emailLink.id}`}>
+                    <a className="text-bold">
                       <i className="iconsminds-mail" />&nbsp;&nbsp;&nbsp;{emailLink.name}
                     </a>
                   </CardTitle>
-                  <a className='text-primary text-one text-bold' href="#" onClick={() => handleEditEmailLink(emailLink)}>
+                  <a className='text-primary text-one text-bold'  href="#" onClick={() => handleEditEmailLink(emailLink)}>
                     {emailLink.name}
                   </a>
                 </CardBody>
@@ -310,46 +308,6 @@ const LinksSurvey = ({
           </Card>
         </Colxx>
       </Row>
-
-      <AddNewWebLinkModal
-        toggleModal={() => setWebLinkModalOpen(!webLinkModalOpen)}
-        modalOpen={webLinkModalOpen}
-        webLink={selectedWebLink}
-        surveyid={surveyid}
-        />
-
-      <AddNewEmailLinkModal
-        toggleModal={() => setEmailLinkModalOpen(!emailLinkModalOpen)}
-        modalOpen={emailLinkModalOpen}
-        emailLink={selectedEmailLink}
-        surveyid={surveyid}
-        />
-
-      <Modal
-        isOpen={deleteModalOpen}
-        toggle={() => setDeleteModalOpen(!deleteModalOpen)}
-      >
-        <ModalHeader>
-          <IntlMessages id="modal.modal-title" />
-        </ModalHeader>
-        <ModalBody>
-          Are you sure to delete this link?
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color="primary"
-            onClick={() => handleDeleteLink()}
-          >
-            <IntlMessages id="modal.yes" />
-          </Button>{' '}
-          <Button
-            color="secondary"
-            onClick={() => setDeleteModalOpen(false)}
-          >
-            <IntlMessages id="modal.no" />
-          </Button>
-        </ModalFooter>
-      </Modal>
     </>
   )
 };
@@ -378,5 +336,5 @@ export default injectIntl(
     getEmailLinkListAction: getEmailLinkList,
     deleteEmailLinkItemAction: deleteEmailLinkItem,
     sendEmailLinkAction: sendEmailLink,
-  })(LinksSurvey)
+  })(EmailLinkPage)
 );

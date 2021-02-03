@@ -5,4 +5,5 @@ export const REPORT_TYPE = {
   PILLAR: 'pillar',
   QUESTION_SCORE: 'question-score',
   BENCHMARKING: 'benchmarking',
+  TREND: 'trend'
 };

@@ -47,6 +47,8 @@ const CustomizeTab = ({
   const [listSummaryQuestion, setListSummaryQuestion] = useState([]);
   const [listPillarQuestion, setListPillarQuestion] = useState([]);
 
+  const { messages } = intl;
+
   const handleSaveSection = () => {
     updateReportItemAction({
       id: reportItem.id,
@@ -61,6 +63,13 @@ const CustomizeTab = ({
   const pillarOptions = pillarItems ? pillarItems.map(item => ({value: item.id, label: item.name})) : [];
 
   const scorableQuestionOptions = getScorableQuestionOptions(surveyItem.json, locale);
+
+  const durationOptions = [
+    { value: "monthly", label: messages['report.monthly'] },
+    { value: "quarterly", label: messages['report.quarterly'] },
+    { value: "semi-annually", label: messages['report.semi-annually'] },
+    { value: "annually", label: messages['report.annually'] },
+  ];
 
   const getSecondScorableQuestionOptions = (survey2_id) => {
     const surveyItem2 = surveyItems.find(item => item.id === survey2_id);
@@ -112,8 +121,6 @@ const CustomizeTab = ({
     }
     return '';
   };
-
-  const {messages} = intl;
 
   return (
     <>
@@ -311,6 +318,23 @@ const CustomizeTab = ({
                     value={getOption(getSecondScorableQuestionOptions(section.content.survey2), section.content.element2)}
                     options={getSecondScorableQuestionOptions(section.content.survey2)}
                     onChange={(option) => {section.content.element2 = option.value; updateReportSectionAction(section)}}
+                  />
+                </FormGroup>
+                </>
+              )}
+              {(section.type === REPORT_TYPE.TREND) && (
+                <>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="report.duration" />{' '}<span className='luci-primary-color'>*</span>
+                  </Label>
+                  <Select
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    value={getOption(durationOptions, section.content.durationType)}
+                    options={durationOptions}
+                    onChange={(option) => {section.content.durationType = option.value; updateReportSectionAction(section)}}
                   />
                 </FormGroup>
                 </>
