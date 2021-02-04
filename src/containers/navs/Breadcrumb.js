@@ -8,6 +8,7 @@ import { adminRoot } from '../../constants/defaultValues';
 const getMenuTitle = (sub) => {
   if('/'+sub===adminRoot) return <IntlMessages id="menu.home" />;
   else if (+sub>0) return <>{sub}</>;
+  else if (sub[0] === '*') return <>{sub.substr(1)}</>
   return <IntlMessages id={`menu.${sub}`} />;
 };
 
@@ -45,6 +46,10 @@ const BreadcrumbItems = ({ match }) => {
   if (paths[paths.length - 1] == ':reportid') {
     paths[paths.length-1] = match.params.reportid;
     path = path.replace(paths[paths.length - 1], match.params.reportid);
+  }
+  if (paths[paths.length - 1] == ':linkid') {
+    paths[paths.length-1] = '*' + match.linkname;
+    // path = path.replace(paths[paths.length - 1], match.params.reportid);
   }
 
   return (

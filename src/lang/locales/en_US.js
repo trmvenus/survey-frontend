@@ -144,6 +144,7 @@ module.exports = {
   'menu.mydashboard': 'My Dashboard',
   'menu.websitedashboard': 'Website Dashboard',
   'menu.manual': 'Manual',
+  'menu.emaillink': 'Email Link',
 
   /* 04.Dashboards */
   'dashboards.survey': 'Survey',
@@ -359,6 +360,12 @@ module.exports = {
   'link.already-sent': 'Already Sent',
   'link.sent': 'Sent',
   'link.email-sending-success-message': 'The email has been sent successfully.',
+  'link.invitations': 'Invitations',
+  'link.responses': 'Responses',
+  'link.total': 'Total',
+  'link.sent': 'Sent',
+  'link.remaining': 'Remaining',
+  'link.opened': 'Opened',
 
   /* 06.06. Settings */
   'settings.active': 'Active',

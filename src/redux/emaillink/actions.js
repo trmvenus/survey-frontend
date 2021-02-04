@@ -14,6 +14,9 @@ import {
   EMAIL_LINK_LIST_SEND_EMAIL,
   EMAIL_LINK_LIST_SEND_EMAIL_SUCCESS,
   EMAIL_LINK_LIST_SEND_EMAIL_ERROR,
+  EMAIL_LINK_LIST_GET_ITEM,
+  EMAIL_LINK_LIST_GET_ITEM_SUCCESS,
+  EMAIL_LINK_LIST_GET_ITEM_ERROR,
 } from '../actions';
 
 export const getEmailLinkList = (payload) => ({
@@ -29,6 +32,21 @@ export const getEmailLinkListSuccess = (items) => ({
 export const getEmailLinkListError = (error) => ({
   type: EMAIL_LINK_LIST_GET_LIST_ERROR,
   payload: error,
+});
+
+export const getEmailLinkItem = (id) => ({
+  type: EMAIL_LINK_LIST_GET_ITEM,
+  payload: {id},
+});
+
+export const getEmailLinkItemSuccess = (payload) => ({
+  type: EMAIL_LINK_LIST_GET_ITEM_SUCCESS,
+  payload,
+});
+
+export const getEmailLinkItemError = (payload) => ({
+  type: EMAIL_LINK_LIST_GET_ITEM_ERROR,
+  payload,
 });
 
 export const addEmailLinkItem = (item) => ({

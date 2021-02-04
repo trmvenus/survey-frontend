@@ -144,6 +144,7 @@ module.exports = {
   'menu.mydashboard': 'Mi Tableros',
   'menu.websitedashboard': 'Sitio web',
   'menu.manual': 'Manual',
+  'menu.emaillink': 'Email Enlaces',
 
   /* 04.Error  */
   'dashboards.survey': 'Encuesta',
@@ -356,6 +357,12 @@ module.exports = {
   'link.already-sent': 'Ya Enviado',
   'link.sent': 'Expedido',
   'link.email-sending-success-message': 'El correo electrónico se envió correctamente.',
+  'link.invitations': 'Invitaciones',
+  'link.responses': 'Respuestas',
+  'link.total': 'Total',
+  'link.sent': 'Expedido',
+  'link.remaining': 'Restante',
+  'link.opened': 'Abierto',
 
   /* 06.06. Settings */
   'settings.active': 'Activo',

@@ -14,11 +14,16 @@ import {
   EMAIL_LINK_LIST_SEND_EMAIL,
   EMAIL_LINK_LIST_SEND_EMAIL_ERROR,
   EMAIL_LINK_LIST_SEND_EMAIL_SUCCESS,
+  EMAIL_LINK_LIST_GET_ITEM,
+  EMAIL_LINK_LIST_GET_ITEM_SUCCESS,
+  EMAIL_LINK_LIST_GET_ITEM_ERROR,
 } from '../actions';
 
 const INIT_STATE = {
   emailLinkItems: [],
+  emailLinkItem: null,
   isLoaded: false,
+  isLoadedItem: false,
   isSaved: false,
   sendingSuccess: false,
   error: '',
@@ -32,6 +37,13 @@ export default (state = INIT_STATE, action) => {
       return { ...state, isLoaded: true, emailLinkItems: action.payload, };
     case EMAIL_LINK_LIST_GET_LIST_ERROR:
       return { ...state, isLoaded: true, error: action.payload, };
+
+    case EMAIL_LINK_LIST_GET_ITEM:
+      return { ...state, isLoadedItem: false, };
+    case EMAIL_LINK_LIST_GET_ITEM_SUCCESS:
+      return { ...state, isLoadedItem: true, emailLinkItem: action.payload, };
+    case EMAIL_LINK_LIST_GET_ITEM_ERROR:
+      return { ...state, isLoadedItem: true, error: action.payload, };
 
     case EMAIL_LINK_LIST_ADD_ITEM:
       return { ...state, isSaved: false, };

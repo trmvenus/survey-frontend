@@ -8,7 +8,9 @@ import {
   EMAIL_LINK_LIST_UPDATE_ITEM, 
   EMAIL_LINK_LIST_DELETE_ITEM,
   EMAIL_LINK_LIST_SEND_EMAIL,
+  EMAIL_LINK_LIST_GET_ITEM,
 } from '../actions';
+import { copySharedSurveyItems } from '../sharedSurvey/actions';
 
 import {
   getEmailLinkListSuccess,
@@ -21,7 +23,13 @@ import {
   deleteEmailLinkItemError,
   sendEmailLinkError,
   sendEmailLinkSuccess,
+  getEmailLinkItemSuccess,
+  getEmailLinkItemError,
 } from './actions';
+
+export function* watchGetList() {
+  yield takeEvery(EMAIL_LINK_LIST_GET_LIST, getEmailLinkListItems);
+}
 
 const getEmailLinkListRequest = async (payload) =>
   await client
@@ -38,10 +46,31 @@ function* getEmailLinkListItems({payload}) {
   }
 }
 
-export function* watchGetList() {
-  yield takeEvery(EMAIL_LINK_LIST_GET_LIST, getEmailLinkListItems);
+
+export function* watchGetItem() {
+  yield takeEvery(EMAIL_LINK_LIST_GET_ITEM, getEmailLinkItem);
 }
 
+const getEmailLinkItemAsync = async (id) => 
+  await client
+    .get(`/link/email/${id}`)
+    .then(res => res.data)
+    .catch(error => {throw error.response.data});
+
+function* getEmailLinkItem({payload}) {
+  try {
+    const {id} = payload;
+    const response = yield call(getEmailLinkItemAsync, id);
+    yield put(getEmailLinkItemSuccess(response));
+  } catch (error) {
+    yield put(getEmailLinkItemError(error));
+  }
+}
+
+
+export function* watchAddItem() {
+  yield takeEvery(EMAIL_LINK_LIST_ADD_ITEM, addEmailLinkItem);
+}
 
 const addEmailLinkItemRequest = async (item) => {
   const uploadForm = new FormData();
@@ -64,10 +93,10 @@ function* addEmailLinkItem({ payload }) {
   }
 }
 
-export function* watchAddItem() {
-  yield takeEvery(EMAIL_LINK_LIST_ADD_ITEM, addEmailLinkItem);
-}
 
+export function* watchUpdateItem() {
+  yield takeEvery(EMAIL_LINK_LIST_UPDATE_ITEM, updateEmailLinkItem);
+}
 
 const updateEmailLinkItemRequest = async (id, item) => 
   await client
@@ -86,10 +115,10 @@ function* updateEmailLinkItem({payload}) {
   }
 }
 
-export function* watchUpdateItem() {
-  yield takeEvery(EMAIL_LINK_LIST_UPDATE_ITEM, updateEmailLinkItem);
-}
 
+export function* watchDeleteItem() {
+  yield takeEvery(EMAIL_LINK_LIST_DELETE_ITEM, deleteEmailLinkItem);
+}
 
 const deleteEmailLinkItemRequest = async (id) => 
   await client
@@ -106,10 +135,10 @@ function* deleteEmailLinkItem({payload}) {
   }
 }
 
-export function* watchDeleteItem() {
-  yield takeEvery(EMAIL_LINK_LIST_DELETE_ITEM, deleteEmailLinkItem);
-}
 
+export function* watchSendEmail() {
+  yield takeEvery(EMAIL_LINK_LIST_SEND_EMAIL, sendEmailLink);
+}
 
 const sendEmailLinkRequest = async (id) =>
   await client 
@@ -126,10 +155,13 @@ function* sendEmailLink({payload}) {
   }
 }
 
-export function* watchSendEmail() {
-  yield takeEvery(EMAIL_LINK_LIST_SEND_EMAIL, sendEmailLink);
-}
-
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(watchAddItem), fork(watchUpdateItem), fork(watchDeleteItem), fork(watchSendEmail) ]);
+  yield all([
+    fork(watchGetList), 
+    fork(watchGetItem),
+    fork(watchAddItem), 
+    fork(watchUpdateItem), 
+    fork(watchDeleteItem), 
+    fork(watchSendEmail),
+  ]);
 }

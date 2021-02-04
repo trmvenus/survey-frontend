@@ -11,9 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import classnames from 'classnames';
+import { CircularProgressbar } from 'react-circular-progressbar';
 
 // Components
 import { Colxx, Separator } from '../../../../components/common/CustomBootstrap';
@@ -25,8 +23,9 @@ import Breadcrumb from '../../../../containers/navs/Breadcrumb';
 // Helpers
 import IntlMessages from '../../../../helpers/IntlMessages';
 import Button from 'reactstrap/lib/Button';
-import { getWebLinkList, deleteWebLinkItem, getEmailLinkList, deleteEmailLinkItem, sendEmailLink, } from '../../../../redux/actions';
+import { getEmailLinkItem, } from '../../../../redux/actions';
 import { adminRoot, shareSurveyPath } from '../../../../constants/defaultValues';
+import Col from 'reactstrap/lib/Col';
 
 
 const EmailLinkPage = ({ 
@@ -34,43 +33,18 @@ const EmailLinkPage = ({
   match,
   surveyid,
   
-  surveyItem,
-  surveyItemError,
-  isSurveyItemLoaded,
-  webLinkItems,
-  webLinkError,
-  isWebLinkItemsLoaded,
-  emailLinkItems,
+  emailLinkItem,
   emailLinkError,
   isEmailLinkItemLoaded,
-  sendingEmailSuccess,
 
-  getWebLinkListAction,
-  deleteWebLinkItemAction,
-  getEmailLinkListAction,
-  deleteEmailLinkItemAction,
-  sendEmailLinkAction,
+  getEmailLinkItemAction,
 }) => {
+  const [total, setTotal] = useState('');
+  const [sent, setSent] = useState('');
+  const [remaining, setRemaining] = useState('');
+  const [opened, setOpened] = useState('');
+
   const { messages } = intl;
-
-  const [webLinkModalOpen, setWebLinkModalOpen] = useState(false);
-  const [emailLinkModalOpen, setEmailLinkModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-  const [selectedWebLink, setSelectedWebLink] = useState(null);
-  const [selectedEmailLink, setSelectedEmailLink] = useState(null);
-
-  useEffect(() => {
-    if (surveyItemError) {
-      NotificationManager.warning(surveyItemError.message??surveyItemError, 'Links Error', 3000, null, null, '');
-    }
-  }, [surveyItemError]);
-
-  useEffect(() => {
-    if (webLinkError) {
-      NotificationManager.warning(webLinkError.message??webLinkError, 'Links Error', 3000, null, null, '');
-    }
-  }, [webLinkError]);
 
   useEffect(() => {
     if (emailLinkError) {
@@ -79,60 +53,29 @@ const EmailLinkPage = ({
   }, [emailLinkError]);
 
   useEffect(() => {
-    if (sendingEmailSuccess) {
-      NotificationManager.success(messages['link.email-sending-success-message'], 'Send Email', 3000, null, null, '');
-    }
-  }, [sendingEmailSuccess]);
+    getEmailLinkItemAction(match.params.linkid);
+  }, [match]);
 
   useEffect(() => {
-    getWebLinkListAction({id: surveyid});
-    getEmailLinkListAction({id: surveyid});
-  }, [surveyid]);
+    if (emailLinkItem) {
+      let s = 0, r = 0, o = 0;
+      for (const contact of emailLinkItem.contacts) {
+        if (contact.status === 'sent') {
+          s ++;
+          if (contact.is_open === true) {
+            o ++;
+          }
+        } else {
+          r ++;
+        }
+      }
 
-  const handleAddWebLink = () => {
-    setSelectedWebLink(null);
-    setWebLinkModalOpen(true);
-  }
-
-  const handleEditWebLink = (webLink) => {
-    setSelectedWebLink(webLink);
-    setWebLinkModalOpen(true);
-  }
-
-  const handleDeleteWebLink = (webLink) => {
-    setSelectedWebLink(webLink);
-    setSelectedEmailLink(null);
-    setDeleteModalOpen(true);
-  }
-
-  const handleAddEmailLink = () => {
-    setSelectedEmailLink(null);
-    setEmailLinkModalOpen(true);
-  }
-
-  const handleSendEmail = (emailLink) => {
-    sendEmailLinkAction({id: emailLink.id});
-  }
-
-  const handleEditEmailLink = (emailLink) => {
-    setSelectedEmailLink(emailLink);
-    setEmailLinkModalOpen(true);
-  }
-
-  const handleDeleteEmailLink = (emailLink) => {
-    setSelectedEmailLink(emailLink);
-    setSelectedWebLink(null);
-    setDeleteModalOpen(true);
-  }
-
-  const handleDeleteLink = () => {
-    if (selectedWebLink) {
-      deleteWebLinkItemAction({id: selectedWebLink.id});
-    } else if (selectedEmailLink) {
-      deleteEmailLinkItemAction({id: selectedEmailLink.id});
+      setTotal(emailLinkItem.contacts.length);
+      setSent(s);
+      setRemaining(r);
+      setOpened(o);
     }
-    setDeleteModalOpen(false);
-  }
+  }, emailLinkItem)
 
   return (
     <>
@@ -140,170 +83,50 @@ const EmailLinkPage = ({
         <Colxx xxs="12">
           <div className="mb-2">
             <h1>
-              <IntlMessages id="survey.links" />:&nbsp;
-              {surveyItem && (
-                <span className="text-primary">{surveyItem.name}</span>
+              <IntlMessages id="menu.emaillink" />:&nbsp;
+              {emailLinkItem && (
+                <span className="text-primary">{emailLinkItem.name}</span>
               )}
             </h1>
-            <Breadcrumb match={match} />
+            <Breadcrumb match={{...match, linkname: emailLinkItem ? emailLinkItem.name : ''}}/>
           </div>
           <Separator className="mb-5" />
         </Colxx>
       </Row>
       <Row>
-        <Colxx xxs="12" className="mb-4">
-          {isWebLinkItemsLoaded ? (
-            <>
-            {webLinkItems && webLinkItems.map((webLink, i) => (
-              <Card className="mb-3" key={i}>
-                <div className="position-absolute card-top-buttons d-flex">
-                  <CopyToClipboard 
-                    text={shareSurveyPath+webLink.link_id}
-                  >
-                    <Button color="outline-primary" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex">
-                      <i className="iconsminds-file-clipboard d-none d-sm-block"/>&nbsp;&nbsp;
-                      <span className="d-none d-sm-block">
-                        <IntlMessages id="report.copy-url" />
-                      </span>
-                      <span className="d-block d-sm-none">
-                        <IntlMessages id="survey.copy" />
-                      </span>
-                    </Button>
-                  </CopyToClipboard>
-                  
-                  <Button color="outline-success" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex" onClick={() => handleEditWebLink(webLink)}>
-                    <i className="iconsminds-pen d-none d-sm-block"/>&nbsp;&nbsp;
-                    <span>
-                      <IntlMessages id="menu.edit" />
-                    </span>
-                  </Button>
-
-                  <Button color="outline-danger" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 d-flex" onClick={() => handleDeleteWebLink(webLink)}>
-                    <i className="iconsminds-trash-with-men d-none d-sm-block"/>&nbsp;&nbsp;
-                    <span>
-                      <IntlMessages id="pages.delete" />
-                    </span>
-                  </Button>
-                </div>
-                <CardBody>
-                  <CardTitle>
-                    <a className={classnames({
-                      "text-bold": true,
-                      "text-muted": !webLink.is_active
-                    })}>
-                      <i className="simple-icon-link" />&nbsp;&nbsp;&nbsp;{webLink.name}
-                    </a>
-                  </CardTitle>
-                  <a 
-                    className='text-primary text-one text-bold' 
-                    href={shareSurveyPath+webLink.link_id}
-                    target="_blank"
-                    >
-                    {shareSurveyPath+webLink.link_id}
-                  </a>
-                </CardBody>
-              </Card>
-            ))}
-            </>
-          ) : (
-            <div className="loading" />
-          )}
-
-
-          {isEmailLinkItemLoaded && emailLinkItems ? (
-            <>
-            {emailLinkItems && emailLinkItems.map((emailLink, i) => (
-              <Card className="mb-3" key={i}>
-                <div className="position-absolute card-top-buttons d-flex">
-                  {emailLink.is_sent ? (
-                  <Button color="outline-primary" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex" disabled>
-                    <i className="iconsminds-mail-send d-none d-sm-block"/>&nbsp;&nbsp;
-                    <span className="d-none d-sm-block">
-                      <IntlMessages id="link.already-sent" />
-                    </span>
-                    <span className="d-block d-sm-none">
-                      <IntlMessages id="link.sent" />
-                    </span>
-                  </Button>
-                  ) : (
-                  <Button 
-                    color="outline-primary" 
-                    className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex" 
-                    onClick={() => handleSendEmail(emailLink)}
-                  >
-                    <i className="iconsminds-mail-send d-none d-sm-block"/>&nbsp;&nbsp;
-                    <span className="d-none d-sm-block">
-                      <IntlMessages id="link.send-emails" />
-                    </span>
-                    <span className="d-block d-sm-none">
-                      <IntlMessages id="pages.send" />
-                    </span>
-                  </Button>
-                  )}
-                  
-                  <Button 
-                    color="outline-success" 
-                    className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex" 
-                    onClick={() => handleEditEmailLink(emailLink)}
-                  >
-                    <i className="iconsminds-pen d-none d-sm-block"/>&nbsp;&nbsp;
-                    <IntlMessages id="menu.edit" />
-                  </Button>
-
-                  <Button
-                    color="outline-danger" 
-                    className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 d-flex" 
-                    onClick={() => handleDeleteEmailLink(emailLink)}>
-                    <i className="iconsminds-trash-with-men d-none d-sm-block"/>&nbsp;&nbsp;
-                    <span>
-                      <IntlMessages id="pages.delete" />
-                    </span>
-                  </Button>
-                </div>
-                <CardBody>
-                  <CardTitle>
-                    <a className="text-bold">
-                      <i className="iconsminds-mail" />&nbsp;&nbsp;&nbsp;{emailLink.name}
-                    </a>
-                  </CardTitle>
-                  <a className='text-primary text-one text-bold'  href="#" onClick={() => handleEditEmailLink(emailLink)}>
-                    {emailLink.name}
-                  </a>
-                </CardBody>
-              </Card>
-            ))}
-            </>
-          ) : (
-            <div className="loading" />
-          )}
-
+        <Colxx xxs="6" className="mb-4">
           <Card>
-            <CardBody className="mb-3">
+            <CardBody className="justify-content-between d-flex flex-row">
+              <div>
+                <CardTitle>
+                  <h2><IntlMessages id='link.invitations' /></h2>
+                </CardTitle>
+
+                <p><IntlMessages id='link.total' />: {total}</p>
+
+                <p><IntlMessages id='link.sent' />: {sent}</p>
+
+                <p><IntlMessages id='link.remaining' />: {remaining}</p>
+
+                <p><IntlMessages id='link.opened' />: {opened}</p>
+              </div>
+
+              <div className="luci-emaillink-progress-bar position-relative">
+                <CircularProgressbar
+                  strokeWidth={4}
+                  value={100 * sent / total}
+                  text={`${sent}/${total}`}
+                />
+              </div>
+            </CardBody>
+          </Card>
+        </Colxx>
+        <Colxx xxs="6" className="mb-4">
+          <Card>
+            <CardBody>
               <CardTitle>
-                <IntlMessages id='link.add-title' />
+                <IntlMessages id='link.responses' />
               </CardTitle>
-              <Row>
-                <Colxx md={4} sm={6}>
-                  <Button color="outline-primary" block size="lg" className="mb-2" onClick={handleAddWebLink}>
-                    <i className="simple-icon-link" />&nbsp;&nbsp;&nbsp;
-                    <IntlMessages id='link.web-link' />
-                  </Button>
-                </Colxx>
-                <Colxx md={4} sm={6}>
-                  <Button color="outline-primary" block size="lg" className="mb-2" onClick={handleAddEmailLink}>
-                    <i className="iconsminds-mail" />&nbsp;&nbsp;&nbsp;
-                    <IntlMessages id='link.email-link' />
-                  </Button>
-                </Colxx>
-                <Colxx md={4} sm={6}>
-                  <NavLink to={`${adminRoot}/surveys/${surveyid}/manual`} location={{}}>
-                    <Button color="outline-primary" block size="lg" className="mb-2">
-                      <i className="iconsminds-pen" />&nbsp;&nbsp;&nbsp;
-                      <IntlMessages id='link.manual-data-entry' />
-                    </Button>
-                  </NavLink>
-                </Colxx>
-              </Row>
             </CardBody>
           </Card>
         </Colxx>
@@ -312,29 +135,16 @@ const EmailLinkPage = ({
   )
 };
 
-const mapStateToProps = ({ survey, weblink, emaillink, }) => {
+const mapStateToProps = ({ emaillink, }) => {
   return {
-    surveyItem: survey.surveyItem,
-    surveyItemError : survey.error,
-    isSurveyItemLoaded: survey.loading,
-
-    webLinkItems: weblink.webLinkItems,
-    webLinkError: weblink.error,
-    isWebLinkItemsLoaded: weblink.isLoaded,
-
-    emailLinkItems: emaillink.emailLinkItems,
+    emailLinkItem: emaillink.emailLinkItem,
     emailLinkError: emaillink.error,
-    isEmailLinkItemLoaded: emaillink.isLoaded,
-    sendingEmailSuccess: emaillink.sendingSuccess,
+    isEmailLinkItemLoaded: emaillink.isLoadedItem,
   };
 };
 
 export default injectIntl(
   connect(mapStateToProps, {
-    getWebLinkListAction: getWebLinkList,
-    deleteWebLinkItemAction: deleteWebLinkItem,
-    getEmailLinkListAction: getEmailLinkList,
-    deleteEmailLinkItemAction: deleteEmailLinkItem,
-    sendEmailLinkAction: sendEmailLink,
+    getEmailLinkItemAction: getEmailLinkItem,
   })(EmailLinkPage)
 );

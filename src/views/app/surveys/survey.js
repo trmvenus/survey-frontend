@@ -102,7 +102,7 @@ const Survey = ({ match, getSurveyItemAction }) => {
         exact
       />
       <Route
-        path={`${match.url}/links/emaillink/:linkid`}
+        path={`${match.url}/links/:linkid`}
         render={(props) => <EmailLinkPage surveyid={survey_id} {...props} />}
         exact
       />

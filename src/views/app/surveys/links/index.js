@@ -264,7 +264,7 @@ const LinksSurvey = ({
                 </div>
                 <CardBody>
                   <CardTitle>
-                    <a className="text-bold" href={`./links/emaillink/${emailLink.id}`}>
+                    <a className="text-bold" href={`./links/${emailLink.id}`}>
                       <i className="iconsminds-mail" />&nbsp;&nbsp;&nbsp;{emailLink.name}
                     </a>
                   </CardTitle>
