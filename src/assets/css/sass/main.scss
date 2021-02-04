@@ -85,6 +85,19 @@
   width: 150px;
   height: 150px;
 }
+
+.luci-loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba($theme-color-1, 0.2);
+  border-radius: 50%;
+  border-top-color: $theme-color-1;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+  position: absolute;
+  z-index: 1;
+}
 /* 
 html {
   background-color: $theme-color-1 !important;

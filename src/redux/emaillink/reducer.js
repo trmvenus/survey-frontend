@@ -17,6 +17,9 @@ import {
   EMAIL_LINK_LIST_GET_ITEM,
   EMAIL_LINK_LIST_GET_ITEM_SUCCESS,
   EMAIL_LINK_LIST_GET_ITEM_ERROR,
+  EMAIL_LINK_LIST_SEND_EMAIL_CONTACT,
+  EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_SUCCESS,
+  EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR,
 } from '../actions';
 
 const INIT_STATE = {
@@ -25,6 +28,7 @@ const INIT_STATE = {
   isLoaded: false,
   isLoadedItem: false,
   isSaved: false,
+  isSending: false,
   sendingSuccess: false,
   error: '',
 };
@@ -86,6 +90,21 @@ export default (state = INIT_STATE, action) => {
       };
     case EMAIL_LINK_LIST_SEND_EMAIL_ERROR:
       return { ...state, error: action.payload, sendingSuccess: false, };
+
+
+      case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT:
+        return { ...state, isSending: true, };
+      case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_SUCCESS:
+        return { 
+          ...state, 
+          emailLinkItem: {
+            ...state.emailLinkItem,
+            contacts: state.emailLinkItem.contacts.map(item => item.id === action.payload.id ? action.payload : item),
+          },
+          isSending: false, 
+        };
+      case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR:
+        return { ...state, error: action.payload, isSending: false, };
 
     default:
       return { ...state };

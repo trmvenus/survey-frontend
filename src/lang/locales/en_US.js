@@ -366,6 +366,11 @@ module.exports = {
   'link.sent': 'Sent',
   'link.remaining': 'Remaining',
   'link.opened': 'Opened',
+  'link.complete': 'Complete',
+  'link.responded': 'Responded',
+  'link.email-address': 'Email Address',
+  'link.recipients': 'Recipients',
+  'link.failed': 'Failed',
 
   /* 06.06. Settings */
   'settings.active': 'Active',
@@ -563,9 +568,9 @@ module.exports = {
   'forms.validation-availity': 'Availity Reactstrap Validation',
   'forms.validation-formik': 'Formik Validation',
   'forms.default': 'Default',
-  'forms.firstname': 'First name',
+  'forms.firstname': 'First Name',
   'forms.firstname-message': 'Please enter your first name!',
-  'forms.lastname': 'Last name',
+  'forms.lastname': 'Last Name',
   'forms.lastname-message': 'Please enter your last name!',
   'forms.name': 'Name',
   'forms.birthday': "Birthday",

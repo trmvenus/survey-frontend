@@ -6,10 +6,7 @@ import {
   Card,
   CardBody,
   CardTitle,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
+  Table,
 } from 'reactstrap';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
@@ -22,10 +19,9 @@ import Breadcrumb from '../../../../containers/navs/Breadcrumb';
 
 // Helpers
 import IntlMessages from '../../../../helpers/IntlMessages';
-import Button from 'reactstrap/lib/Button';
-import { getEmailLinkItem, } from '../../../../redux/actions';
-import { adminRoot, shareSurveyPath } from '../../../../constants/defaultValues';
-import Col from 'reactstrap/lib/Col';
+
+// Redux
+import { getEmailLinkItem, sendEmailContact } from '../../../../redux/actions';
 
 
 const EmailLinkPage = ({ 
@@ -36,13 +32,19 @@ const EmailLinkPage = ({
   emailLinkItem,
   emailLinkError,
   isEmailLinkItemLoaded,
+  isEmailSending,
 
   getEmailLinkItemAction,
+  sendEmailContactAction,
 }) => {
   const [total, setTotal] = useState('');
   const [sent, setSent] = useState('');
   const [remaining, setRemaining] = useState('');
   const [opened, setOpened] = useState('');
+  const [responses, setResponses] = useState('');
+  const [complete, setComplete] = useState('');
+
+  const [sendId, setSendId] = useState(null);
 
   const { messages } = intl;
 
@@ -58,7 +60,7 @@ const EmailLinkPage = ({
 
   useEffect(() => {
     if (emailLinkItem) {
-      let s = 0, r = 0, o = 0;
+      let s = 0, r = 0, o = 0, rs = 0, comp = 0;
       for (const contact of emailLinkItem.contacts) {
         if (contact.status === 'sent') {
           s ++;
@@ -68,14 +70,28 @@ const EmailLinkPage = ({
         } else {
           r ++;
         }
+
+        if (contact.is_responded) {
+          rs ++;
+          if (contact.is_completed) {
+            comp ++;
+          }
+        }
       }
 
       setTotal(emailLinkItem.contacts.length);
       setSent(s);
       setRemaining(r);
       setOpened(o);
+      setResponses(rs);
+      setComplete(comp);
     }
-  }, emailLinkItem)
+  }, [emailLinkItem]);
+
+  const handleSendEmail = (contact) => {
+    setSendId(contact.id);
+    sendEmailContactAction(emailLinkItem.id, contact.email_address);
+  }
 
   return (
     <>
@@ -84,7 +100,7 @@ const EmailLinkPage = ({
           <div className="mb-2">
             <h1>
               <IntlMessages id="menu.emaillink" />:&nbsp;
-              {emailLinkItem && (
+              {isEmailLinkItemLoaded && emailLinkItem && (
                 <span className="text-primary">{emailLinkItem.name}</span>
               )}
             </h1>
@@ -94,39 +110,98 @@ const EmailLinkPage = ({
         </Colxx>
       </Row>
       <Row>
-        <Colxx xxs="6" className="mb-4">
-          <Card>
+        <Colxx md="6" className="mb-4">
+          <Card className="h-100">
             <CardBody className="justify-content-between d-flex flex-row">
               <div>
                 <CardTitle>
                   <h2><IntlMessages id='link.invitations' /></h2>
                 </CardTitle>
 
-                <p><IntlMessages id='link.total' />: {total}</p>
+                <p className='align-items-center'><span className='h4 text-primary'>{total}</span> : <IntlMessages id='link.total' /></p>
 
-                <p><IntlMessages id='link.sent' />: {sent}</p>
+                <p><span className='h4 text-primary'>{sent}</span> : <IntlMessages id='link.sent' /></p>
 
-                <p><IntlMessages id='link.remaining' />: {remaining}</p>
+                <p><span className='h4 text-primary'>{remaining}</span> : <IntlMessages id='link.remaining' /></p>
 
-                <p><IntlMessages id='link.opened' />: {opened}</p>
+                <p><span className='h4 text-primary'>{opened}</span> : <IntlMessages id='link.opened' /></p>
               </div>
 
               <div className="luci-emaillink-progress-bar position-relative">
                 <CircularProgressbar
                   strokeWidth={4}
                   value={100 * sent / total}
-                  text={`${sent}/${total}`}
+                  text={`${sent} / ${total}`}
                 />
               </div>
             </CardBody>
           </Card>
         </Colxx>
-        <Colxx xxs="6" className="mb-4">
+        <Colxx md="6" className="mb-4">
+          <Card className="h-100">
+            <CardBody className="justify-content-between d-flex flex-row">
+              <div>
+                <CardTitle>
+                  <h2><IntlMessages id='link.responses' /></h2>
+                </CardTitle>
+
+                <p className='align-items-center'><span className='h4 text-primary'>{responses}</span> : <IntlMessages id='link.total' /></p>
+
+                <p className='align-items-center'><span className='h4 text-primary'>{complete}</span> : <IntlMessages id='link.complete' /></p>
+              </div>
+
+              <div className="luci-emaillink-progress-bar position-relative">
+                <CircularProgressbar
+                  strokeWidth={4}
+                  value={100 * complete / responses}
+                  text={`${complete} / ${responses}`}
+                />
+              </div>
+            </CardBody>
+          </Card>
+        </Colxx>
+        <Colxx xxs="12">
           <Card>
             <CardBody>
               <CardTitle>
-                <IntlMessages id='link.responses' />
+                Recipients
               </CardTitle>
+              <Table responsive>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th><IntlMessages id='link.email-address' /></th>
+                    <th><IntlMessages id='forms.firstname' /></th>
+                    <th><IntlMessages id='forms.lastname' /></th>
+                    <th><IntlMessages id='link.sent' /></th>
+                    <th><IntlMessages id='link.responded' /></th>
+                    <th><IntlMessages id='nav.action' /></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {emailLinkItem && emailLinkItem.contacts.map((contact, i) => (
+                    <tr key={i}>
+                      <th scope="row">{i+1}</th>
+                      <td>{contact.email_address}</td>
+                      <td>{contact.first_name}</td>
+                      <td>{contact.last_name}</td>
+                      <td>{contact.status === 'sent' ? <IntlMessages id='modal.yes' /> : contact.status === 'failed' ? <IntlMessages id='link.failed' /> : <IntlMessages id='modal.no' />}</td>
+                      <td>{contact.is_responded ? contact.is_completed ? <IntlMessages id='link.complete' /> : <IntlMessages id='modal.yes' /> : <IntlMessages id='modal.no' />}</td>
+                      <td className='position-relative'>
+                        {(isEmailSending && contact.id === sendId) ? (
+                          <div className='luci-loading' />
+                        ) : (
+                          contact.status === 'sent' ? (
+                            <span><IntlMessages id='link.sent' /></span>
+                          ) : (
+                            <a className='luci-cursor-grabbing' onClick={() => handleSendEmail(contact)}><i className='simple-icon-paper-plane mr-2' /><IntlMessages id='pages.send' /></a>
+                          )
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </CardBody>
           </Card>
         </Colxx>
@@ -140,11 +215,13 @@ const mapStateToProps = ({ emaillink, }) => {
     emailLinkItem: emaillink.emailLinkItem,
     emailLinkError: emaillink.error,
     isEmailLinkItemLoaded: emaillink.isLoadedItem,
+    isEmailSending: emaillink.isSending,
   };
 };
 
 export default injectIntl(
   connect(mapStateToProps, {
     getEmailLinkItemAction: getEmailLinkItem,
+    sendEmailContactAction: sendEmailContact,
   })(EmailLinkPage)
 );

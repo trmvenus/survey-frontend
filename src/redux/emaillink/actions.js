@@ -17,6 +17,9 @@ import {
   EMAIL_LINK_LIST_GET_ITEM,
   EMAIL_LINK_LIST_GET_ITEM_SUCCESS,
   EMAIL_LINK_LIST_GET_ITEM_ERROR,
+  EMAIL_LINK_LIST_SEND_EMAIL_CONTACT,
+  EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_SUCCESS,
+  EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR,
 } from '../actions';
 
 export const getEmailLinkList = (payload) => ({
@@ -106,5 +109,20 @@ export const sendEmailLinkSuccess = (payload) => ({
 
 export const sendEmailLinkError = (error) => ({
   type: EMAIL_LINK_LIST_SEND_EMAIL_ERROR,
+  payload: error,
+});
+
+export const sendEmailContact = (id, email) => ({
+  type: EMAIL_LINK_LIST_SEND_EMAIL_CONTACT,
+  payload: {id, email}
+});
+
+export const sendEmailContactSuccess = (payload) => ({
+  type: EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_SUCCESS,
+  payload,
+});
+
+export const sendEmailContactError = (error) => ({
+  type: EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR,
   payload: error,
 });

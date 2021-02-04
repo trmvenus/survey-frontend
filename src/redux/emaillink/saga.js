@@ -9,6 +9,7 @@ import {
   EMAIL_LINK_LIST_DELETE_ITEM,
   EMAIL_LINK_LIST_SEND_EMAIL,
   EMAIL_LINK_LIST_GET_ITEM,
+  EMAIL_LINK_LIST_SEND_EMAIL_CONTACT,
 } from '../actions';
 import { copySharedSurveyItems } from '../sharedSurvey/actions';
 
@@ -25,6 +26,8 @@ import {
   sendEmailLinkSuccess,
   getEmailLinkItemSuccess,
   getEmailLinkItemError,
+  sendEmailContactSuccess,
+  sendEmailContactError,
 } from './actions';
 
 export function* watchGetList() {
@@ -155,6 +158,27 @@ function* sendEmailLink({payload}) {
   }
 }
 
+
+export function* watchSendEmailContact() {
+  yield takeEvery(EMAIL_LINK_LIST_SEND_EMAIL_CONTACT, sendEmailContact);
+}
+
+const sendEmailContactRequest = async (id, email) =>
+  await client 
+    .get(`/link/email/${id}/send?email=${email}`)
+    .then(res => res.data)
+    .catch(err => {throw err.response.data});
+
+function* sendEmailContact({payload}) {
+  try {
+    const {id, email} = payload;
+    const response = yield call(sendEmailContactRequest, id, email);
+    yield put(sendEmailContactSuccess(response));
+  } catch (error) {
+    yield put(sendEmailContactError(error));
+  }
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchGetList), 
@@ -163,5 +187,6 @@ export default function* rootSaga() {
     fork(watchUpdateItem), 
     fork(watchDeleteItem), 
     fork(watchSendEmail),
+    fork(watchSendEmailContact),
   ]);
 }

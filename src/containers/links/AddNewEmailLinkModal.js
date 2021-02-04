@@ -198,7 +198,7 @@ const AddNewEmailLinkModal = ({
 
                 
                 <ExcelFile 
-                  filename='contacts-template.xlsx'
+                  filename='contacts-template'
                   element={<a className="pl-1 text-primary" href='#'><IntlMessages id='link.download-template' /></a>}
                 >
                   <ExcelSheet data={[]} name="Emails">

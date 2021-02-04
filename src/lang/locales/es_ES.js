@@ -363,6 +363,11 @@ module.exports = {
   'link.sent': 'Expedido',
   'link.remaining': 'Restante',
   'link.opened': 'Abierto',
+  'link.complete': 'Completo',
+  'link.responded': 'Respondido',
+  'link.email-address': 'Dirección de Email',
+  'link.recipients': 'Destinatarios',
+  'link.failed': 'Fallido',
 
   /* 06.06. Settings */
   'settings.active': 'Activo',
