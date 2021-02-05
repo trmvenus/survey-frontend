@@ -20,11 +20,15 @@ import {
   EMAIL_LINK_LIST_SEND_EMAIL_CONTACT,
   EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_SUCCESS,
   EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR,
+  EMAIL_LINK_LIST_CHECK_EMAIL_INVITED,
+  EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_SUCCESS,
+  EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_ERROR,
 } from '../actions';
 
 const INIT_STATE = {
   emailLinkItems: [],
   emailLinkItem: null,
+  emailContact: null,
   isLoaded: false,
   isLoadedItem: false,
   isSaved: false,
@@ -92,21 +96,28 @@ export default (state = INIT_STATE, action) => {
       return { ...state, error: action.payload, sendingSuccess: false, };
 
 
-      case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT:
-        return { ...state, isSending: true, };
-      case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_SUCCESS:
-        return { 
-          ...state, 
-          emailLinkItem: {
-            ...state.emailLinkItem,
-            contacts: state.emailLinkItem.contacts.map(item => item.id === action.payload.id ? action.payload : item),
-          },
-          isSending: false, 
-        };
-      case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR:
-        return { ...state, error: action.payload, isSending: false, };
+    case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT:
+      return { ...state, isSending: true, };
+    case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_SUCCESS:
+      return { 
+        ...state, 
+        emailLinkItem: {
+          ...state.emailLinkItem,
+          contacts: state.emailLinkItem.contacts.map(item => item.id === action.payload.id ? action.payload : item),
+        },
+        isSending: false, 
+      };
+    case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR:
+      return { ...state, error: action.payload, isSending: false, };
+
+    case EMAIL_LINK_LIST_CHECK_EMAIL_INVITED:
+      return { ...state, emailContact: null };
+    case EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_SUCCESS:
+      return { ...state, emailContact: action.payload, };
+    case EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_ERROR:
+      return { ...state, error: action.payload };
 
     default:
-      return { ...state };
+      return { ...state, };
   }
 };

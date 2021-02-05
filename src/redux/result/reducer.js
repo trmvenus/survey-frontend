@@ -11,6 +11,7 @@ import {
   RESULT_LIST_POST_ITEM,
   RESULT_LIST_POST_ITEM_SUCCESS,
   RESULT_LIST_POST_ITEM_ERROR,
+  RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME,
 } from '../actions';
 
 const INIT_STATE = {
@@ -34,6 +35,8 @@ export default (state = INIT_STATE, action) => {
 
     case RESULT_LIST_GET_ITEM:
       return { ...state, loading: true, };
+    case RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME:
+      return { ...state, loading: true, }
     case RESULT_LIST_GET_ITEM_SUCCESS:
       return { ...state, loading: false, resultItem: action.payload, };
     case RESULT_LIST_GET_ITEM_ERROR:
@@ -43,7 +46,7 @@ export default (state = INIT_STATE, action) => {
     case RESULT_LIST_POST_ITEM:
       return { ...state, };
     case RESULT_LIST_POST_ITEM_SUCCESS:
-      return { ...state, };
+      return { ...state, resultItem: action.payload };
     case RESULT_LIST_POST_ITEM_ERROR:
       return { ...state, error: action.payload };
 

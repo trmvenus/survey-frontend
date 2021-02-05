@@ -30,7 +30,8 @@ export const searchPath = `${adminRoot}/#`;
 export const servicePath = 'https://api.coloredstrategies.com';
 
 export const shareReportPath = `${window.location.origin}/share/report?id=`;
-export const shareSurveyPath = `${window.location.origin}/share/run?id=`;
+export const shareWebSurveyPath = `${window.location.origin}/share/w/run?id=`;
+export const shareEmailSurveyPath = `${window.location.origin}/share/e/run?id=`;
 
 export const currentUser = {
   id: 1,

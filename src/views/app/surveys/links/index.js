@@ -27,7 +27,7 @@ import IntlMessages from '../../../../helpers/IntlMessages';
 import Button from 'reactstrap/lib/Button';
 import AddNewWebLinkModal from '../../../../containers/links/AddNewWebLinkModal';
 import { getWebLinkList, deleteWebLinkItem, getEmailLinkList, deleteEmailLinkItem, sendEmailLink, } from '../../../../redux/actions';
-import { adminRoot, shareSurveyPath } from '../../../../constants/defaultValues';
+import { adminRoot, shareWebSurveyPath } from '../../../../constants/defaultValues';
 import AddNewEmailLinkModal from '../../../../containers/links/AddNewEmailLinkModal';
 
 
@@ -160,7 +160,7 @@ const LinksSurvey = ({
               <Card className="mb-3" key={i}>
                 <div className="position-absolute card-top-buttons d-flex">
                   <CopyToClipboard 
-                    text={shareSurveyPath+webLink.link_id}
+                    text={shareWebSurveyPath+webLink.link_id}
                   >
                     <Button color="outline-primary" className="pl-1 pl-sm-3 pr-2 pr-sm-3 pt-1 pt-sm-2 pb-0 pb-sm-2 mr-1 mr-md-3 d-flex">
                       <i className="iconsminds-file-clipboard d-none d-sm-block"/>&nbsp;&nbsp;
@@ -198,10 +198,10 @@ const LinksSurvey = ({
                   </CardTitle>
                   <a 
                     className='text-primary text-one text-bold' 
-                    href={shareSurveyPath+webLink.link_id}
+                    href={shareWebSurveyPath+webLink.link_id}
                     target="_blank"
                     >
-                    {shareSurveyPath+webLink.link_id}
+                    {shareWebSurveyPath+webLink.link_id}
                   </a>
                 </CardBody>
               </Card>

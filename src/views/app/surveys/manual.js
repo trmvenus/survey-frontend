@@ -37,7 +37,7 @@ const RunSurvey = ({
 
   const [start, setStart] = useState(false);
   const [name, setName] = useState('');
-  const [errors, setErrors] = useState({name: null})
+  const [errors, setErrors] = useState({name: null});
 
   const { messages } = intl;
   
@@ -60,6 +60,7 @@ const RunSurvey = ({
         time_spent: timeSpent, 
         ip_address,
         respondent_name: name,
+        is_completed: true,
       });
     }
   }

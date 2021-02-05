@@ -1,4 +1,4 @@
-
+import { shareEmailSurveyPath } from "../constants/defaultValues";
 
 export const getRandomLinkId = () => {
   return 'xxxyxxxx'.replace(/[xy]/g, function(c) {
@@ -13,7 +13,7 @@ export const getDefaultEmailLinkContent = (link_id) => {
   <p>Hello, {FirstName}.</p>
   <p>{enter your message here}</p>
   <p>
-    <a href="${window.location.origin}/share/run?id=${link_id}">
+    <a href="${shareEmailSurveyPath}${link_id}">
       Click here to run the survey.
     </a>
   </p>

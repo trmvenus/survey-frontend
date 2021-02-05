@@ -14,6 +14,7 @@ import {
   RESULT_LIST_POST_MANUAL_ITEM,
   RESULT_LIST_POST_MANUAL_ITEM_SUCCESS,
   RESULT_LIST_POST_MANUAL_ITEM_ERROR,
+  RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME,
 } from '../actions';
 
 export const getResultList = (payload) => ({
@@ -34,6 +35,11 @@ export const getResultListError = (error) => ({
 export const getResultItem = (payload) => ({
   type: RESULT_LIST_GET_ITEM,
   payload,
+});
+
+export const getResultItemByWebLinkAndName = (survey_id, weblink_link_id, name, ip_address) => ({
+  type: RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME,
+  payload: {survey_id, weblink_link_id, name, ip_address}
 });
 
 export const getResultItemSuccess = (item) => ({

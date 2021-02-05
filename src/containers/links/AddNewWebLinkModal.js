@@ -27,7 +27,7 @@ import { NotificationManager } from '../../components/common/react-notifications
 
 // Containers
 import { FormikCustomCheckbox, FormikDatePicker } from '../../containers/form-validations/FormikFields';
-import { shareSurveyPath } from '../../constants/defaultValues';
+import { shareWebSurveyPath } from '../../constants/defaultValues';
 import { getRandomLinkId } from '../../helpers/linkHelper';
 
 const WebLinkSchema = Yup.object().shape({
@@ -138,7 +138,7 @@ const AddNewWebLinkModal = ({
                 </Label>
                 <InputGroup className="mb-3">
                   <InputGroupAddon addonType="prepend">
-                    {shareSurveyPath}
+                    {shareWebSurveyPath}
                   </InputGroupAddon>
                   <Field
                     className='form-control'

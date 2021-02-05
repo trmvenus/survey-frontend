@@ -20,6 +20,9 @@ import {
   EMAIL_LINK_LIST_SEND_EMAIL_CONTACT,
   EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_SUCCESS,
   EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR,
+  EMAIL_LINK_LIST_CHECK_EMAIL_INVITED,
+  EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_SUCCESS,
+  EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_ERROR,
 } from '../actions';
 
 export const getEmailLinkList = (payload) => ({
@@ -126,3 +129,18 @@ export const sendEmailContactError = (error) => ({
   type: EMAIL_LINK_LIST_SEND_EMAIL_CONTACT_ERROR,
   payload: error,
 });
+
+export const checkIfEmailIsInvited = (link_id, email) => ({
+  type: EMAIL_LINK_LIST_CHECK_EMAIL_INVITED,
+  payload: {link_id, email},
+});
+
+export const checkIfEmailIsInvitedSuccess = (payload) => ({
+  type: EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_SUCCESS,
+  payload,
+});
+
+export const checkIfEmailIsInvitedError = (error) => ({
+  type: EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_ERROR,
+  payload: error,
+})

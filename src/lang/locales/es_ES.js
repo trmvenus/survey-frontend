@@ -335,6 +335,8 @@ module.exports = {
   'report.annually': 'Anualmente',
 
   /* 06.04. Result */
+  'result.manual': 'Manual',
+  'result.direct': 'Directo',
 
   /* 06.05. Link */
   'link.add-title': 'Agregar Más Enlaces',
@@ -364,6 +366,7 @@ module.exports = {
   'link.remaining': 'Restante',
   'link.opened': 'Abierto',
   'link.complete': 'Completo',
+  'link.in-progress': 'En Curso',
   'link.responded': 'Respondido',
   'link.email-address': 'Dirección de Email',
   'link.recipients': 'Destinatarios',

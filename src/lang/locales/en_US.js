@@ -338,6 +338,8 @@ module.exports = {
   'report.annually': 'Annually',
 
   /* 06.04. Result */
+  'result.manual': 'Manual',
+  'result.direct': 'Direct',
 
   /* 06.05. Link */
   'link.add-title': 'Add More Links',
@@ -367,6 +369,7 @@ module.exports = {
   'link.remaining': 'Remaining',
   'link.opened': 'Opened',
   'link.complete': 'Complete',
+  'link.in-progress': 'In Progress',
   'link.responded': 'Responded',
   'link.email-address': 'Email Address',
   'link.recipients': 'Recipients',
@@ -578,6 +581,7 @@ module.exports = {
   'forms.male': "Male",
   'forms.female': "Female",
   'forms.respondent-name': 'Respondent Name',
+  'forms.email-error': 'Email address is required.',
 
   /* 07.11.Form Components */
   'form-components.custom-inputs': 'Custom Inputs',

@@ -2,10 +2,11 @@ import {
   GET_SURVEY,
   GET_SURVEY_SUCCESS,
   GET_SURVEY_ERROR,
-  GET_SURVEY_SHARE,
   UPDATE_SURVEY,
   UPDATE_SURVEY_SUCCESS,
-  UPDATE_SURVEY_ERROR
+  UPDATE_SURVEY_ERROR,
+  GET_SURVEY_BY_WEB_LINK,
+  GET_SURVEY_BY_EMAIL_LINK
 } from '../actions';
 
 export const getSurvey = (payload) => ({
@@ -13,8 +14,13 @@ export const getSurvey = (payload) => ({
   payload: payload,
 });
 
-export const getSurveyItemShare = (share_id) => ({
-  type: GET_SURVEY_SHARE,
+export const getSurveyItemByWebLink = (share_id) => ({
+  type: GET_SURVEY_BY_WEB_LINK,
+  payload: share_id,
+});
+
+export const getSurveyItemByEmailLink = (share_id) => ({
+  type: GET_SURVEY_BY_EMAIL_LINK,
   payload: share_id,
 });
 

@@ -7,7 +7,8 @@ import {
   RESULT_LIST_GET_LIST, 
   RESULT_LIST_GET_ITEM, 
   RESULT_LIST_POST_ITEM, 
-  RESULT_LIST_POST_MANUAL_ITEM, 
+  RESULT_LIST_POST_MANUAL_ITEM,
+  RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME, 
 } from '../actions';
 
 import {
@@ -59,12 +60,31 @@ const getResultItemRequest = async (payload) => {
     .then((user) => user.data)
     .catch((error) => {throw error.response.data});
   }
-  
 }
 
 function* getResultItem({payload}) {
   try {
     const response = yield call(getResultItemRequest, payload);
+    yield put(getResultItemSuccess(response));
+  } catch (error) {
+    yield put(getResultItemError(error));
+  }
+}
+
+
+export function* watchGetItemByWebLinkAndName() {
+  yield takeEvery(RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME, getResultItemByWebLinkAndName);
+}
+
+const getResultItemByWebLinkAndNameRequest = async (payload) =>
+  await client
+    .get(`/result?survey=${payload.survey_id}&weblink_link=${payload.weblink_link_id}&name=${payload.name}&ip=${payload.ip_address}`)
+    .then((user) => user.data)
+    .catch((error) => {throw error.response.data});
+
+function* getResultItemByWebLinkAndName({payload}) {
+  try {
+    const response = yield call(getResultItemByWebLinkAndNameRequest, payload);
     yield put(getResultItemSuccess(response));
   } catch (error) {
     yield put(getResultItemError(error));
@@ -135,6 +155,7 @@ export default function* rootSaga() {
   yield all([
     fork(watchGetList), 
     fork(watchGetItem), 
+    fork(watchGetItemByWebLinkAndName),
     fork(watchPostItem), 
     fork(watchUpdateItem),
     fork(watchPostManualItem),

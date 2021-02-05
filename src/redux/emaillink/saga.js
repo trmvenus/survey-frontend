@@ -10,6 +10,7 @@ import {
   EMAIL_LINK_LIST_SEND_EMAIL,
   EMAIL_LINK_LIST_GET_ITEM,
   EMAIL_LINK_LIST_SEND_EMAIL_CONTACT,
+  EMAIL_LINK_LIST_CHECK_EMAIL_INVITED,
 } from '../actions';
 import { copySharedSurveyItems } from '../sharedSurvey/actions';
 
@@ -28,6 +29,8 @@ import {
   getEmailLinkItemError,
   sendEmailContactSuccess,
   sendEmailContactError,
+  checkIfEmailIsInvitedSuccess,
+  checkIfEmailIsInvitedError,
 } from './actions';
 
 export function* watchGetList() {
@@ -179,6 +182,27 @@ function* sendEmailContact({payload}) {
   }
 }
 
+
+export function* watchCheckIfEmailIsInvited() {
+  yield takeEvery(EMAIL_LINK_LIST_CHECK_EMAIL_INVITED, checkIfEmailIsInvited);
+}
+
+const checkIfEmailIsInvitedAsync = async (link_id, email) =>
+  await client
+    .get(`/link/email/check?share=${link_id}&email=${email}`)
+    .then(res => res.data)
+    .catch(err => {throw err.response.data});
+
+function* checkIfEmailIsInvited({payload}) {
+  try {
+    const {link_id, email} = payload;
+    const response = yield call(checkIfEmailIsInvitedAsync, link_id, email);
+    yield put(checkIfEmailIsInvitedSuccess(response));
+  } catch (error) {
+    yield put(checkIfEmailIsInvitedError(error));
+  }
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchGetList), 
@@ -188,5 +212,6 @@ export default function* rootSaga() {
     fork(watchDeleteItem), 
     fork(watchSendEmail),
     fork(watchSendEmailContact),
+    fork(watchCheckIfEmailIsInvited),
   ]);
 }

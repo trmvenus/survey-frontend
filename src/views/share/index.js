@@ -9,8 +9,12 @@ const ReportPage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-report" */ './report')
 );
 
-const RunPage = React.lazy(() => 
-  import(/* webpackChunkName: "viwes-run" */ './run')
+const EmailRunPage = React.lazy(() => 
+  import(/* webpackChunkName: "viwes-run" */ './emailrun')
+);
+
+const WebRunPage = React.lazy(() => 
+  import(/* webpackChunkName: "viwes-run" */ './webrun')
 );
 
 const ShareApp = ({ 
@@ -36,8 +40,12 @@ const ShareApp = ({
               render={(props) => <ReportPage {...props} />}
             />
             <Route
-              path={`${match.url}/run`}
-              render={(props) => <RunPage {...props} />}
+              path={`${match.url}/e/run`}
+              render={(props) => <EmailRunPage {...props} />}
+            />
+            <Route
+              path={`${match.url}/w/run`}
+              render={(props) => <WebRunPage {...props} />}
             />
             <Redirect to="/error" />
           </Switch>

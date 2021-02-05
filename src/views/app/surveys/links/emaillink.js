@@ -186,7 +186,7 @@ const EmailLinkPage = ({
                       <td>{contact.first_name}</td>
                       <td>{contact.last_name}</td>
                       <td>{contact.status === 'sent' ? <IntlMessages id='modal.yes' /> : contact.status === 'failed' ? <IntlMessages id='link.failed' /> : <IntlMessages id='modal.no' />}</td>
-                      <td>{contact.is_responded ? contact.is_completed ? <IntlMessages id='link.complete' /> : <IntlMessages id='modal.yes' /> : <IntlMessages id='modal.no' />}</td>
+                      <td>{contact.is_responded ? contact.is_completed ? <IntlMessages id='link.complete' /> : <IntlMessages id='link.in-progress' /> : <IntlMessages id='modal.no' />}</td>
                       <td className='position-relative'>
                         {(isEmailSending && contact.id === sendId) ? (
                           <div className='luci-loading' />
