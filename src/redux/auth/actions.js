@@ -15,6 +15,12 @@ import {
   GET_CURRENT_USER,
   GET_CURRENT_USER_SUCCESS,
   GET_CURRENT_USER_ERROR,
+  UPDATE_USER_PROFILE,
+  UPDATE_USER_PROFILE_SUCCESS,
+  UPDATE_USER_PROFILE_ERROR,
+  GET_ADDITIONAL_USER_INFO,
+  GET_ADDITIONAL_USER_INFO_SUCCESS,
+  GET_ADDITIONAL_USER_INFO_ERROR,
 } from '../actions';
 
 export const loginUser = (user, history) => ({
@@ -84,4 +90,29 @@ export const getCurrentUserSuccess = (user) => ({
 export const getCurrentUserError = (error) => ({
   type: GET_CURRENT_USER_ERROR,
   payload: error,
-})
+});
+
+export const updateUserProfile = (profile) => ({
+  type: UPDATE_USER_PROFILE,
+  payload: profile,
+});
+export const updateUserProfileSuccess = (user) => ({
+  type: UPDATE_USER_PROFILE_SUCCESS,
+  payload: user,
+});
+export const updateUserProfileError = (error) => ({
+  type: UPDATE_USER_PROFILE_ERROR,
+  payload: error,
+});
+
+export const getAdditionalUserInfo = () => ({
+  type: GET_ADDITIONAL_USER_INFO,
+});
+export const getAdditionalUserInfoSuccess = (info) => ({
+  type: GET_ADDITIONAL_USER_INFO_SUCCESS,
+  payload: info,
+});
+export const getAdditionalUserInfoError = (error) => ({
+  type: GET_ADDITIONAL_USER_INFO_ERROR,
+  payload: error,
+});

@@ -36,6 +36,9 @@
   }
   .react-select__control--is-disabled {
     background-color: #e9ecef !important;
+    .react-select__value-container {
+      background-color: #e9ecef !important;
+    }
   }
 }
 

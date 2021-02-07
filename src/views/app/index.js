@@ -1,15 +1,17 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import AppLayout from '../../layout/AppLayout';
 import { ProtectedRoute, UserRole } from '../../helpers/authHelper';
+import { getCurrentUser as getCurrentUserFromLocalStorage } from '../../helpers/Utils';
 import { 
   getCurrentUser, 
   getOrganizationList, 
   getPillarList, 
   getSurveyList,
   getSharedSurveyList,
+  getEntireSurveyList,
 } from '../../redux/actions';
 
 const Dashboards = React.lazy(() => 
@@ -33,9 +35,11 @@ const App = ({
   getCurrentUserAction,
   getPillarListAction,
   getOrganizationListAction,
+  getEntireSurveyListAction,
   getMySurveyListAction,
   getSharedSurveyListAction,
 }) => {
+  const [currentUser] = useState(getCurrentUserFromLocalStorage());
 
   useEffect(() => {
     getCurrentUserAction();
@@ -47,6 +51,10 @@ const App = ({
     getPillarListAction();
 
     getOrganizationListAction();
+
+    if (currentUser.role == UserRole.Admin) {
+      getEntireSurveyListAction();
+    }
   }, []);
   
   return (
@@ -93,6 +101,7 @@ export default withRouter(connect(mapStateToProps, {
   getCurrentUserAction: getCurrentUser,
   getPillarListAction: getPillarList,
   getOrganizationListAction: getOrganizationList,
+  getEntireSurveyListAction: getEntireSurveyList,
   getMySurveyListAction: getSurveyList,
   getSharedSurveyListAction: getSharedSurveyList,
 })(App));

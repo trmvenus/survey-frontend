@@ -19,6 +19,7 @@ const SurveyListItem = ({
   item, 
   handleCheckChange, 
   isSelected,
+  isNameDisplayed = false,
 
   shareSurveyItemAction,  
 }) => {
@@ -62,7 +63,12 @@ const SurveyListItem = ({
               />
               <span className="align-middle d-inline-block truncate luci-survey-name">{item.name}</span>
             </NavLink>
+            {isNameDisplayed && (
             <div className="w-10 text-muted w-xs-100">
+                {item.creator_name}
+            </div>
+            )}
+            <div className="ml-1 text-muted w-xs-100">
                 {item.responses}
             </div>
             <p className="mb-1 text-muted text-small w-15 w-xs-100">

@@ -1,5 +1,4 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
-import { auth } from '../../helpers/Firebase';
 import { client } from '../../helpers/client';
 import {
   LOGIN_USER,
@@ -8,6 +7,10 @@ import {
   FORGOT_PASSWORD,
   RESET_PASSWORD,
   GET_CURRENT_USER,
+  UPDATE_USER_PROFILE,
+  updateUserProfileError,
+  updateUserProfileSuccess,
+  GET_ADDITIONAL_USER_INFO,
 } from '../actions';
 
 import {
@@ -21,10 +24,12 @@ import {
   resetPasswordError,
   getCurrentUserSuccess,
   getCurrentUserError,
+  getAdditionalUserInfoSuccess,
+  getAdditionalUserInfoError,
 } from './actions';
 
 import { adminRoot } from "../../constants/defaultValues"
-import { setCurrentUser } from '../../helpers/Utils';
+import { setCurrentUser, getCurrentUser as getCurrentUserFromLocalStorage } from '../../helpers/Utils';
 
 export function* watchLoginUser() {
   yield takeEvery(LOGIN_USER, loginWithEmailPassword);
@@ -52,7 +57,6 @@ function* loginWithEmailPassword({ payload }) {
       yield put(loginUserError(loginUser.message));
     }
   } catch (error) {
-    console.log(error);
     yield put(loginUserError(error));
   }
 }
@@ -94,19 +98,10 @@ export function* watchLogoutUser() {
   yield takeEvery(LOGOUT_USER, logout);
 }
 
-const logoutAsync = async (history) => {
-  await auth
-    .signOut()
-    .then((user) => user)
-    .catch((error) => {throw error.response.data});
-  history.push(adminRoot);
-};
-
 function* logout({ payload }) {
   const { history } = payload;
   setCurrentUser();
   history.push('/user/login');
-  // yield call(logoutAsync, history);
 }
 
 export function* watchForgotPassword() {
@@ -184,6 +179,48 @@ function* getCurrentUser() {
   }
 }
 
+
+export function* watchUpdateUserProfile() {
+  yield takeEvery(UPDATE_USER_PROFILE, updateUserProfile);
+}
+
+const updateUserProfileAsync = async (payload) => 
+  await client 
+    .put('/auth/me', payload)
+    .then(res => res.data)
+    .catch(error => {throw error.response.data});
+
+function* updateUserProfile({payload}) {
+  try {
+    const user = yield call(updateUserProfileAsync, payload);
+    setCurrentUser({...getCurrentUserFromLocalStorage(), name: user.name});
+    yield put(updateUserProfileSuccess(user));
+  } catch (error) {
+    yield put(updateUserProfileError(error));
+  }
+}
+
+
+export function* watchGetAdditionalUserInfo() {
+  yield takeEvery(GET_ADDITIONAL_USER_INFO, getAdditionalUserInfo);
+}
+
+const getAdditionalUserInfoAsync = async (payload) =>
+  await client
+    .get('/auth/me/profile', payload)
+    .then(res => res.data)
+    .catch(error => {throw error.response.data});
+
+function* getAdditionalUserInfo({payload}) {
+  try {
+    const additionalInfo = yield call(getAdditionalUserInfoAsync, payload);
+    yield put(getAdditionalUserInfoSuccess(additionalInfo));
+  } catch (error) {
+    yield put(getAdditionalUserInfoError(error));
+  }
+}
+
+
 export default function* rootSaga() {
   yield all([
     fork(watchLoginUser),
@@ -192,5 +229,7 @@ export default function* rootSaga() {
     fork(watchForgotPassword),
     fork(watchResetPassword),
     fork(watchGetCurrentUser),
+    fork(watchUpdateUserProfile),
+    fork(watchGetAdditionalUserInfo),
   ]);
 }

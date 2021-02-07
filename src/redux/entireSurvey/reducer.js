@@ -1,39 +1,36 @@
 import {
-  SURVEY_LIST_GET_LIST,
-  SURVEY_LIST_GET_LIST_SUCCESS,
-  SURVEY_LIST_GET_LIST_ERROR,
-  SURVEY_LIST_GET_LIST_WITH_FILTER,
-  SURVEY_LIST_GET_LIST_WITH_ORDER,
-  SURVEY_LIST_GET_LIST_SEARCH,
-  SURVEY_LIST_ADD_ITEM,
-  SURVEY_LIST_ADD_ITEM_SUCCESS,
-  SURVEY_LIST_ADD_ITEM_ERROR,
-  SURVEY_LIST_SELECTED_ITEMS_CHANGE,
-  SURVEY_LIST_DELETE_ITEMS,
-  SURVEY_LIST_DELETE_ITEMS_SUCCESS,
-  SURVEY_LIST_DELETE_ITEMS_ERROR,
-  SURVEY_LIST_COPY_ITEMS,
-  SURVEY_LIST_COPY_ITEMS_SUCCESS,
-  SURVEY_LIST_COPY_ITEMS_ERROR,
-  SURVEY_LIST_SHARE_ITEM,
-  SURVEY_LIST_SHARE_ITEM_SUCCESS,
-  SURVEY_LIST_SHARE_ITEM_ERROR,
-  SURVEY_LIST_ACTIVE_ITEM,
-  SURVEY_LIST_ACTIVE_ITEM_SUCCESS,
-  SURVEY_LIST_ACTIVE_ITEM_ERROR,
-  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM,
-  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR,
-  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS,
+  ENTIRE_SURVEY_LIST_GET_LIST,
+  ENTIRE_SURVEY_LIST_GET_LIST_SUCCESS,
+  ENTIRE_SURVEY_LIST_GET_LIST_ERROR,
+  ENTIRE_SURVEY_LIST_GET_LIST_WITH_FILTER,
+  ENTIRE_SURVEY_LIST_GET_LIST_WITH_ORDER,
+  ENTIRE_SURVEY_LIST_GET_LIST_SEARCH,
+  ENTIRE_SURVEY_LIST_SELECTED_ITEMS_CHANGE,
+  ENTIRE_SURVEY_LIST_DELETE_ITEMS,
+  ENTIRE_SURVEY_LIST_DELETE_ITEMS_SUCCESS,
+  ENTIRE_SURVEY_LIST_DELETE_ITEMS_ERROR,
+  ENTIRE_SURVEY_LIST_COPY_ITEMS,
+  ENTIRE_SURVEY_LIST_COPY_ITEMS_SUCCESS,
+  ENTIRE_SURVEY_LIST_COPY_ITEMS_ERROR,
+  ENTIRE_SURVEY_LIST_SHARE_ITEM,
+  ENTIRE_SURVEY_LIST_SHARE_ITEM_SUCCESS,
+  ENTIRE_SURVEY_LIST_SHARE_ITEM_ERROR,
+  ENTIRE_SURVEY_LIST_ACTIVE_ITEM,
+  ENTIRE_SURVEY_LIST_ACTIVE_ITEM_SUCCESS,
+  ENTIRE_SURVEY_LIST_ACTIVE_ITEM_ERROR,
+  ENTIRE_SURVEY_LIST_SET_MULTI_RESPONSES_ITEM,
+  ENTIRE_SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR,
+  ENTIRE_SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS,
 } from '../actions';
 
 const INIT_STATE = {
-  mySurveyItems: [],
+  entireSurveyItems: [],
   surveyItems: [],
   error: '',
   filter: null,
   searchKeyword: '',
   orderColumn: null,
-  loading: false,
+  isLoaded: false,
   labels: [
     { label: 'EDUCATION', color: 'secondary' },
     { label: 'NEW FRAMEWORK', color: 'primary' },
@@ -49,52 +46,47 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
-    case SURVEY_LIST_GET_LIST:
-      return { ...state, loading: false };
-
-    case SURVEY_LIST_GET_LIST_SUCCESS:
+    case ENTIRE_SURVEY_LIST_GET_LIST:
+      return { ...state, isLoaded: false };
+    case ENTIRE_SURVEY_LIST_GET_LIST_SUCCESS:
       return {
         ...state,
-        loading: true,
-        mySurveyItems: action.payload,
+        isLoaded: true,
+        entireSurveyItems: action.payload,
         surveyItems: action.payload,
       };
-
-    case SURVEY_LIST_GET_LIST_ERROR:
-      return { ...state, loading: true, error: action.payload };
-
-    case SURVEY_LIST_GET_LIST_WITH_FILTER:
+    case ENTIRE_SURVEY_LIST_GET_LIST_ERROR:
+      return { ...state, isLoaded: true, error: action.payload };
+    case ENTIRE_SURVEY_LIST_GET_LIST_WITH_FILTER:
       if (action.payload.column === '' || action.payload.value === '') {
         return {
           ...state,
-          loading: true,
-          surveyItems: state.mySurveyItems,
+          isLoaded: true,
+          surveyItems: state.entireSurveyItems,
           filter: null,
         };
       }
-      const filteredItems = state.mySurveyItems.filter(
+      const filteredItems = state.entireSurveyItems.filter(
         (item) => item[action.payload.column] === action.payload.value
       );
       return {
         ...state,
-        loading: true,
+        isLoaded: true,
         surveyItems: filteredItems,
         filter: {
           column: action.payload.column,
           value: action.payload.value,
         },
       };
-
-    case SURVEY_LIST_GET_LIST_WITH_ORDER:
+    case ENTIRE_SURVEY_LIST_GET_LIST_WITH_ORDER:
       if (action.payload === '') {
         return {
           ...state,
-          loading: true,
+          isLoaded: true,
           surveyItems: state.surveyItems,
           orderColumn: null,
         };
       }
-
       const sortedItems = state.surveyItems.sort((a, b) => {
         if (a[action.payload] < b[action.payload]) return -1;
         if (a[action.payload] > b[action.payload]) return 1;
@@ -102,19 +94,18 @@ export default (state = INIT_STATE, action) => {
       });
       return {
         ...state,
-        loading: true,
+        isLoaded: true,
         surveyItems: sortedItems,
         orderColumn: state.orderColumns.find(
           (x) => x.column === action.payload
         ),
       };
-
-    case SURVEY_LIST_GET_LIST_SEARCH:
+    case ENTIRE_SURVEY_LIST_GET_LIST_SEARCH:
       if (action.payload === '') {
-        return { ...state, surveyItems: state.mySurveyItems };
+        return { ...state, surveyItems: state.entireSurveyItems };
       }
       const keyword = action.payload.toLowerCase();
-      const searchItems = state.mySurveyItems.filter(
+      const searchItems = state.entireSurveyItems.filter(
         (item) =>
           item.name.toLowerCase().indexOf(keyword) > -1 // ||
           // item.status.toLowerCase().indexOf(keyword) > -1 ||
@@ -123,106 +114,92 @@ export default (state = INIT_STATE, action) => {
       );
       return {
         ...state,
-        loading: true,
+        isLoaded: true,
         surveyItems: searchItems,
         searchKeyword: action.payload,
       };
 
-    case SURVEY_LIST_ADD_ITEM:
-      return { ...state, loading: false };
+    case ENTIRE_SURVEY_LIST_SELECTED_ITEMS_CHANGE:
+      return { ...state, isLoaded: true, selectedItems: action.payload };
 
-    case SURVEY_LIST_ADD_ITEM_SUCCESS:
-      return {
-        ...state,
-        loading: true,
-        mySurveyItems: [action.payload, ...state.mySurveyItems],
-        surveyItems: [action.payload, ...state.surveyItems],
-      };
+    case ENTIRE_SURVEY_LIST_DELETE_ITEMS:
+      return { ...state, isLoaded: false, };
 
-    case SURVEY_LIST_ADD_ITEM_ERROR:
-      return { ...state, loading: true, error: action.payload };
-
-    case SURVEY_LIST_SELECTED_ITEMS_CHANGE:
-      return { ...state, loading: true, selectedItems: action.payload };
-
-    case SURVEY_LIST_DELETE_ITEMS:
-      return { ...state, loading: false, };
-
-    case SURVEY_LIST_DELETE_ITEMS_SUCCESS:
+    case ENTIRE_SURVEY_LIST_DELETE_ITEMS_SUCCESS:
       return { 
         ...state, 
-        loading: true, 
+        isLoaded: true, 
         surveyItems: state.surveyItems.filter(item => !state.selectedItems.includes(item.id)),
         selectedItems: [],
       };
 
-    case SURVEY_LIST_DELETE_ITEMS_ERROR:
+    case ENTIRE_SURVEY_LIST_DELETE_ITEMS_ERROR:
       return { 
         ...state, 
-        loading: true, 
+        isLoaded: true, 
         error: action.payload,
         selectedItems: [],
       };
 
-    case SURVEY_LIST_COPY_ITEMS:
-      return { ...state, loading: false, };
+    case ENTIRE_SURVEY_LIST_COPY_ITEMS:
+      return { ...state, isLoaded: false, };
 
-    case SURVEY_LIST_COPY_ITEMS_SUCCESS:
+    case ENTIRE_SURVEY_LIST_COPY_ITEMS_SUCCESS:
       return {
         ...state,
-        loading: true,
+        isLoaded: true,
         surveyItems: [...action.payload, ...state.surveyItems],
         selectedItems: [],
       };
 
-    case SURVEY_LIST_COPY_ITEMS_ERROR:
+    case ENTIRE_SURVEY_LIST_COPY_ITEMS_ERROR:
       return { 
         ...state, 
-        loading: true, 
+        isLoaded: true, 
         error: action.payload,
         selectedItems: [],
       };
 
-    case SURVEY_LIST_SHARE_ITEM:
+    case ENTIRE_SURVEY_LIST_SHARE_ITEM:
       return {
         ...state,
       };
-    case SURVEY_LIST_SHARE_ITEM_SUCCESS:
+    case ENTIRE_SURVEY_LIST_SHARE_ITEM_SUCCESS:
       return {
         ...state,
         surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_share: !item.is_share} : item),
       };
-    case SURVEY_LIST_SHARE_ITEM_ERROR:
+    case ENTIRE_SURVEY_LIST_SHARE_ITEM_ERROR:
       return {
         ...state,
         error: action.payload,
       };
 
-    case SURVEY_LIST_ACTIVE_ITEM:
+    case ENTIRE_SURVEY_LIST_ACTIVE_ITEM:
       return {
         ...state,
       };
-    case SURVEY_LIST_ACTIVE_ITEM_SUCCESS:
+    case ENTIRE_SURVEY_LIST_ACTIVE_ITEM_SUCCESS:
       return {
         ...state,
         surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_active: !item.is_active} : item),
       };
-    case SURVEY_LIST_ACTIVE_ITEM_ERROR:
+    case ENTIRE_SURVEY_LIST_ACTIVE_ITEM_ERROR:
       return {
         ...state,
         error: action.payload,
       };
 
-    case SURVEY_LIST_SET_MULTI_RESPONSES_ITEM:
+    case ENTIRE_SURVEY_LIST_SET_MULTI_RESPONSES_ITEM:
       return {
         ...state,
       };
-    case SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS:
+    case ENTIRE_SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS:
       return {
         ...state,
         surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_multi_responses: !item.is_multi_responses} : item),
       };
-    case SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR:
+    case ENTIRE_SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR:
       return {
         ...state,
         error: action.payload,

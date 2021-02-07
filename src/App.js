@@ -7,7 +7,6 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
-import './helpers/Firebase';
 import AppLocale from './lang';
 import ColorSwitcher from './components/common/ColorSwitcher';
 import { NotificationContainer } from './components/common/react-notifications';
@@ -67,6 +66,10 @@ class App extends React.Component {
                     component={ViewApp}
                     roles={[UserRole.Admin, UserRole.User, UserRole.OrgAdmin]}
                   />
+                  {/* <Route
+                    path={adminRoot}
+                    render={(props) => <ViewApp {...props} />}
+                  /> */}
                   <Route
                     path="/user"
                     render={(props) => <ViewUser {...props} />}

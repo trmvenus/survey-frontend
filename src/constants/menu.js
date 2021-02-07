@@ -39,9 +39,24 @@ const data = [
         to: `${adminRoot}/surveys/sharedsurveys`,
       },
       {
+        id: 'allsurveys',
+        icon: 'simple-icon-list',
+        label: 'menu.allsurveys',
+        to: `${adminRoot}/surveys/all`,
+        roles: [UserRole.Admin],
+      },
+      {
         id: 'mysurveys-parent',
         icon: 'simple-icon-layers',
         label: 'menu.mysurveys',
+        to: `${adminRoot}/surveys`,
+        subs: [
+        ],
+      },
+      {
+        id: 'allsurveys-parent',
+        icon: 'simple-icon-layers',
+        label: 'menu.allsurveys',
         to: `${adminRoot}/surveys`,
         subs: [
         ],
@@ -53,12 +68,11 @@ const data = [
     icon: 'simple-icon-settings',
     label: 'menu.settings',
     to: `${adminRoot}/settings`,
-    // roles: [UserRole.Admin, UserRole.Editor],
     subs: [
       {
         icon: 'simple-icon-user',
-        label: 'menu.account',
-        to: `${adminRoot}/settings/account`,
+        label: 'menu.profile',
+        to: `${adminRoot}/settings/profile`,
       },
     ],
   },

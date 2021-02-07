@@ -357,7 +357,7 @@ const CustomizeTab = ({
 const mapStateToProps = ({ survey, surveyListApp, report, pillar, settings }) => {
   return {
     surveyItem: survey.surveyItem,
-    surveyItems: surveyListApp.allSurveyItems,
+    surveyItems: surveyListApp.mySurveyItems,
     reportItem: report.reportItem,
     pillarItems: pillar.pillarItems,
     locale: settings.locale,

@@ -356,7 +356,7 @@ const mapStateToProps = ({ survey, surveyListApp, report, result, pillar, settin
     surveyItemError : survey.error,
     isSurveyItemLoaded: survey.loading,
 
-    surveyItems: surveyListApp.allSurveyItems,
+    surveyItems: surveyListApp.mySurveyItems,
     surveyItemsError: surveyListApp.error,
     isSurveyItemsLoaded: survey.loading,
 

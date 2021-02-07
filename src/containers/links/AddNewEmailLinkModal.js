@@ -116,6 +116,8 @@ const AddNewEmailLinkModal = ({
 
   const link_id = getRandomLinkId();
 
+  console.log(emailLink);
+
   const initialValues = emailLink !== null ?
       {
         name: emailLink.name,

@@ -124,6 +124,8 @@ module.exports = {
   'menu.validations': 'Validations',
   'menu.wizard': 'Wizard',
   'menu.dashboard': 'Dashboard',
+  'menu.allsurveys': 'All Surveys',
+  'menu.all': 'All',
   'menu.mysurveys': 'My Surveys',
   'menu.sharedsurveys': 'Shared Surveys',
   'menu.surveys': 'Surveys',
@@ -739,6 +741,10 @@ module.exports = {
 
   /* 08.01.Profile */
   'profile.role': 'Role',
+  'profile.profile-title': 'Profile',
+  'profile.description-title': 'Description',
+  'profile.short-description': 'Short Description',
+  'profile.long-description': 'Long Description',
 
   /* 09.Admin Panel */
 

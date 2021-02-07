@@ -701,7 +701,7 @@ const AddNewReportModal = ({
 const mapStateToProps = ({ pillar, survey, surveyListApp, settings, }) => {
   return {
     surveyItem: survey.surveyItem,
-    surveyItems: surveyListApp.allSurveyItems,
+    surveyItems: surveyListApp.mySurveyItems,
     pillarItems: pillar.pillarItems,
     pillarError: pillar.error,
     locale: settings.locale,

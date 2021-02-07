@@ -16,7 +16,8 @@ import {
 } from '../../redux/actions';
 
 import { adminRoot } from "../../constants/defaultValues";
-import menuItems from '../../constants/menu';
+import dynamicMenuItems from '../../constants/menu';
+import { UserRole } from '../../helpers/authHelper';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class Sidebar extends Component {
       selectedParentMenu: '',
       viewingParentMenu: '',
       collapsedMenus: [],
+      menuItems: dynamicMenuItems,
     };
   }
 
@@ -216,7 +218,7 @@ class Sidebar extends Component {
       } else if (this.state.selectedParentMenu === '') {
         this.setState(
           {
-            selectedParentMenu: menuItems[0].id,
+            selectedParentMenu: this.state.menuItems[0].id,
           },
           callback
         );
@@ -232,7 +234,7 @@ class Sidebar extends Component {
 
   getIsHasSubItem = () => {
     const { selectedParentMenu } = this.state;
-    const menuItem = menuItems.find((x) => x.id === selectedParentMenu);
+    const menuItem = this.state.menuItems.find((x) => x.id === selectedParentMenu);
     if (menuItem)
       return !!(menuItem && menuItem.subs && menuItem.subs.length > 0);
     return false;
@@ -245,22 +247,52 @@ class Sidebar extends Component {
       window.scrollTo(0, 0);
     }
 
-    if (this.props.allSurveyItems !== prevProps.allSurveyItems) {
-      const surveysMenu = menuItems.find(item => item.id == 'surveys');
+    if ( (this.props.mySurveyItems !== prevProps.mySurveyItems) ||
+      (this.props.currentUser.role === UserRole.Admin && this.props.entireSurveyItems !== prevProps.entireSurveyItems) ) {
 
-      if (surveysMenu) {
-        const mySurveysMenu = surveysMenu.subs.find(item => item.id == 'mysurveys-parent');
-        if (mySurveysMenu) {
-          this.props.allSurveyItems.forEach(surveyItem => {
-            mySurveysMenu.subs.push({
-              id: 'survey-id-' + surveyItem.id,
-              icon: 'simple-icon-arrow-right',
-              label: surveyItem.name,
-              to: `${adminRoot}/surveys/${surveyItem.id}`,
+      const menu = dynamicMenuItems;
+
+      if (this.props.mySurveyItems !== prevProps.mySurveyItems) {
+        const surveysMenu = menu.find(item => item.id == 'surveys');
+
+        if (surveysMenu) {
+          const mySurveysMenu = surveysMenu.subs.find(item => item.id == 'mysurveys-parent');
+          if (mySurveysMenu) {
+            this.props.mySurveyItems.forEach(surveyItem => {
+              mySurveysMenu.subs.push({
+                id: 'survey-id-' + surveyItem.id,
+                icon: 'simple-icon-arrow-right',
+                label: surveyItem.name,
+                to: `${adminRoot}/surveys/${surveyItem.id}`,
+              });
             });
-          });
+          }
         }
       }
+
+      if (this.props.currentUser.role === UserRole.Admin && this.props.entireSurveyItems !== prevProps.entireSurveyItems) {
+
+        const surveysMenu = menu.find(item => item.id == 'surveys');
+
+        if (surveysMenu) {
+          const entireSurveysMenu = surveysMenu.subs.find(item => item.id == 'allsurveys-parent');
+          if (entireSurveysMenu) {
+            this.props.entireSurveyItems.forEach(surveyItem => {
+              entireSurveysMenu.subs.push({
+                id: 'entire-survey-id-' + surveyItem.id,
+                icon: 'simple-icon-arrow-right',
+                label: surveyItem.name,
+                to: `${adminRoot}/surveys/${surveyItem.id}`,
+              });
+            });
+
+          }
+        }
+      }
+
+      this.setState({
+        menuItems: menu,
+      });
     }
 
     this.handleProps();
@@ -349,8 +381,6 @@ class Sidebar extends Component {
   }
 
 
-
-
   render() {
 
     const {
@@ -366,8 +396,8 @@ class Sidebar extends Component {
               options={{ suppressScrollX: true, wheelPropagation: false }}
             >
               <Nav vertical className="list-unstyled">
-                {menuItems &&
-                  this.filteredList(menuItems).map((item) => {
+                {this.state.menuItems &&
+                  this.filteredList(this.state.menuItems).map((item) => {
                     return (
                       <NavItem
                         key={item.id}
@@ -410,8 +440,8 @@ class Sidebar extends Component {
             <PerfectScrollbar
               options={{ suppressScrollX: true, wheelPropagation: false }}
             >
-              {menuItems &&
-                this.filteredList(menuItems).map((item) => {
+              {this.state.menuItems &&
+                this.filteredList(this.state.menuItems).map((item) => {
                   return (
                     <Nav
                       key={item.id}
@@ -524,7 +554,7 @@ class Sidebar extends Component {
   }
 }
 
-const mapStateToProps = ({ menu, surveyListApp, authUser }) => {
+const mapStateToProps = ({ menu, surveyListApp, entireSurvey, authUser }) => {
   const {
     containerClassnames,
     subHiddenBreakpoint,
@@ -534,7 +564,7 @@ const mapStateToProps = ({ menu, surveyListApp, authUser }) => {
   } = menu;
 
   const {
-    allSurveyItems,
+    mySurveyItems,
   } = surveyListApp;
 
   const { currentUser } = authUser;
@@ -544,7 +574,8 @@ const mapStateToProps = ({ menu, surveyListApp, authUser }) => {
     menuHiddenBreakpoint,
     menuClickCount,
     selectedMenuHasSubItems,
-    allSurveyItems,
+    mySurveyItems,
+    entireSurveyItems: entireSurvey.entireSurveyItems,
     currentUser,
   };
 };

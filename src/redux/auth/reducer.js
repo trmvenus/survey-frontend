@@ -15,12 +15,19 @@ import {
   GET_CURRENT_USER,
   GET_CURRENT_USER_SUCCESS,
   GET_CURRENT_USER_ERROR,
+  UPDATE_USER_PROFILE,
+  UPDATE_USER_PROFILE_SUCCESS,
+  UPDATE_USER_PROFILE_ERROR,
+  GET_ADDITIONAL_USER_INFO,
+  GET_ADDITIONAL_USER_INFO_SUCCESS,
+  GET_ADDITIONAL_USER_INFO_ERROR
 } from '../actions';
 import { getCurrentUser } from '../../helpers/Utils';
 
 
 const INIT_STATE = {
   currentUser: getCurrentUser(),
+  additionalInfo: {},
   forgotUserMail: '',
   newPassword: '',
   resetPasswordCode: '',
@@ -99,6 +106,25 @@ export default (state = INIT_STATE, action) => {
       return { ...state, currentUser: action.payload };
     case GET_CURRENT_USER_ERROR:
       return { ...state, error: action.payload };
+
+    case UPDATE_USER_PROFILE:
+      return { ...state, };
+    case UPDATE_USER_PROFILE_SUCCESS:
+      const {name, ...profile} = action.payload;
+      return { 
+        ...state,
+        currentUser: {...state.currentUser, name: name},
+        additionalInfo: profile,
+      };
+    case UPDATE_USER_PROFILE_ERROR:
+      return { ...state, error: action.payload };
+
+    case GET_ADDITIONAL_USER_INFO:
+      return { ...state, };
+    case GET_ADDITIONAL_USER_INFO_SUCCESS:
+      return { ...state, additionalInfo: action.payload, };
+    case GET_ADDITIONAL_USER_INFO_ERROR:
+      return { ...state, error: action.payload, };
 
     default:
       return { ...state };

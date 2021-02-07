@@ -179,8 +179,8 @@ const TopNav = ({
     setIsInFullScreen(!isFS);
   };
 
-  const handleClickAccount = () => {
-    history.push('/app/settings/account');
+  const handleClickProfile = () => {
+    history.push('/app/settings/profile');
   }
 
   const handleLogout = () => {
@@ -304,8 +304,8 @@ const TopNav = ({
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right> 
-              <DropdownItem onClick={handleClickAccount}>
-                <IntlMessages id='menu.account' />
+              <DropdownItem onClick={handleClickProfile}>
+                <IntlMessages id='menu.profile' />
               </DropdownItem>
               {/* <DropdownItem>Features</DropdownItem>
               <DropdownItem>History</DropdownItem>

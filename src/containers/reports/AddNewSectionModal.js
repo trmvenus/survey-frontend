@@ -465,7 +465,7 @@ const mapStateToProps = ({ survey, surveyListApp, pillar, settings, }) => {
     surveyItem: survey.surveyItem,
     isSurveyItemLoaded: survey.loading,
 
-    surveyItems: surveyListApp.allSurveyItems,
+    surveyItems: surveyListApp.mySurveyItems,
     isSurveyItemsLoaded: survey.loading,
 
     pillarItems: pillar.pillarItems,

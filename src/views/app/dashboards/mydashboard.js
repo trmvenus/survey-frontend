@@ -87,7 +87,7 @@ const DefaultDashboard = ({
 
 const mapStateToProps = ({ surveyListApp, dashboard }) => {
   return {
-    allMySurveyItems: surveyListApp.allSurveyItems,
+    allMySurveyItems: surveyListApp.mySurveyItems,
     isLoaded: surveyListApp.loading,
 
     myDashboardInfo: dashboard.myInfo,

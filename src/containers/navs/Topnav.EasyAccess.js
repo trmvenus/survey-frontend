@@ -19,7 +19,7 @@ const TopnavEasyAccess = () => {
             <i className="iconsminds-shop-4 d-block" />{' '}
             <IntlMessages id="menu.dashboards" />
           </NavLink>
-          <NavLink to="/app/settings/account" className="icon-menu-item">
+          <NavLink to="/app/settings/profile" className="icon-menu-item">
             <i className="simple-icon-user d-block" />{' '}
             <IntlMessages id="menu.profile" />
           </NavLink>

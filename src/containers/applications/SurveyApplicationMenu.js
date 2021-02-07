@@ -22,7 +22,7 @@ import {
 const SurveyApplicationMenu = ({
   surveyItems,
   filter,
-  allSurveyItems,
+  mySurveyItems,
   loading,
   labels,
   categoryItems,
@@ -61,7 +61,7 @@ const SurveyApplicationMenu = ({
                 <i className="simple-icon-reload" />
                 <IntlMessages id="survey.all-surveys" />
                 <span className="float-right">
-                  {loading && allSurveyItems.length}
+                  {loading && mySurveyItems.length}
                 </span>
               </NavLink>
             </NavItem>
@@ -82,7 +82,7 @@ const SurveyApplicationMenu = ({
                 <IntlMessages id="survey.active-surveys" />
                 <span className="float-right">
                   {loading &&
-                    allSurveyItems.filter((x) => x.is_active === true).length}
+                    mySurveyItems.filter((x) => x.is_active === true).length}
                 </span>
               </NavLink>
             </NavItem>
@@ -103,7 +103,7 @@ const SurveyApplicationMenu = ({
                 <IntlMessages id="survey.shared-surveys" />
                 <span className="float-right">
                   {loading &&
-                    allSurveyItems.filter((x) => x.is_share === true).length}
+                    mySurveyItems.filter((x) => x.is_share === true).length}
                 </span>
               </NavLink>
             </NavItem>
@@ -189,7 +189,7 @@ const mapStateToProps = ({ surveyListApp, categoryList }) => {
   const {
     surveyItems,
     filter,
-    allSurveyItems,
+    mySurveyItems,
     loading,
     labels,
   } = surveyListApp;
@@ -201,7 +201,7 @@ const mapStateToProps = ({ surveyListApp, categoryList }) => {
   return {
     surveyItems,
     filter,
-    allSurveyItems,
+    mySurveyItems,
     loading,
     labels,
     categoryItems,

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import settings from './settings/reducer';
 import menu from './menu/reducer';
 import authUser from './auth/reducer';
+import entireSurvey from './entireSurvey/reducer';
 import surveyListApp from './surveyList/reducer';
 import sharedSurvey from './sharedSurvey/reducer';
 import categoryList from './categoryList/reducer';
@@ -19,6 +20,7 @@ const reducers = combineReducers({
   menu,
   settings,
   authUser,
+  entireSurvey,
   surveyListApp,
   sharedSurvey,
   categoryList,
