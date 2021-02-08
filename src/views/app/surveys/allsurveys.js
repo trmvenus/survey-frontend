@@ -18,8 +18,8 @@ import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 
 import {
-  getSurveyListWithOrder,
-  getSurveyListSearch,
+  getEntireSurveyListWithOrder,
+  getEntireSurveyListSearch,
   selectedSurveyItemsChange,
   deleteSurveyItems,
   copySurveyItems,
@@ -45,15 +45,15 @@ const AllSurveyList = ({
   surveyItems,
   searchKeyword,
   isLoaded,
-  orderColumn,
+  orderColumn, 
   orderColumns,
   selectedItems,
 
-  getSurveyListWithOrderAction,
-  getSurveyListSearchAction,
-  selectedSurveyItemsChangeAction,
-  deleteSurveyItemsAction,
-  copySurveyItemsAction,
+  getEntireSurveyListWithOrderAction,
+  getEntireSurveyListSearchAction,
+  selectedEntireSurveyItemsChangeAction,
+  deleteEntireSurveyItemsAction,
+  copyEntireSurveyItemsAction,
 }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [copyModalOpen, setCopyModalOpen] = useState(false);
@@ -80,7 +80,7 @@ const AllSurveyList = ({
     } else {
       selectedList.push(id);
     }
-    selectedSurveyItemsChangeAction(selectedList);
+    selectedEntireSurveyItemsChangeAction(selectedList);
 
     if (event.shiftKey) {
       let items = surveyItems;
@@ -93,29 +93,29 @@ const AllSurveyList = ({
         })
       );
       selectedList = Array.from(new Set(selectedList));
-      selectedSurveyItemsChangeAction(selectedList);
+      selectedEntireSurveyItemsChangeAction(selectedList);
     }
   };
 
   const handleChangeSelectAll = () => {
     if (isLoaded) {
       if (selectedItems.length >= surveyItems.length) {
-        selectedSurveyItemsChangeAction([]);
+        selectedEntireSurveyItemsChangeAction([]);
       } else {
-        selectedSurveyItemsChangeAction(surveyItems.map((x) => x.id));
+        selectedEntireSurveyItemsChangeAction(surveyItems.map((x) => x.id));
       }
     }
   };
 
   const handleDeleteSelectedItems = () => {
     if (isLoaded) {
-      deleteSurveyItemsAction({ids: selectedItems});
+      deleteEntireSurveyItemsAction({ids: selectedItems});
     }
   };
 
   const handleCopySelectedItems = (withResponses) => {
     if (isLoaded) {
-      copySurveyItemsAction({ids: selectedItems, with: withResponses});
+      copyEntireSurveyItemsAction({ids: selectedItems, with: withResponses});
     }
   };
 
@@ -199,7 +199,7 @@ const AllSurveyList = ({
                       return (
                         <DropdownItem
                           key={index}
-                          onClick={() => getSurveyListWithOrderAction(o.column)}
+                          onClick={() => getEntireSurveyListWithOrderAction(o.column)}
                         >
                           {o.label}
                         </DropdownItem>
@@ -216,7 +216,7 @@ const AllSurveyList = ({
                     defaultValue={searchKeyword}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
-                        getSurveyListSearchAction(e.target.value);
+                        getEntireSurveyListSearchAction(e.target.value);
                       }
                     }}
                   />
@@ -276,10 +276,10 @@ const mapStateToProps = ({ entireSurvey }) => ({
 
 export default injectIntl(
   connect(mapStateToProps, {
-    getSurveyListWithOrderAction: getSurveyListWithOrder,
-    getSurveyListSearchAction: getSurveyListSearch,
-    selectedSurveyItemsChangeAction: selectedSurveyItemsChange,
-    deleteSurveyItemsAction: deleteSurveyItems,
-    copySurveyItemsAction: copySurveyItems,
+    getEntireSurveyListWithOrderAction: getEntireSurveyListWithOrder,
+    getEntireSurveyListSearchAction: getEntireSurveyListSearch,
+    selectedEntireSurveyItemsChangeAction: selectedSurveyItemsChange,
+    deleteEntireSurveyItemsAction: deleteSurveyItems,
+    copyEntireSurveyItemsAction: copySurveyItems,
   })(AllSurveyList)
 );

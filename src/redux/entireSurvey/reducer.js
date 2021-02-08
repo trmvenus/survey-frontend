@@ -40,6 +40,7 @@ const INIT_STATE = {
     { column: 'name', label: 'Name' },
     { column: 'category', label: 'Category' },
     { column: 'responses', label: 'Responses' },
+    { column: 'creator_name', label: 'Creator Name' },
   ],
   selectedItems: [],
 };

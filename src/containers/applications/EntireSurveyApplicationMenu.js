@@ -14,7 +14,7 @@ import IntlMessages from '../../helpers/IntlMessages';
 import ApplicationMenu from '../../components/common/ApplicationMenu';
 
 import { 
-  getSurveyListWithFilter,
+  getEntireSurveyListWithFilter,
 } from '../../redux/actions';
 
 const SurveyApplicationMenu = ({
@@ -22,10 +22,10 @@ const SurveyApplicationMenu = ({
   entireSurveyItems,
   isLoaded,
 
-  getSurveyListWithFilterAction,
+  getEntireSurveyListWithFilterAction,
 }) => {
   const addFilter = (column, value) => {
-    getSurveyListWithFilterAction(column, value);
+    getEntireSurveyListWithFilterAction(column, value);
   };
 
   return (
@@ -103,5 +103,5 @@ const mapStateToProps = ({ entireSurvey, }) => ({
 });
 
 export default connect(mapStateToProps, {
-  getSurveyListWithFilterAction: getSurveyListWithFilter,
+  getEntireSurveyListWithFilterAction: getEntireSurveyListWithFilter,
 })(SurveyApplicationMenu);
