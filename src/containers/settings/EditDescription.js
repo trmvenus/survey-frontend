@@ -3,7 +3,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/display-name */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Formik, Form, Field, } from 'formik';
@@ -27,13 +27,10 @@ const EditDescription = ({
 
   const { messages } = intl;
 
-
   return (
     <CardBody>
-      {(!('short_description' in additionalUserInfo)) ? (
-        <div className='loading' />
-      ) : (
       <Formik
+        enableReinitialize
         initialValues={{
           shortDesc: additionalUserInfo.short_description ?? '',
           longDesc: additionalUserInfo.long_description ?? '',
@@ -66,7 +63,6 @@ const EditDescription = ({
           </Form>
         )}
       </Formik>
-      )}
     </CardBody>
   );
 };

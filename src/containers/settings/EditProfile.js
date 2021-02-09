@@ -55,10 +55,8 @@ const EditProfile = ({
 
   return (
     <CardBody>
-      {(!('location' in additionalUserInfo)) ? (
-        <div className='loading' />
-      ) : (
       <Formik
+        enableReinitialize
         initialValues={{
           name: currentUser.name,
           email: currentUser.email,
@@ -158,7 +156,6 @@ const EditProfile = ({
           </Form>
         )}
       </Formik>
-      )}
     </CardBody>
   );
 };
