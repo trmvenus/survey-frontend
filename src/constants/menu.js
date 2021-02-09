@@ -74,6 +74,11 @@ const data = [
         label: 'menu.profile',
         to: `${adminRoot}/settings/profile`,
       },
+      {
+        icon: 'simple-icon-key',
+        label: 'menu.security',
+        to: `${adminRoot}/settings/security`,
+      },
     ],
   },
   {

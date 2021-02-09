@@ -71,7 +71,6 @@ const SurveyResultTable = ({
         cellClass: 'text-muted  w-10  w-xs-100 align-middle',
         Cell: (props) => 
         <>
-        {console.log(props.data[props.row.index])}
         {
           props.value ? 
             messages['result.manual'] : (

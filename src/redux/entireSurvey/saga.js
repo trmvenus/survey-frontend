@@ -39,7 +39,6 @@ const getEntireSurveyListRequest = async () =>
 function* getEntireSurveyListItems() {
   try {
     const response = yield call(getEntireSurveyListRequest);
-    console.log(response);
     yield put(getEntireSurveyListSuccess(response));
   } catch (error) {
     yield put(getEntireSurveyListError(error));

@@ -21,6 +21,9 @@ import {
   GET_ADDITIONAL_USER_INFO,
   GET_ADDITIONAL_USER_INFO_SUCCESS,
   GET_ADDITIONAL_USER_INFO_ERROR,
+  UPDATE_PASSWORD,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_ERROR,
 } from '../actions';
 
 export const loginUser = (user, history) => ({
@@ -92,6 +95,18 @@ export const getCurrentUserError = (error) => ({
   payload: error,
 });
 
+export const getAdditionalUserInfo = () => ({
+  type: GET_ADDITIONAL_USER_INFO,
+});
+export const getAdditionalUserInfoSuccess = (info) => ({
+  type: GET_ADDITIONAL_USER_INFO_SUCCESS,
+  payload: info,
+});
+export const getAdditionalUserInfoError = (error) => ({
+  type: GET_ADDITIONAL_USER_INFO_ERROR,
+  payload: error,
+});
+
 export const updateUserProfile = (profile) => ({
   type: UPDATE_USER_PROFILE,
   payload: profile,
@@ -105,14 +120,15 @@ export const updateUserProfileError = (error) => ({
   payload: error,
 });
 
-export const getAdditionalUserInfo = () => ({
-  type: GET_ADDITIONAL_USER_INFO,
+export const updatePassword = (password) => ({
+  type: UPDATE_PASSWORD,
+  payload: {password}
 });
-export const getAdditionalUserInfoSuccess = (info) => ({
-  type: GET_ADDITIONAL_USER_INFO_SUCCESS,
-  payload: info,
+export const updatePasswordSuccess = (payload) => ({
+  type: UPDATE_PASSWORD_SUCCESS,
+  payload,
 });
-export const getAdditionalUserInfoError = (error) => ({
-  type: GET_ADDITIONAL_USER_INFO_ERROR,
+export const updatePasswordError = (error) => ({
+  type: UPDATE_PASSWORD_ERROR,
   payload: error,
 });

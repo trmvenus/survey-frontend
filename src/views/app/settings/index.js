@@ -4,6 +4,10 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 const ProfileSettings = React.lazy(() =>
   import(/* webpackChunkName: "second" */ './profile')
 );
+const SecuritySettings = React.lazy(() => 
+  import(/* webpackChunkName: "second" */ './security')
+);
+
 const Settings = ({ match }) => (
   <Suspense fallback={<div className="loading" />}>
     <Switch>
@@ -11,6 +15,10 @@ const Settings = ({ match }) => (
       <Route
         path={`${match.url}/profile`}
         render={(props) => <ProfileSettings {...props} />}
+      />
+      <Route
+        path={`${match.url}/security`}
+        render={(props) => <SecuritySettings {...props} />}
       />
       <Redirect to="/surveys" />
     </Switch>

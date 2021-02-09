@@ -20,7 +20,10 @@ import {
   UPDATE_USER_PROFILE_ERROR,
   GET_ADDITIONAL_USER_INFO,
   GET_ADDITIONAL_USER_INFO_SUCCESS,
-  GET_ADDITIONAL_USER_INFO_ERROR
+  GET_ADDITIONAL_USER_INFO_ERROR,
+  UPDATE_PASSWORD,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_ERROR
 } from '../actions';
 import { getCurrentUser } from '../../helpers/Utils';
 
@@ -33,6 +36,7 @@ const INIT_STATE = {
   resetPasswordCode: '',
   loading: false,
   error: '',
+  isUpdated: false,
 };
 
 export default (state = INIT_STATE, action) => {
@@ -107,6 +111,13 @@ export default (state = INIT_STATE, action) => {
     case GET_CURRENT_USER_ERROR:
       return { ...state, error: action.payload };
 
+    case GET_ADDITIONAL_USER_INFO:
+      return { ...state, };
+    case GET_ADDITIONAL_USER_INFO_SUCCESS:
+      return { ...state, additionalInfo: action.payload, };
+    case GET_ADDITIONAL_USER_INFO_ERROR:
+      return { ...state, error: action.payload, };
+
     case UPDATE_USER_PROFILE:
       return { ...state, };
     case UPDATE_USER_PROFILE_SUCCESS:
@@ -119,12 +130,17 @@ export default (state = INIT_STATE, action) => {
     case UPDATE_USER_PROFILE_ERROR:
       return { ...state, error: action.payload };
 
-    case GET_ADDITIONAL_USER_INFO:
-      return { ...state, };
-    case GET_ADDITIONAL_USER_INFO_SUCCESS:
-      return { ...state, additionalInfo: action.payload, };
-    case GET_ADDITIONAL_USER_INFO_ERROR:
-      return { ...state, error: action.payload, };
+    case UPDATE_PASSWORD:
+      return { ...state, isUpdated: false, };
+    case UPDATE_PASSWORD_SUCCESS:
+      const {password} = action.payload;
+      return {
+        ...state,
+        currentUser: {...state.currentUser, password},
+        isUpdated: true,
+      };
+    case UPDATE_PASSWORD_ERROR:
+      return { ...state, isUpdated: true, error: action.payload };
 
     default:
       return { ...state };

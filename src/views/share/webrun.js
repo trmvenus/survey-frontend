@@ -99,7 +99,6 @@ const WebRunSurvey = ({
 
   useEffect(() => {
     if (start && shareId && surveyItem && name && ipAddress) {
-      console.log(surveyItem);
       getResultItemByWebLinkAndNameAction(surveyItem.id, shareId, name, ipAddress);
     }
   }, [start, surveyItem, ipAddress]);
@@ -115,8 +114,6 @@ const WebRunSurvey = ({
       NotificationManager.warning(resultItemError.message??resultItemError, 'Run Survey Error', 3000, null, null, '');
     }
   }, [resultItemError]);
-
-  console.log(resultItem);
 
   return (
     <>

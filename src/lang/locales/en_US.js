@@ -135,6 +135,7 @@ module.exports = {
   'menu.save': 'Save',
   'menu.settings': 'Settings',
   'menu.account': 'Account',
+  'menu.security': 'Security',
   'menu.results': 'Results',
   'menu.reports': 'Reports',
   'menu.links': 'Links',
@@ -584,6 +585,9 @@ module.exports = {
   'forms.female': "Female",
   'forms.respondent-name': 'Respondent Name',
   'forms.email-error': 'Email address is required.',
+  'forms.current-password': 'Current Password',
+  'forms.new-password': 'New Password',
+  'forms.confirm-password': 'Confirm Password',
 
   /* 07.11.Form Components */
   'form-components.custom-inputs': 'Custom Inputs',
@@ -617,6 +621,7 @@ module.exports = {
   'form-components.start': 'Start',
   'form-components.end': 'End',
   'form-components.tables': 'Tables',
+
   /* 07.12.Icons */
   'icons.simplelineicons': 'Simple Line Icons',
   'icons.iconsmind': 'Iconsmind Icons',
@@ -751,6 +756,8 @@ module.exports = {
   /* 09.01.Users */
   'settings.choose-organization-title': 'Choose Organization',
   'settings.choose-organization-message': 'Please select an organization.',
+  'settings.change-password': 'Change Password',
+  'settings.change': 'Change',
 
   /* 09.02.Organizations */
   'organization.name': 'Name',

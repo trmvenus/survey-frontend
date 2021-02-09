@@ -135,6 +135,7 @@ module.exports = {
   'menu.save': 'Guardar',
   'menu.settings': 'Configuraciones',
   'menu.account': 'Cuenta Configuraciones',
+  'menu.security': 'Seguridad',
   'menu.results': 'Resultados',
   'menu.reports': 'Informes',
   'menu.links': 'Enlaces',
@@ -581,6 +582,10 @@ module.exports = {
   'forms.male': "Masculino",
   'forms.female': "Femenino",
   'forms.respondent-name': 'Nombre del Encuestado',
+  'forms.email-error': 'Se requiere Dirección de correo electrónico.',
+  'forms.current-password': 'Contraseña Actual',
+  'forms.new-password': 'Nueva Contraseña',
+  'forms.confirm-password': 'Confirmar Contraseña',
 
   /* 07.11.Componentes */
   'form-components.custom-inputs': 'Entrada Personalizada',
@@ -614,6 +619,7 @@ module.exports = {
   'form-components.start': 'Comienzo',
   'form-components.end': 'Fin',
   'form-components.tables': 'Tablas',
+
   /* 07.12.Iconos */
   'icons.simplelineicons': 'Simple Line Iconos',
   'icons.iconsmind': 'Iconsmind Iconos',
@@ -748,6 +754,8 @@ module.exports = {
   /* 09.01.Users */
   'settings.choose-organization-title': 'Seleccione Organización.',
   'settings.choose-organization-message': 'Seleccione una organización.',
+  'settings.change-password': 'Cambia la Contraseña',
+  'settings.change': 'Cambio',
 
   /* 09.02.Organization */
   'organization.name': 'Nombre',

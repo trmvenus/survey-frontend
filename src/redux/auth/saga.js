@@ -8,9 +8,8 @@ import {
   RESET_PASSWORD,
   GET_CURRENT_USER,
   UPDATE_USER_PROFILE,
-  updateUserProfileError,
-  updateUserProfileSuccess,
   GET_ADDITIONAL_USER_INFO,
+  UPDATE_PASSWORD,
 } from '../actions';
 
 import {
@@ -26,6 +25,10 @@ import {
   getCurrentUserError,
   getAdditionalUserInfoSuccess,
   getAdditionalUserInfoError,
+  updatePasswordSuccess,
+  updatePasswordError,
+  updateUserProfileError,
+  updateUserProfileSuccess,
 } from './actions';
 
 import { adminRoot } from "../../constants/defaultValues"
@@ -180,6 +183,26 @@ function* getCurrentUser() {
 }
 
 
+export function* watchGetAdditionalUserInfo() {
+  yield takeEvery(GET_ADDITIONAL_USER_INFO, getAdditionalUserInfo);
+}
+
+const getAdditionalUserInfoAsync = async (payload) =>
+  await client
+    .get('/auth/me/profile', payload)
+    .then(res => res.data)
+    .catch(error => {throw error.response.data});
+
+function* getAdditionalUserInfo({payload}) {
+  try {
+    const additionalInfo = yield call(getAdditionalUserInfoAsync, payload);
+    yield put(getAdditionalUserInfoSuccess(additionalInfo));
+  } catch (error) {
+    yield put(getAdditionalUserInfoError(error));
+  }
+}
+
+
 export function* watchUpdateUserProfile() {
   yield takeEvery(UPDATE_USER_PROFILE, updateUserProfile);
 }
@@ -201,25 +224,26 @@ function* updateUserProfile({payload}) {
 }
 
 
-export function* watchGetAdditionalUserInfo() {
-  yield takeEvery(GET_ADDITIONAL_USER_INFO, getAdditionalUserInfo);
+export function* watchUpdatePassword() {
+  yield takeEvery(UPDATE_PASSWORD, updatePassword);
 }
 
-const getAdditionalUserInfoAsync = async (payload) =>
-  await client
-    .get('/auth/me/profile', payload)
+const updatePasswordRequest = async (password) => 
+  await client 
+    .put('/auth/password', {password})
     .then(res => res.data)
     .catch(error => {throw error.response.data});
 
-function* getAdditionalUserInfo({payload}) {
+function* updatePassword({payload}) {
   try {
-    const additionalInfo = yield call(getAdditionalUserInfoAsync, payload);
-    yield put(getAdditionalUserInfoSuccess(additionalInfo));
+    const {password} = payload;
+    const user = yield call(updatePasswordRequest, password);
+    setCurrentUser({...getCurrentUserFromLocalStorage(), password: user.password});
+    yield put(updatePasswordSuccess(user));
   } catch (error) {
-    yield put(getAdditionalUserInfoError(error));
+    yield put(updatePasswordError(error));
   }
 }
-
 
 export default function* rootSaga() {
   yield all([
@@ -229,7 +253,8 @@ export default function* rootSaga() {
     fork(watchForgotPassword),
     fork(watchResetPassword),
     fork(watchGetCurrentUser),
-    fork(watchUpdateUserProfile),
     fork(watchGetAdditionalUserInfo),
+    fork(watchUpdateUserProfile),
+    fork(watchUpdatePassword),
   ]);
 }
