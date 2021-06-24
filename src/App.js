@@ -46,8 +46,7 @@ class App extends React.Component {
 
   render() {
     const { locale } = this.props;
-    const currentAppLocale = AppLocale[locale];
-
+    const currentAppLocale = AppLocale[locale]
     return (
       <div className="h-100">
         <IntlProvider

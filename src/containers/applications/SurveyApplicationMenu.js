@@ -12,11 +12,26 @@ import classnames from 'classnames';
 
 import IntlMessages from '../../helpers/IntlMessages';
 import ApplicationMenu from '../../components/common/ApplicationMenu';
+import DeleteCategoryModal from './DeleteCategoryModal'
+import EditCategoryModal from './EditCategoryModal'
+
+import { 
+  Row,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownMenu,
+  Collapse,
+  ButtonDropdown, 
+  CustomInput,
+} from 'reactstrap';
 
 import { 
   getSurveyListWithFilter,
   getCategoryList,
   addCategoryItem,
+  deleteCategoryItem,
+  updateCategoryItem
 } from '../../redux/actions';
 
 const SurveyApplicationMenu = ({
@@ -30,9 +45,15 @@ const SurveyApplicationMenu = ({
   getSurveyListWithFilterAction,
   getCategoryListAction,
   addCategoryItemAction,
+  deleteCategoryItemAction,
+  updateCategoryItemAction,
 }) => {
   const [newCategoryName, setNewCategoryName] = useState('');
-
+  const [editItem,setEditItem] = useState('')
+  const [dropdownSplitOpen, setDropdownSplitOpen] = useState(false);
+  const [selectedItemId,setSelectedItemId] = useState('')
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   useEffect(() => {
     getCategoryListAction();
   }, [getCategoryListAction]);
@@ -46,6 +67,32 @@ const SurveyApplicationMenu = ({
     setNewCategoryName('');
   }
 
+  const toggleAction = (e) => {
+    if(dropdownSplitOpen){
+      setSelectedItemId(e)
+    } else{
+      setSelectedItemId(e)
+    }
+    setDropdownSplitOpen(!dropdownSplitOpen)
+    
+  }
+
+  const handleDeleteSelectedItems = () => {
+    // if (isLoaded) {
+    //   deleteEntireSurveyItemsAction({ids: selectedItems});
+    // }
+    deleteCategoryItemAction({id:selectedItemId})
+  };
+  const handleCategoryItemEdit = (e) => {
+    setEditItem(e)
+    setEditModalOpen(true) 
+
+  }
+
+  const handleEditSelectedItem = (newName) => {
+    updateCategoryItemAction({id:selectedItemId, name:newName})
+
+  }
   return (
     <ApplicationMenu>
       <PerfectScrollbar
@@ -114,21 +161,46 @@ const SurveyApplicationMenu = ({
           <ul className="list-unstyled mb-5">
             {categoryLoading && categoryItems.map((c, index) => {
               return (
-                <NavItem key={index}>
-                  <div onClick={() => addFilter('category_id', c.id)}>
-                    <div className="custom-control custom-radio">
-                      <Input
-                        type="radio"
-                        className="custom-control-input"
-                        checked={
-                          filter !== null && filter.column === 'category_id' && filter.value === c.id
-                        }
-                        onChange={()=>{}}
-                      />
-                      <label className="custom-control-label">{c.name}</label>
+                <div key={index} style={{display:'flex'}} className='categoryList'>
+                  <NavItem key={index}>
+                    <div onClick={() => addFilter('category_id', c.id)}>
+                      <div className="custom-control custom-radio">
+                        <Input
+                          type="radio"
+                          className="custom-control-input"
+                          checked={
+                            filter !== null && filter.column === 'category_id' && filter.value === c.id
+                          }
+                          onChange={()=>{}}
+                        />
+                        <label className="custom-control-label">{c.name}</label>
+                      </div>
+                    
                     </div>
-                  </div>
-                </NavItem>
+                  </NavItem>
+                  <div className="text-zero top-right-button-container1">
+                    <ButtonDropdown
+                      id={c.id}
+                      isOpen={dropdownSplitOpen && selectedItemId==c.id}
+                      toggle={() => toggleAction(c.id)}
+                    >
+                    
+                      <DropdownToggle
+                        caret
+                        color="primary"
+                        className="dropdown-toggle-split btn-lg"
+                      />
+                      <DropdownMenu right>
+                        <DropdownItem onClick={() =>  setDeleteModalOpen(true) }>
+                          <IntlMessages id="survey.delete" />
+                        </DropdownItem>
+                        <DropdownItem onClick={() => handleCategoryItemEdit(c)}>
+                          <IntlMessages id="survey.edit" />
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </ButtonDropdown>
+                </div>
+               </div>
               );
             })}
             <InputGroup className="mt-3 mb-3 pr-3">
@@ -150,6 +222,17 @@ const SurveyApplicationMenu = ({
               </InputGroupAddon>
             </InputGroup>
           </ul>
+          <DeleteCategoryModal
+            toggleModal={() => setDeleteModalOpen(!deleteModalOpen)}
+            modalOpen={deleteModalOpen}
+            handleClickYes={handleDeleteSelectedItems}
+          />
+          <EditCategoryModal
+            toggleModal={() => setEditModalOpen(!editModalOpen)}
+            modalOpen={editModalOpen}
+            editItem={editItem}
+            handleClickSave={handleEditSelectedItem}
+          />
           {/* <p className="text-muted text-small">
             <IntlMessages id="survey.labels" />
           </p>
@@ -212,4 +295,6 @@ export default connect(mapStateToProps, {
   getSurveyListWithFilterAction: getSurveyListWithFilter,
   getCategoryListAction: getCategoryList,
   addCategoryItemAction: addCategoryItem,
+  deleteCategoryItemAction:deleteCategoryItem,
+  updateCategoryItemAction:updateCategoryItem,
 })(SurveyApplicationMenu);

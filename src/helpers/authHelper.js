@@ -49,6 +49,7 @@ const UserRole = {
     Admin: 0,
     User: 1,
     OrgAdmin: 2,
+    Researcher:3,
 }
 
 const getRoleName = (role) => {
@@ -58,6 +59,8 @@ const getRoleName = (role) => {
         return 'User';
     else if (role == UserRole.OrgAdmin)
         return 'University Manager';
+    else if (role == UserRole.Researcher)
+        return 'Researcher';
 }
 
 export { ProtectedRoute, UserRole, getRoleName };

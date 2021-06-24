@@ -15,6 +15,7 @@ import {
   RESULT_LIST_POST_MANUAL_ITEM_SUCCESS,
   RESULT_LIST_POST_MANUAL_ITEM_ERROR,
   RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME,
+  IS_COMPLETE_UPDATE
 } from '../actions';
 
 export const getResultList = (payload) => ({
@@ -81,6 +82,11 @@ export const updateResultItemError = (error) => ({
   type: RESULT_LIST_UPDATE_ITEM_ERROR,
   payload: error,
 });
+
+export const isCompleteUpdate1 = (payload) => ({
+  type: IS_COMPLETE_UPDATE,
+  payload: payload
+})
 
 export const postManualResultItem = (item) => ({
   type: RESULT_LIST_POST_MANUAL_ITEM,

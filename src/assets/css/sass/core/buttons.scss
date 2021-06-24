@@ -583,3 +583,42 @@ button {
     }
   }
 }
+.top-right-button-container1 {
+  float: right;
+  position: relative;
+  
+  .btn-group .btn {
+    line-height: 1;
+    padding: 0.1rem 0.5rem 0.1rem 0.5rem!important;
+  }
+
+  @include respond-below(xs) {
+    float: initial;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .top-right-button {
+    @include respond-below(xs) {
+      display: flex;
+      flex-grow: 1;
+      justify-content: center;
+      align-items: center;
+      margin-right: 1px;
+    }
+  }
+
+  .dropdown {
+    @include respond-below(xs) {
+      display: flex;
+      flex-grow: 1;
+      margin-right: 1px;
+    }
+  }
+}
+
+
+.categoryList {
+  justify-content: space-between;
+  margin-right: 10px;
+}

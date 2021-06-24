@@ -42,7 +42,6 @@ const SurveyReportTable = ({
   const [deleteId, setDeleteId] = useState(null);
 
   const {messages} = intl;
-
   const cols = React.useMemo(
     () => [
       {

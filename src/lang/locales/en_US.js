@@ -8,7 +8,7 @@ Table of Contents
 04.Error Page
 */
 
-module.exports = {
+const enMessages = {
   /* 01.General */
   'general.copyright': 'SurveyWizard © 2021 All Rights Reserved.',
 
@@ -229,6 +229,7 @@ module.exports = {
   'pages.createdon': 'Created On',
   'pages.move-to-organization': 'Move to Organization',
   'pages.back': 'Back',
+  'pages.rerun': 'Rerun',
 
   /* 06.Survey */
 
@@ -261,6 +262,8 @@ module.exports = {
   'survey.settings': 'Settings',
   'survey.copy': 'Copy',
   'survey.delete-title': 'Delete Surveys',
+  'category.delete-title':'Delete Category',
+  'category.edit-title':'Edit Category',
   'survey.copy-title': 'Copy Surveys',
   'survey.disabled': 'Not Allowed',
 
@@ -764,3 +767,5 @@ module.exports = {
   'organization.add-new-modal-title': 'Add New Organization',
 
 };
+
+export default enMessages;

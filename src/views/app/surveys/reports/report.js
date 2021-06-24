@@ -131,7 +131,7 @@ const ReportPage = ({
 
   useEffect(() => {
     getReportItemAction({id: report_id});
-
+    
     getResultItemsAction({id: surveyid});
 
     getPillarItemsAction();
@@ -146,7 +146,6 @@ const ReportPage = ({
   
         const filter = reportItem.filter;
         const sections = reportItem.sections;
-  
         const results = (filter.conditionFilter === true || filter.dateFilter === true) ? 
                           filterResults(resultItems, filter) :
                           resultItems;

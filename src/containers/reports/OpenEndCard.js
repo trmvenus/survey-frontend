@@ -15,39 +15,47 @@ const OpenEndCard = ({
 }) => {
 
   return (
-    <Card className="mb-4">
-      <CardBody>
-        <CardTitle className="text-primary">
-          <IntlMessages id='report.open-end'/>
-        </CardTitle>
+    <>{
+      reportData.answers.map((block, i) => (
+        <Card className="mb-4" key={i}>
+          <CardBody>
+            <CardTitle className="text-primary">
+              {/* <IntlMessages id='report.open-end'/> */}
+              {i+1}.{block.question}
+            </CardTitle>
 
-        <div className="float-right mb-3">
-          <Badge color='info p-3'>
-            <h5>
-              <IntlMessages id='summary.total-responses' />{': '}{reportData.totalresponse}
-            </h5>
-          </Badge>
-        </div>
+            <div className="float-right mb-3">
+              <Badge color='info p-3'>
+                <h5>
+                  <IntlMessages id='summary.total-responses' />{': '}{block.totalresponse}
+                </h5>
+              </Badge>
+            </div>
 
-        <Table striped bordered className='align-middle text-center'>
-          <thead>
-            <tr>
-              <th scope='col' width='25%'><IntlMessages id='report.respondent-name' /></th>
-              <th scope='col'><IntlMessages id='report.text' /></th>
-            </tr>
-          </thead>
-          <tbody>
-          {reportData.answers.map((data, i) => (
-            <tr key={i}>
-              <td>{data.name}</td>
-              <td>{data.text}</td>
-            </tr>
-          ))}
-          </tbody>
-        </Table>
-      </CardBody>
+            <Table striped bordered className='align-middle text-center'>
+              <thead>
+                <tr>
+                  <th scope='col' width='25%'><IntlMessages id='report.respondent-name' /></th>
+                  <th scope='col'><IntlMessages id='report.text' /></th>
+                </tr>
+              </thead>
+              <tbody>
+              {block.answers.map((data, i) => (
+                <tr key={i+1500}>
+                  <td>{data.name}</td>
+                  <td>{data.text}</td>
+                </tr>
+              ))}
+              </tbody>
+            </Table>
+          </CardBody>
     </Card>
-  ) 
+  
+      ))
+    }
+     
+    </>
+   ) 
 }
 
 export default OpenEndCard;

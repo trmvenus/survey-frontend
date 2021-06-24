@@ -74,11 +74,11 @@ const ReportSchema = Yup.object().shape({
       is: val => val && val.value === REPORT_TYPE.CROSS_TAB,
       then: Yup.string().required('Vertical question is required!'),
     }),
-  openEndQuestion: Yup.string()
-    .when('type', {
-      is: val => val && val.value === REPORT_TYPE.OPEN_END,
-      then: Yup.string().required('Open-End question is required!'),
-    }),
+  // openEndQuestion: Yup.string()
+  //   .when('type', {
+  //     is: val => val && val.value === REPORT_TYPE.OPEN_END,
+  //     then: Yup.string().required('Open-End question is required!'),
+  //   }),
   pillar: Yup.string()
     .when('type', {
       is: val => val && val.value === REPORT_TYPE.PILLAR,
@@ -172,7 +172,7 @@ const AddNewReportModal = ({
 
       case REPORT_TYPE.OPEN_END:
         section.content = {
-          openend: values.openEndQuestion.value,
+          openend: "openend"
         };
         break;
 
@@ -400,7 +400,7 @@ const AddNewReportModal = ({
                 </FormGroup>
                 </>
               )}
-              {(values.type.value == REPORT_TYPE.OPEN_END) && (
+              {/* {(values.type.value == REPORT_TYPE.OPEN_END) && (
                 <>
                 <FormGroup>
                   <Label>
@@ -421,7 +421,7 @@ const AddNewReportModal = ({
                   ) : null}
                 </FormGroup>
                 </>
-              )}
+              )} */}
               {(values.type.value == REPORT_TYPE.PILLAR) && (
                 <FormGroup>
                   <Label>

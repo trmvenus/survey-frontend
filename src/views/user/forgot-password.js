@@ -30,6 +30,7 @@ const ForgotPassword = ({
   const onForgotPassword = (values) => {
     if (!loading) {
       if (values.email !== '') {
+        console.log("forgotPass-->>",values)
         forgotPasswordAction(values, history);
       }
     }

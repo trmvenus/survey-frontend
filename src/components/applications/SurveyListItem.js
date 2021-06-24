@@ -27,7 +27,6 @@ const SurveyListItem = ({
   const [collapse, setCollapse] = useState(false);
 
   const { messages } = intl;
-
   const handleClickRun = (event) => {
     if (item && item.is_active === false) {
       NotificationManager.info(messages['run.not-active'], 'Cannot Run Survey', 3000, null, null, '');
@@ -49,10 +48,13 @@ const SurveyListItem = ({
           <CardBody
             className="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center"
           >
+            <div className="w-10 text-muted w-xs-100">
+                {item.id}
+            </div>
             <NavLink
               to='#'
               onClick={() => setCollapse(!collapse)}
-              className="list-item-heading mb-0 w-50 w-xs-100 mb-1 mt-1"
+              className="list-item-heading mb-0 w-40 w-xs-100 mb-1 mt-1"
             >
               <i
                 className={`${
@@ -64,6 +66,7 @@ const SurveyListItem = ({
               <span className="align-middle d-inline-block truncate luci-survey-name">{item.name}</span>
             </NavLink>
             {isNameDisplayed && (
+              
             <div className="w-10 text-muted w-xs-100">
                 {item.creator_name}
             </div>

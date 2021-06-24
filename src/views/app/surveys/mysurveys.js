@@ -186,9 +186,9 @@ const MySurveyList = ({
             <Button
               color="empty"
               className="pt-0 pl-0 d-inline-block d-md-none"
-              onClick={() => {
-                setDisplayOptionsIsOpen(!displayOptionsIsOpen);
-              }}
+              // onClick={() => {
+              //     (!displayOptionsIsOpen);
+              // }}
             >
               <IntlMessages id="survey.display-options" />{' '}
               <i className="simple-icon-arrow-down align-middle" />

@@ -8,7 +8,8 @@ import {
   RESULT_LIST_GET_ITEM, 
   RESULT_LIST_POST_ITEM, 
   RESULT_LIST_POST_MANUAL_ITEM,
-  RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME, 
+  RESULT_LIST_GET_ITEM_BY_WEB_LINK_AND_NAME,
+  IS_COMPLETE_UPDATE, 
 } from '../actions';
 
 import {
@@ -22,6 +23,7 @@ import {
   postResultItemError,
   postManualResultItemSuccess,
   postManualResultItemError,
+  isCompleteUpdate1
 } from './actions';
 
 export function* watchGetList() {
@@ -131,6 +133,13 @@ function* updateResultItem({payload}) {
   }
 }
 
+// export function* watchIsCompleteUpdate() {
+//   yield takeEvery(IS_COMPLETE_UPDATE,isCompleteUpdate)
+// }
+
+// function* isCompleteUpdate({payload}) {
+//  yield put(isCompleteUpdate1(payload))
+// }
 
 export function* watchPostManualItem() {
   yield takeEvery(RESULT_LIST_POST_MANUAL_ITEM, postManualResultItem);
@@ -158,6 +167,7 @@ export default function* rootSaga() {
     fork(watchGetItemByWebLinkAndName),
     fork(watchPostItem), 
     fork(watchUpdateItem),
+    // fork(watchIsCompleteUpdate),
     fork(watchPostManualItem),
   ]);
 }

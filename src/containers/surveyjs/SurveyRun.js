@@ -69,9 +69,11 @@ const SurveyPage = ({
 	}
 	
 	const onComplete = (result) => {
+		
 		clearInterval(timerId);
 		if (mode === 'edit' && handleOnUpdate) {
 			handleOnUpdate(result.data, timeSpent, true);
+			
 		}
 	}
 

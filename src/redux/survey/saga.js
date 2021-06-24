@@ -10,6 +10,9 @@ import {
   updateSurveySuccess,
   updateSurveyError,
 } from './actions';
+import {
+ isCompleteUpdate1
+} from '../result/actions';
 
 
 export function* watchGetSurvey() {
@@ -27,8 +30,11 @@ function* getSurveyItem({payload}) {
   try {
     const response = yield call(getSurveyRequest, payload);
     yield put(getSurveySuccess(response));
+    yield put(isCompleteUpdate1(false))
+    
   } catch (error) {
     yield put(getSurveyError(error.response.data));
+    yield put(isCompleteUpdate1(false))
   }
 }
 

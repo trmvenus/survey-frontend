@@ -81,7 +81,7 @@ const getChoicesOfQuestion = (element, locale) => {
 				choices.push(choice);
 			}
 			break;
-		case "rating":
+		case "barrating":
 			if ("rateValues" in element) {
 				for (let item of element.rateValues) {
 					var choice;
@@ -207,7 +207,7 @@ export const getQuestionOptions = (questions) => {
 	for (let page of questions) {
 		const pageOptions = [];
 		for (let question of page.questions) {
-			if (['boolean', 'radiogroup', 'dropdown', 'imagepicker', 'rating'].includes(question.type)) {
+			if (['boolean', 'radiogroup', 'dropdown', 'imagepicker', 'barrating'].includes(question.type)) {
 				pageOptions.push({
 					label: question.title,
 					value: question.name,
@@ -226,7 +226,7 @@ export const getSummaryQuestions = (questions) => {
 	const summaryQuestions = [];
 	for (let page of questions) {
 		for (let question of page.questions) {
-			if (['boolean', 'radiogroup', 'dropdown', 'imagepicker', 'rating', 'checkbox', 'matrix', 'matrixdropdown'].includes(question.type)) {
+			if (['boolean', 'radiogroup', 'dropdown', 'imagepicker', 'barrating', 'checkbox', 'matrix', 'matrixdropdown'].includes(question.type)) {
 				summaryQuestions.push(question);
 			}
 		}
@@ -239,7 +239,7 @@ export const getCrossTabQuestionOptions = (questions) => {
 	for (let page of questions) {
 		const pageOptions = [];
 		for (let question of page.questions) {
-			if (['boolean', 'radiogroup', 'dropdown', 'imagepicker', 'rating', 'checkbox'].includes(question.type)) {
+			if (['boolean', 'radiogroup', 'dropdown', 'imagepicker', 'barrating', 'checkbox'].includes(question.type)) {
 				pageOptions.push({
 					label: question.title,
 					value: question.name,
@@ -413,7 +413,7 @@ export const hasScore = (element) => {
 				score = element.score;
 			}
 			break;
-		case "rating":
+		case "barrating":
 			if (!element.score || !("choices" in element.score)) {
 				break;
 			}
@@ -440,7 +440,7 @@ export const setScore = (element) => {
 				score = element.score;
 			}
 			break;
-		case "rating":
+		case "barrating":
 			if (!element.score || !("choices" in element.score)) {
 				break;
 			}
@@ -704,7 +704,7 @@ const getChoicableQuestionReport = (element, results, locale) => {
 		case "radiogroup":
 		case "dropdown":
 		case "imagepicker":
-		case "rating":
+		case "barrating":
 		case "boolean":
 			question = getSingleChoiceQuestionReport(element, results, locale);
 			break;
@@ -909,28 +909,58 @@ export const genOpenEndReport = (surveyjson, results, content, locale) => {
 	var answers = [];
 	var totalresponse = 0;
 	try {
-		var openendquestion = null;
+		// var openendquestion = null;
+		var openendquestions = [];
 		if ("pages" in surveyjson) {
 			for (let page of surveyjson.pages) {
 				if ("elements" in page) {
 					for (let element of page.elements) {
-						if (element.name == content.openend) {
-							openendquestion = element;
+						// if (element.name == content.openend) {
+						// 	openendquestion = element;
+						// }
+						if( element.type == "text" || element.type == "comment"){
+							openendquestions.push(element)
 						}
 					}
 				}
 			}
 		}
-
-		if (openendquestion != null) {
-			for (let result of results) {
-				const json = result.json;
-				if (openendquestion.name in json) {
-					answers.push({ name: result.username, text: json[openendquestion.name] });
-					totalresponse++;
+     
+		// for (let result of results) {
+		// 			const json = result.json;
+		// 				answers.push({ name: result.username, text: json[result.title] });
+		// 				totalresponse++;
+					
+		// 		}
+		// if (openendquestion != null) {
+		// 	for (let result of results) {
+		// 		const json = result.json;
+		// 		if (openendquestion.name in json) {
+		// 			answers.push({ name: result.username, text: json[openendquestion.name] });
+		// 			totalresponse++;
+		// 		}
+		// 	}
+		// } else {
+		// 	return {
+		// 		result: "error",
+		// 		message: "Couldn't find a question that was used to write this report."
+		// 	}
+		// }
+		if(openendquestions.length>0){
+			for (let openendquestion of openendquestions){
+				var elementAnswers=[]
+				var totalresponse=0
+				for (let result of results){
+					const json = result.json;
+					if(openendquestion.name in json){
+						elementAnswers.push({name:result.respondent_name, text: json[openendquestion.name]})
+						totalresponse++;
+					}
 				}
+				answers.push({openendquestion_name:openendquestion.name,answers:elementAnswers,totalresponse:totalresponse,question:openendquestion.title})
 			}
-		} else {
+			
+		}else {
 			return {
 				result: "error",
 				message: "Couldn't find a question that was used to write this report."
@@ -945,7 +975,6 @@ export const genOpenEndReport = (surveyjson, results, content, locale) => {
 			message: message,
 		}
 	}
-
 	return {
 		result: "success",
 		answers: answers,
@@ -960,7 +989,7 @@ export const genQuestionScoreReport = (surveyjson, results, content, locale) => 
 			for (let page of surveyjson.pages) {
 				if ("elements" in page) {
 					for (let element of page.elements) {
-						if (["boolean", "radiogroup", "dropdown", "imagepicker", "rating", "checkbox"].includes(element.type)) {
+						if (["boolean", "radiogroup", "dropdown", "imagepicker", "barrating", "checkbox"].includes(element.type)) {
 							if (setScore(element)) {
 								var responses = 0;
 								var pointsobtained = 0;
@@ -1242,7 +1271,7 @@ export const getAllQuestions = (surveyjson, locale) => {
 					question.title = getTitle(element, locale);
 					question.type = element.type;
 
-					if (["radiogroup", "dropdown", "imagepicker", "rating", "boolean"].includes(element.type)) {
+					if (["radiogroup", "dropdown", "imagepicker", "barrating", "boolean"].includes(element.type)) {
 						if ((element.type == "imagepicker") && ("multiselect" in element)) {
 							question.choiceable = 2;
 						} else {
@@ -1271,5 +1300,13 @@ export const getChoiceOptions = (questions, questionName) => {
 			}
 		}
 	}
+	return [];
+}
+
+export const getResearcherList = (users) => {
+	if(users.length>0){
+		return users.map(user => ({ value: user.value, label: user.label }));
+	}
+
 	return [];
 }

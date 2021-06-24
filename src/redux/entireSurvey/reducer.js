@@ -108,7 +108,8 @@ export default (state = INIT_STATE, action) => {
       const keyword = action.payload.toLowerCase();
       const searchItems = state.entireSurveyItems.filter(
         (item) =>
-          item.name.toLowerCase().indexOf(keyword) > -1 // ||
+          item.name.toLowerCase().indexOf(keyword) > -1 || item.id==keyword
+          // ||
           // item.status.toLowerCase().indexOf(keyword) > -1 ||
           // item.category.toLowerCase().indexOf(keyword) > -1 ||
           // item.label.toLowerCase().indexOf(keyword) > -1

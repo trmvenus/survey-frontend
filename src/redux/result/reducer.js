@@ -8,6 +8,7 @@ import {
   RESULT_LIST_GET_ITEM,
   RESULT_LIST_GET_ITEM_SUCCESS,
   RESULT_LIST_GET_ITEM_ERROR,
+  IS_COMPLETE_UPDATE,
   RESULT_LIST_POST_ITEM,
   RESULT_LIST_POST_ITEM_SUCCESS,
   RESULT_LIST_POST_ITEM_ERROR,
@@ -19,6 +20,7 @@ const INIT_STATE = {
   resultItem: null,
   loading: true,
   saving: false,
+  isCompleted: false,
   error: '',
 };
 
@@ -50,15 +52,17 @@ export default (state = INIT_STATE, action) => {
     case RESULT_LIST_POST_ITEM_ERROR:
       return { ...state, error: action.payload };
 
+    case IS_COMPLETE_UPDATE:
+      return {...state, isCompleted: action.payload.isCompleted}
 
     case RESULT_LIST_UPDATE_ITEM:
       return { ...state, saving: true };
 
     case RESULT_LIST_UPDATE_ITEM_SUCCESS:
-      return { ...state, saving: false };
+      return { ...state, saving: false ,isCompleted:true};
 
     case RESULT_LIST_UPDATE_ITEM_ERROR:
-      return { ...state, saving: false, error: action.payload };
+      return { ...state, saving: false, error: action.payload ,isCompleted:true};
 
     default:
       return { ...state };

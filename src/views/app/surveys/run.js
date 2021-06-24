@@ -1,14 +1,16 @@
-import React, {useEffect} from 'react';
-import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
+import React, {useEffect, useState} from 'react';
+  import { connect } from 'react-redux';
+  import { injectIntl } from 'react-intl';
 import { 
   Row,
+  Button
 } from 'reactstrap';
 
 import publicIp from 'public-ip';
 
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 import SurveyPage from '../../../containers/surveyjs/SurveyRun';
+import SurveyTopPageTool from './SurveyTopPageTool.js'
 
 import {
   getResultItem, updateResultItem,
@@ -34,10 +36,12 @@ const RunSurvey = ({
   updateResultItemAction,
 }) => {
 
+  const [reRun,setReRun] = useState(false)
   const handleOnUpdate = async (result, timeSpent, completed=false) => {
     const ip_address = await publicIp.v4();
 
     if (resultItem && resultItem.id) {
+
       updateResultItemAction({
         id: resultItem.id,
         result,
@@ -46,6 +50,10 @@ const RunSurvey = ({
         completed,
       });
     }
+  }
+
+  const handleReRun = () => {
+    setReRun(!reRun)
   }
 
   useEffect(() => {
@@ -75,7 +83,9 @@ const RunSurvey = ({
   return (
     <>
       <Row>
+
         <Colxx xxs="12">
+          
           <div className="mb-2">
             {isSurveyItemLoaded && (
             <h1>
@@ -84,6 +94,8 @@ const RunSurvey = ({
             )}
 
             <Breadcrumb match={match} />
+            <SurveyTopPageTool handleRun={handleReRun} is_multi_responses={surveyItem ? surveyItem.is_multi_responses: null}/>
+            
           </div>
           <Separator className="mb-5" />
         </Colxx>
@@ -109,6 +121,7 @@ const RunSurvey = ({
                 resultJson={resultItem.json}
                 timeSpent={resultItem.time_spent}
                 handleOnUpdate={handleOnUpdate} />
+          
             ))
           ) : (
             <div className="loading" />

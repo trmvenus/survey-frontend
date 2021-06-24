@@ -207,7 +207,7 @@ const CustomizeTab = ({
                 </FormGroup>
                 </>
               )}
-              {(section.type === REPORT_TYPE.OPEN_END) && (
+              {/* {(section.type === REPORT_TYPE.OPEN_END) && (
                 <>
                 <FormGroup>
                   <Label>
@@ -223,7 +223,7 @@ const CustomizeTab = ({
                   />
                 </FormGroup>
                 </>
-              )}
+              )} */}
               {(section.type === REPORT_TYPE.QUESTION_SCORE) && (
                 <></>
               )}

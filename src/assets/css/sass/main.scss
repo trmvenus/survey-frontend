@@ -101,6 +101,26 @@
   position: absolute;
   z-index: 1;
 }
+
+// .svd_test_results {
+//   display: none!important;
+// }
+
+.slider + input{
+  
+    display: block!important;
+    position: absolute;
+    width: 30px!important;
+    padding: 2px!important;
+    left: 0px;
+    border: none!important;  
+    pointer-events: none;
+}
+
+// canvas {
+//   width: 100%!important;
+//   height: 300px!important;
+// }
 /* 
 html {
   background-color: $theme-color-1 !important;

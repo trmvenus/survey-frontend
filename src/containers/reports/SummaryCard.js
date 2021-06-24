@@ -26,7 +26,7 @@ import { ThemeColors } from '../../helpers/ThemeColors';
 const SummaryCard = ({
   reportData = []
 }) => {
-
+  console.log(reportData)
   const colors = ThemeColors();
 
   const drawLineChart = (question, isMatrix=false, rowno=0) => {
@@ -202,7 +202,7 @@ const SummaryCard = ({
           {(question.type === 'checkbox' 
             || question.type === 'radiogroup'
             || question.type === 'dropdown'
-            || question.type === 'rating'
+            || question.type === 'barrating'
             || question.type === 'imagepicker'
             || question.type === 'boolean'
             ) && (

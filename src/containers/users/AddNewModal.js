@@ -34,6 +34,7 @@ const options = [
   { value: UserRole.Admin, label: getRoleName(UserRole.Admin), },
   { value: UserRole.OrgAdmin, label: getRoleName(UserRole.OrgAdmin), },
   { value: UserRole.User, label: getRoleName(UserRole.User), },
+  { value: UserRole.Researcher, label: getRoleName(UserRole.Researcher), },
 ];
 
 const AddNewModal = ({ 
@@ -44,6 +45,7 @@ const AddNewModal = ({
   addUserAction,
 }) => {
 
+  console.log(categories,"----")
   const addNewUser = (values, { setSubmitting}) => {
     addUserAction(values);
     toggleModal();
