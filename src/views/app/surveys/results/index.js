@@ -3,8 +3,11 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { 
   Row,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from 'reactstrap';
-
 // Redux
 import {
   getResultList,
@@ -24,7 +27,7 @@ import IntlMessages from '../../../../helpers/IntlMessages';
 const ResultsSurvey = ({ 
   match,
   surveyid,
-
+  resultItems,
   surveyItem,
   surveyItemError,
   resultItemError,
@@ -48,6 +51,14 @@ const ResultsSurvey = ({
     getResultListAction({id: surveyid});
   }, [getResultListAction]);
 
+  const handleExprotExcel = () => {
+    console.log("handleExprotExcel===>>",resultItems)
+    const result={}
+    resultItems.forEach(element => {
+      
+    });
+  }
+
   return (
     <>
       <Row>
@@ -61,8 +72,28 @@ const ResultsSurvey = ({
             </h1>
             
             <Breadcrumb match={match} />
+            <div className="text-zero top-right-button-container">
+              <UncontrolledDropdown>
+                <DropdownToggle
+                  caret
+                  color="primary"
+                  size="lg"
+                  outline
+                  className="top-right-button top-right-button-single"
+                >
+                  <IntlMessages id="summary.export" />
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={handleExprotExcel}>
+                    <IntlMessages id="summary.excel" />
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </div>
           </div>
           <Separator className="mb-5" />
+         
+
         </Colxx>
       </Row>
       <Row>
@@ -81,6 +112,7 @@ const mapStateToProps = ({ survey, result }) => {
     isSurveyItemLoaded: survey.loading,
 
     resultItemError : result.error,
+    resultItems: result.resultItems
   };
 };
 

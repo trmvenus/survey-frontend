@@ -18,12 +18,12 @@ import {
   getResultItemByWebLinkAndName,
   updateResultItem,
 } from '../../redux/actions';
-
+import { useHistory } from 'react-router-dom';
 import { Colxx, Separator } from '../../components/common/CustomBootstrap';
 import { NotificationManager } from '../../components/common/react-notifications';
 import IntlMessages from '../../helpers/IntlMessages';
-
-
+import SurveyTopPageTool from '../app/surveys/SurveyTopPageTool'
+import {isCompleteUpdate1} from '../../redux/result/actions'
 const WebRunSurvey = ({ 
   intl,
   match,
@@ -35,7 +35,7 @@ const WebRunSurvey = ({
   isSurveyItemLoaded,
   resultItem,
   resultItemError,
-
+  isCompletedUpdateAction,
   getSurveyItemByWebLinkAction,
   getResultItemByWebLinkAndNameAction,
   updateResultItemAction,
@@ -45,9 +45,7 @@ const WebRunSurvey = ({
   const [start, setStart] = useState(false);
   const [name, setName] = useState('');
   const [errors, setErrors] = useState({name: null});
-
   const {messages} = intl;
-
   const handleStart = () => {
     if (name.length > 0) {
       setErrors({...errors, name: ''});
@@ -64,7 +62,13 @@ const WebRunSurvey = ({
   }
 
   const handleOnUpdate = async (result, timeSpent, completed=false) => {
+    if(completed){
+      isCompletedUpdateAction({
+        isCompleted:true
+    })
+    }
     if (resultItem && resultItem.id) {
+   
       updateResultItemAction({
         id: resultItem.id,
         result,
@@ -74,6 +78,13 @@ const WebRunSurvey = ({
       });
     }
   }
+
+ const handleReRun = () => {
+// window.location.assign(`${process.env.REACT_APP_FRONTEND_URL}/share/w/run?id=${shareId}`)
+  setName("")
+  setStart(true)
+  history.push(`/share/w/run?id=${shareId}`)
+ }
 
   useEffect(() => {
     handleGetIpAddress();
@@ -125,8 +136,11 @@ const WebRunSurvey = ({
               {surveyItem.name}
             </h1>
             )}
+           <SurveyTopPageTool handleRun={handleReRun} />
           </div>
+          
           <Separator className="mb-5" />
+          
         </Colxx>
       </Row>
       <Row>
@@ -159,6 +173,7 @@ const WebRunSurvey = ({
                 </Button>
                 )}
               </Colxx>
+              
             </FormGroup>
             {(start === true) && (
               (surveyItem && resultItem && !resultItem.is_completed) ? (
@@ -171,7 +186,12 @@ const WebRunSurvey = ({
                 <div className='text-center'>
                   <h1>You have already completed this survey.</h1>
                 </div>
-              ) : (
+              ) : (resultItemError.code === "survey/maxim-quota")?(
+                <div className='text-center'>
+                  <h1>Survey reseached the maximum number of respondants.</h1>
+                </div>
+                
+              ):(
                 <div className="loading" />
               )
             )}
@@ -203,7 +223,6 @@ const mapStateToProps = ({ survey, result, emaillink }) => {
     surveyItem: survey.surveyItem,
     surveyItemError: survey.error,
     isSurveyItemLoaded: survey.loading,
-
     resultItem: result.resultItem,
     resultItemError: result.error,
   };
@@ -213,5 +232,6 @@ export default injectIntl(
     getSurveyItemByWebLinkAction: getSurveyItemByWebLink,
     getResultItemByWebLinkAndNameAction: getResultItemByWebLinkAndName,
     updateResultItemAction: updateResultItem,
+    isCompletedUpdateAction:isCompleteUpdate1
   })(WebRunSurvey)
 );

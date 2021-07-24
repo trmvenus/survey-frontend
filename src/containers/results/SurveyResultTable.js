@@ -27,6 +27,7 @@ const SurveyResultTable = ({
   error,
 }) => {
   const { messages } = intl;
+
   const cols = React.useMemo(
     () => [
       {
@@ -107,7 +108,7 @@ const SurveyResultTable = ({
   }, [error]);
 
   return (
-    <div className="mb-4">
+    <div className="mb-4">      
       {(isLoaded) ? (
         <Table columns={cols} data={resultItems} divided />
       ) : (

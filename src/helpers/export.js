@@ -23,3 +23,11 @@ export const savePDF = (filename, surveyJson, resultJson = {}) => {
   surveyPDF.data = resultJson;
   surveyPDF.save(filename);
 };
+
+export const exportToPPT = (reportsData) => {
+  console.log(reportsData)
+}
+
+export const exportToExcel = (reportsData) => {
+  console.log()
+}

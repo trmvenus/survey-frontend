@@ -60,6 +60,7 @@ const AddNewWebLinkModal = ({
         close_quota: values.closeQuota,
         close_date: values.closeDate,
         is_active: values.isActive,
+        is_multiple: values.isMulti,
       });
     } else {
       addWebLinkItemAction({
@@ -69,19 +70,20 @@ const AddNewWebLinkModal = ({
         close_quota: values.closeQuota,
         close_date: values.closeDate,
         is_active: values.isActive,
+        is_multiple: values.isMulti
       });
     }
 
     toggleModal();
   };
-
   const initialValues = webLink !== null ?
       {
         name: webLink.name,
         url: webLink.link_id,
-        closeQuota: webLink.close_quota??'',
+        closeQuota: webLink.close_quota||'',
         closeDate: new Date(webLink.close_date),
         isActive: webLink.is_active,
+        isMulti: webLink.is_multiple,
       } :
       {
         name: '',
@@ -89,6 +91,7 @@ const AddNewWebLinkModal = ({
         closeQuota: '',
         closeDate: '',
         isActive: false,
+        isMulti:false
       }
 
   return (
@@ -114,7 +117,12 @@ const AddNewWebLinkModal = ({
         >
           <Form>
             <ModalHeader toggle={toggleModal}>
-              <IntlMessages id="link.add-new-web-title" />
+              {(webLink !== null) ? (
+                    <IntlMessages id="link.edit-web-title" />
+                  ) : (
+                    <IntlMessages id="link.add-new-web-title" />
+               )}
+             
             </ModalHeader>
             <ModalBody>
               <FormGroup>
@@ -161,6 +169,7 @@ const AddNewWebLinkModal = ({
                   type='number'
                   className='form-control'
                   name='closeQuota'
+                  value={values.closeQuota}
                 />
                 {errors.closeQuota && touched.closeQuota && (
                   <div className="invalid-feedback d-block">
@@ -191,6 +200,15 @@ const AddNewWebLinkModal = ({
                   name="isActive"
                   value={values.isActive}
                   label={messages['link.is-active']}
+                  onChange={setFieldValue}
+                  onBlur={setFieldTouched}
+                />
+              </FormGroup>
+              <FormGroup>
+                <FormikCustomCheckbox
+                  name="isMulti"
+                  value={values.isMulti}
+                  label={messages['link.is-multiple']}
                   onChange={setFieldValue}
                   onBlur={setFieldTouched}
                 />

@@ -33,6 +33,7 @@ import {
   genTrendReport
 } from '../../../../helpers/surveyHelper';
 import { client } from '../../../../helpers/client';
+import { client1 } from '../../../../helpers/client';
 
 // Containers
 import Breadcrumb from '../../../../containers/navs/Breadcrumb';
@@ -45,14 +46,100 @@ import OpenEndCard from '../../../../containers/reports/OpenEndCard';
 import QuestionScoreCard from '../../../../containers/reports/QuestionScoreCard';
 import BenchmarkingCard from '../../../../containers/reports/BenchmarkingCard';
 import TrendCard from '../../../../containers/reports/TrendCard';
-
+import ReactDOMServer from "react-dom/server";
 // Components
 import { Colxx } from '../../../../components/common/CustomBootstrap';
 import { NotificationManager } from '../../../../components/common/react-notifications';
+// import ReactExport from 'react-export-excel';
 
 // Constants
 import { REPORT_TYPE } from '../../../../constants/surveyValues';
 
+import { exportToPPT, exportToExcel} from '../../../../helpers/export'
+// const ExcelFile = ReactExport.ExcelFile;
+// const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+// const styledMultiDataSet = [
+//   {
+//     columns: [
+//       {
+//         value: "Headings",
+//         widthPx: 160,
+//         style: { font: { sz: "24", bold: true } },
+//       },
+//       {
+//         value: "Text Style",
+//         widthPx: 180,
+//         style: { font: { sz: "24", bold: true } },
+//       },
+//       {
+//         value: "Colors",
+//         style: { font: { sz: "24", bold: true } }, // if no width set, default excel column width will be used ( 64px )
+//       },
+//     ],
+//     data: [
+//       [
+//         { value: "H1", style: { font: { sz: "24", bold: true } } },
+//         { value: "Bold", style: { font: { bold: true } } },
+//         {
+//           value: "Red",
+//           style: {
+//             fill: { patternType: "solid", fgColor: { rgb: "FFFF0000" } },
+//           },
+//         },
+//       ],
+//       [
+//         { value: "H2", style: { font: { sz: "18", bold: true } } },
+//         { value: "underline", style: { font: { underline: true } } },
+//         {
+//           value: "Blue",
+//           style: {
+//             fill: { patternType: "solid", fgColor: { rgb: "FF0000FF" } },
+//           },
+//         },
+//       ],
+//       [
+//         { value: "H3", style: { font: { sz: "14", bold: true } } },
+//         { value: "italic", style: { font: { italic: true } } },
+//         {
+//           value: "Green",
+//           style: {
+//             fill: { patternType: "solid", fgColor: { rgb: "FF00FF00" } },
+//           },
+//         },
+//       ],
+//       [
+//         { value: "H4", style: { font: { sz: "12", bold: true } } },
+//         { value: "strike", style: { font: { strike: true } } },
+//         {
+//           value: "Orange",
+//           style: {
+//             fill: { patternType: "solid", fgColor: { rgb: "FFF86B00" } },
+//           },
+//         },
+//       ],
+//       [
+//         { value: "H5", style: { font: { sz: "10.5", bold: true } } },
+//         { value: "outline", style: { font: { outline: true } } },
+//         {
+//           value: "Yellow",
+//           style: {
+//             fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } },
+//           },
+//         },
+//       ],
+//       [
+//         { value: "H6", style: { font: { sz: "7.5", bold: true } } },
+//         { value: "shadow", style: { font: { shadow: true } } },
+//         {
+//           value: "Light Blue",
+//           style: {
+//             fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } },
+//           },
+//         },
+//       ],
+//     ],
+//   },
+// ];
 const ReportPage = ({ 
   match,
   location,
@@ -86,9 +173,6 @@ const ReportPage = ({
 
   const report_id = match.params.reportid;
 
-  const exportToPDF = () => {
-    
-  }
 
   useEffect(() => {
     if (location.hash.length > 1) {
@@ -208,6 +292,27 @@ const ReportPage = ({
     }
   }, [surveyItem]);
 
+  const exportToPDF = async () => {
+    let item={url:window.location.href}
+
+    await client1.post(`/result/pdfff`,item)
+    .then(response => {
+      const file = new Blob([response.data], {
+        type: "application/pdf"
+      });
+      const fileURL = URL.createObjectURL(file);
+      //Open the URL on new Window
+      // window.open(fileURL);
+      const link = document.createElement('a');
+      link.href = fileURL;
+      link.setAttribute('download', 'Summary-report.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link)
+    })
+    .catch(err => null);
+  }
+
   return (
     <>
       <Row>
@@ -218,7 +323,7 @@ const ReportPage = ({
               {reportItem.name}
             </h1>
             )}
-
+            
             <div className="text-zero top-right-button-container">
               <UncontrolledDropdown>
                 <DropdownToggle
@@ -226,13 +331,19 @@ const ReportPage = ({
                   color="primary"
                   size="lg"
                   outline
-                  className="top-right-button top-right-button-single"
+                  className="export top-right-button top-right-button-single"
                 >
                   <IntlMessages id="summary.export" />
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem onClick={exportToPDF}>
+                  <DropdownItem onClick={()=>{exportToPDF()}}>
                     <IntlMessages id="summary.pdf" />
+                  </DropdownItem>
+                  <DropdownItem onClick={()=>{exportToExcel(reportResults)}}>
+                    <IntlMessages id="summary.excel" />
+                  </DropdownItem>
+                  <DropdownItem onClick={()=>{exportToPPT(reportResults)}}>
+                    <IntlMessages id="summary.ppt" />
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
@@ -243,6 +354,11 @@ const ReportPage = ({
         </Colxx>
       </Row>
       <Row>
+        {/* <div>
+                <ExcelFile element={<button>Download Data With Styles</button>}>
+                    <ExcelSheet dataSet={styledMultiDataSet } name="Organization"/>
+                </ExcelFile>
+            </div> */}
         <Colxx xxs="12" className="mb-4">
           <Nav tabs className="separator-tabs ml-0 mb-5">
             <NavItem>
@@ -303,8 +419,9 @@ const ReportPage = ({
             <TabPane tabId='view'>
               {reportResults.map((reportResult, i) => (
                 <React.Fragment key={i}>
+                
                 {(reportResult.type === REPORT_TYPE.SUMMARY || reportResult.type === REPORT_TYPE.PILLAR) && (
-                  <SummaryCard reportData={reportResult.reportData} />
+                  <SummaryCard  reportData={reportResult.reportData} />
                 )}
                 {(reportResult.type === REPORT_TYPE.CROSS_TAB) && (
                   <CrossTabCard reportData={reportResult.reportData} />

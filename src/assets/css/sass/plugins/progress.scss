@@ -34,6 +34,83 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .progress-bar-circle2 {
+      width: 70px;
+      height: 70px;
+      justify-content: right;
+      svg path:first-of-type {
+        stroke: $separator-color;
+      }
+  
+      svg path:last-of-type {
+        stroke: $theme-color-1;
+      }
+  
+      &.progress-bar-banner {
+        svg path:first-of-type {
+          stroke: darken($theme-color-1, 15%);
+        }
+  
+        svg path:last-of-type {
+          stroke: $button-text-color;
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .suvey-list-item-circle{
+      position:relative!important;
+      min-width:80px;
+      height:10px;
+    }
+    .progress-bar-circle2 {
+        position: 'absolute'!important;
+        top:-30px;
+        width: 70px;
+        height: 70px;
+        justify-content: right;
+        svg path:first-of-type {
+          stroke: $separator-color;
+        }
+    
+        svg path:last-of-type {
+          stroke: $theme-color-1;
+        }
+    
+        &.progress-bar-banner {
+          svg path:first-of-type {
+            stroke: darken($theme-color-1, 15%);
+          }
+    
+          svg path:last-of-type {
+            stroke: $button-text-color;
+          }
+        }
+      }
+    }
+.progress-bar-circle1 {
+  width: 50px;
+  height: 50px;
+  justify-content: right;
+  svg path:first-of-type {
+    stroke: $separator-color;
+  }
+
+  svg path:last-of-type {
+    stroke: $theme-color-1;
+  }
+
+  &.progress-bar-banner {
+    svg path:first-of-type {
+      stroke: darken($theme-color-1, 15%);
+    }
+
+    svg path:last-of-type {
+      stroke: $button-text-color;
+    }
+  }
+}
 .progress-banner {
   height: 200px;
   background-image: linear-gradient(

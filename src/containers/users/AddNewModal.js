@@ -45,7 +45,6 @@ const AddNewModal = ({
   addUserAction,
 }) => {
 
-  console.log(categories,"----")
   const addNewUser = (values, { setSubmitting}) => {
     addUserAction(values);
     toggleModal();

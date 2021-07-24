@@ -59,7 +59,7 @@ export default (state = INIT_STATE, action) => {
       return { ...state, saving: true };
 
     case RESULT_LIST_UPDATE_ITEM_SUCCESS:
-      return { ...state, saving: false ,isCompleted:true};
+      return { ...state, saving: false };
 
     case RESULT_LIST_UPDATE_ITEM_ERROR:
       return { ...state, saving: false, error: action.payload ,isCompleted:true};

@@ -17,7 +17,6 @@ const colors = ThemeColors();
 
 const ResponsesChartCard = ({dates}) => {
   const [showMode, setShowMode] = useState('this-week');
-
   const weekday = moment().weekday();
 
   // This Week
@@ -32,7 +31,7 @@ const ResponsesChartCard = ({dates}) => {
       let yValue = 0;
       if (dates) {
         for (const d of dates) {
-          if (d === date.format('YYYY-MM-DD')) {
+          if (moment.utc(d).local().format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) {
             yValue ++;
           }
         }
@@ -50,7 +49,6 @@ const ResponsesChartCard = ({dates}) => {
     stepSize1 = Math.floor((maxTick1-minTick1) / 4) + 1;
     stepSize1 = stepSize1 < 2 ? 2 : stepSize1;
     maxTick1 = minTick1 + stepSize1 * 4;
-  
     responsesChartData1 = {
       labels: labels,
       datasets: [
@@ -84,7 +82,7 @@ const ResponsesChartCard = ({dates}) => {
   
       let yValue = 0;
       for (const d of dates) {
-        if (d === date.format('YYYY-MM-DD')) {
+        if (moment.utc(d).local().format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) {
           yValue ++;
         }
       }
@@ -136,7 +134,7 @@ const ResponsesChartCard = ({dates}) => {
       let yValue = 0;
       if (dates) {
         for (const d of dates) {
-          if (d === date.format('YYYY-MM-DD')) {
+          if (moment.utc(d).local().format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) {
             yValue ++;
           }
         }

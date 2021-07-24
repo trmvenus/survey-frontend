@@ -12,7 +12,7 @@ import { Colxx } from '../common/CustomBootstrap';
 import { adminRoot } from '../../constants/defaultValues';
 import { shareSurveyItem } from '../../redux/actions';
 import { getCurrentUser } from '../../helpers/Utils';
-
+import { CircularProgressbar } from 'react-circular-progressbar';
 const SurveyListItem = ({ 
   intl, 
 
@@ -25,7 +25,6 @@ const SurveyListItem = ({
 }) => {
   const [currentUser] = useState(getCurrentUser());
   const [collapse, setCollapse] = useState(false);
-
   const { messages } = intl;
   const handleClickRun = (event) => {
     if (item && item.is_active === false) {
@@ -80,6 +79,17 @@ const SurveyListItem = ({
             <p className="mb-1 text-muted text-small w-15 w-xs-100">
               <TimeAgo date={item.created_at}/>
             </p>
+            <div className="suvey-list-item-circle">
+              <div className="progress-bar-circle2 progress-bar-banner position-relative">
+                          <CircularProgressbar
+                            strokeWidth={4}
+                            value={((item.completedresponses?item.completedresponses:0) * 100) / (item.responses?item.responses:0)}
+
+                            text={`${item.completedresponses?item.completedresponses:"0"}/${item.responses?item.responses:"0"}`}
+               />
+              </div>
+            </div>
+            
           </CardBody>
           <div className="custom-control custom-checkbox pl-1 align-self-center mr-4">
             <CustomInput

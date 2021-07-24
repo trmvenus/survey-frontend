@@ -23,6 +23,15 @@ import {
   EMAIL_LINK_LIST_CHECK_EMAIL_INVITED,
   EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_SUCCESS,
   EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_ERROR,
+  CONTACT_ADD_ITEM,
+  CONTACT_ADD_ITEM_SUCCESS,
+  CONTACT_ADD_ITEM_ERROR,
+  CONTACT_DELETE_ITEM_SUCCESS,
+  CONTACT_DELETE_ITEM,
+  CONTACT_DELETE_ITEM_ERROR,
+  CONTACT_UPDATE_ITEM,
+  CONTACT_UPDATE_ITEM_SUCCESS,
+  CONTACT_UPDATE_ITEM_ERROR
 } from '../actions';
 
 export const getEmailLinkList = (payload) => ({
@@ -74,7 +83,45 @@ export const updateEmailLinkItem = (id, item) => ({
   type: EMAIL_LINK_LIST_UPDATE_ITEM,
   payload: {id, item},
 });
+export const addContactItem = (item) => ({
+  type: CONTACT_ADD_ITEM,
+  payload: item
+})
 
+export const addContactItemSuccess = (item) => ({
+  type: CONTACT_ADD_ITEM_SUCCESS,
+  payload:item
+})
+export const addContactItemError = (item) => ({
+  type: CONTACT_ADD_ITEM_ERROR,
+  payload:item
+})
+
+export const updateContactItem =(id,item) => ({
+  type:CONTACT_UPDATE_ITEM,
+  payload:{id, item}
+})
+export const updateContactItemSuccess = (item) =>({
+  type: CONTACT_UPDATE_ITEM_SUCCESS,
+  payload:item
+})
+
+export const updateContactItemError = (item) => ({
+  type: CONTACT_UPDATE_ITEM_ERROR,
+  payload: item
+})
+export const deleteContact = (id,link_id,contact) => ({
+  type: CONTACT_DELETE_ITEM,
+  payload:{id,link_id,contact}
+})
+export const deleteContactItemSuccess = (contact) => ({
+  type: CONTACT_DELETE_ITEM_SUCCESS,
+  payload:contact
+})
+export const deleteContactItemError = (contact) => ({
+  type: CONTACT_DELETE_ITEM_ERROR,
+  payload:contact
+})
 export const updateEmailLinkItemSuccess = (item) => ({
   type: EMAIL_LINK_LIST_UPDATE_ITEM_SUCCESS,
   payload: item,

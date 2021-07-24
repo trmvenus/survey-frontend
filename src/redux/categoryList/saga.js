@@ -49,7 +49,6 @@ function* addCategoryItem({ payload }) {
 }
 
 const deleteCategoryItemRequest = async (item) => 
-  // console.log("deleteCategoryItemRequest-->>>",item)
   await client
     .delete('/category',item)
     .then((user) => user.data)

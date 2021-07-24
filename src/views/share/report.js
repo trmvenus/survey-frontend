@@ -162,7 +162,6 @@ const ReportPage = ({
               {reportItem.name}
             </h1>
             )}
-
             <div className="text-zero top-right-button-container">
               <UncontrolledDropdown>
                 <DropdownToggle

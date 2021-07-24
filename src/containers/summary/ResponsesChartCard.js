@@ -12,33 +12,34 @@ import moment from 'moment';
 import IntlMessages from '../../helpers/IntlMessages';
 import { AreaChart } from '../../components/charts';
 import { ThemeColors } from '../../helpers/ThemeColors';
+import { date } from 'yup';
 
 const colors = ThemeColors();
 
 const ResponsesChartCard = ({ className = '', controls = true, dates=[], }) => {
-
+  
   const [isThisWeek, setThisWeek] = useState(true);
 
   const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const data = [0, 0, 0, 0, 0, 0, 0];
-
+  let maxValue =0
   const weekday = moment().weekday();
 
-  const v1 = isThisWeek ? 0 : 7;
+  const v1 = isThisWeek ? 1 : 7;
   
   for (let i = 1; i <= 7; i ++) {
     const date = moment().subtract(v1+(weekday-i), 'days');
 
     for (const d of dates) {
-      if (d === date.format('YYYY-MM-DD')) {
+      if (moment.utc(d).local().format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) {
         data[i-1] ++;
       }
     }
+    if(maxValue<data[i-1]){maxValue=data[i-1]}
 
     labels[i-1] = date.format('Do, MMM');
   }
   
-
   const areaChartData = {
     labels: labels,
     datasets: [
@@ -95,7 +96,7 @@ const ResponsesChartCard = ({ className = '', controls = true, dates=[], }) => {
       </CardBody>
 
       <div className="chart card-body pt-0">
-        <AreaChart shadow data={areaChartData} mintick={0} maxtick={20} />
+        <AreaChart shadow data={areaChartData} mintick={0} maxtick={maxValue} />
       </div>
     </Card>
   );

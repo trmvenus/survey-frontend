@@ -14,6 +14,7 @@ import GradientWithRadialProgressCard from '../../../components/cards/GradientWi
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
 import SurveyChartCard from '../../../containers/dashboards/SurveyChartCard';
 import ResponsesChartCard from '../../../containers/dashboards/ResponsesChartCard';
+import SurveyResponsedChartCard from '../../../containers/dashboards/SurveyResponsedChartCard'
 
 import IntlMessages from '../../../helpers/IntlMessages';
 import { getMyDashboardInfo } from '../../../redux/actions';
@@ -80,6 +81,11 @@ const DefaultDashboard = ({
           )}
         </Colxx>
       </Row>
+      {/* <Row>
+        <Colxx lg="12" className="mb-5">
+          <SurveyResponsedChartCard dates={myDashboardInfo ? myDashboardInfo.surveyDates : null} />
+        </Colxx>
+      </Row> */}
     </>
   );
 };

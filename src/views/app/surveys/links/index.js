@@ -11,6 +11,8 @@ import {
   ModalFooter,
   ModalHeader,
 } from 'reactstrap';
+import { CircularProgressbar } from 'react-circular-progressbar';
+
 import { NavLink } from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import classnames from 'classnames';
@@ -29,8 +31,7 @@ import AddNewWebLinkModal from '../../../../containers/links/AddNewWebLinkModal'
 import { getWebLinkList, deleteWebLinkItem, getEmailLinkList, deleteEmailLinkItem, sendEmailLink, } from '../../../../redux/actions';
 import { adminRoot, shareWebSurveyPath } from '../../../../constants/defaultValues';
 import AddNewEmailLinkModal from '../../../../containers/links/AddNewEmailLinkModal';
-
-
+import GradientWithRadialProgressCard from '../../../../components/cards/GradientWithRadialProgressCard'
 const LinksSurvey = ({ 
   intl,
   match,
@@ -40,9 +41,13 @@ const LinksSurvey = ({
   surveyItemError,
   isSurveyItemLoaded,
   webLinkItems,
+  webLinksTotalResponses,
+  weblinksCompletedResponse,
   webLinkError,
   isWebLinkItemsLoaded,
   emailLinkItems,
+  emailLinksCompletedResponse,
+  emailLinksTotalResponses,
   emailLinkError,
   isEmailLinkItemLoaded,
   sendingEmailSuccess,
@@ -196,13 +201,24 @@ const LinksSurvey = ({
                       <i className="simple-icon-link" />&nbsp;&nbsp;&nbsp;{webLink.name}
                     </a>
                   </CardTitle>
-                  <a 
-                    className='text-primary text-one text-bold' 
-                    href={shareWebSurveyPath+webLink.link_id}
-                    target="_blank"
-                    >
-                    {shareWebSurveyPath+webLink.link_id}
-                  </a>
+                  <div style={{display:'flex',justifyContent: 'space-between'}}>
+                      <a 
+                        className='text-primary text-one text-bold' 
+                        href={shareWebSurveyPath+webLink.link_id}
+                        target="_blank"
+                        >
+                        {shareWebSurveyPath+webLink.link_id}
+                      </a>
+                      <div className="progress-bar-circle1 progress-bar-banner position-relative">
+                        <CircularProgressbar
+                          strokeWidth={4}
+                          value={((weblinksCompletedResponse[webLink.link_id]?weblinksCompletedResponse[webLink.link_id]:0) * 100) / (webLinksTotalResponses[webLink.link_id]?webLinksTotalResponses[webLink.link_id]:0)}
+
+                          text={`${weblinksCompletedResponse[webLink.link_id]?weblinksCompletedResponse[webLink.link_id]:"0"}/${webLinksTotalResponses[webLink.link_id]?webLinksTotalResponses[webLink.link_id]:"0"}`}
+                        />
+                      </div>
+                  </div>
+                  
                 </CardBody>
               </Card>
             ))}
@@ -268,9 +284,19 @@ const LinksSurvey = ({
                       <i className="iconsminds-mail" />&nbsp;&nbsp;&nbsp;{emailLink.name}
                     </a>
                   </CardTitle>
-                  <a className='text-primary text-one text-bold' href="#" onClick={() => handleEditEmailLink(emailLink)}>
-                    {emailLink.name}
-                  </a>
+                  <div style={{display:'flex',justifyContent: 'space-between'}}>
+                    <a className='text-primary text-one text-bold' href="#" onClick={() => handleEditEmailLink(emailLink)}>
+                      {emailLink.name}
+                    </a>
+                    <div className="progress-bar-circle1 progress-bar-banner position-relative">
+                        <CircularProgressbar
+                          strokeWidth={4}
+                          value={((emailLinksCompletedResponse[emailLink.link_id]?emailLinksCompletedResponse[emailLink.link_id]:0) * 100) / (emailLinksTotalResponses[emailLink.link_id]?emailLinksTotalResponses[emailLink.link_id]:0)}
+                          text={`${emailLinksCompletedResponse[emailLink.link_id]?emailLinksCompletedResponse[emailLink.link_id]:"0"}/${emailLinksTotalResponses[emailLink.link_id]?emailLinksTotalResponses[emailLink.link_id]:"0"}`}
+                        />
+                      </div>
+                  </div>
+                  
                 </CardBody>
               </Card>
             ))}
@@ -361,10 +387,14 @@ const mapStateToProps = ({ survey, weblink, emaillink, }) => {
     isSurveyItemLoaded: survey.loading,
 
     webLinkItems: weblink.webLinkItems,
+    weblinksCompletedResponse:weblink.weblinksCompletedResponse,
+    webLinksTotalResponses:weblink.webLinksTotalResponses,
     webLinkError: weblink.error,
     isWebLinkItemsLoaded: weblink.isLoaded,
 
     emailLinkItems: emaillink.emailLinkItems,
+    emailLinksTotalResponses:emaillink.emailLinksTotalResponses,
+    emailLinksCompletedResponse:emaillink.emailLinksCompletedResponse,
     emailLinkError: emaillink.error,
     isEmailLinkItemLoaded: emaillink.isLoaded,
     sendingEmailSuccess: emaillink.sendingSuccess,

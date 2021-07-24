@@ -35,6 +35,8 @@ import { Colxx } from '../../components/common/CustomBootstrap';
 // Containers
 import { FormikDatePicker } from '../../containers/form-validations/FormikFields';
 
+import EmailLinkPage  from '../../views/app/surveys/links/emaillink';
+
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -86,7 +88,7 @@ const AddNewEmailLinkModal = ({
 }) => {
 
   const { messages } = intl;
-
+  const [detailContactStatus,setDetailContactStatus] = useState(false)
   const addNewEmailLink = (values) => {
     if (emailLink !== null) {
       updateEmailLinkItemAction(emailLink.id, {
@@ -114,6 +116,12 @@ const AddNewEmailLinkModal = ({
     toggleModal();
   };
 
+  const downloadContactFile = () => {
+    console.log("emailLink",emailLink)
+  }
+  const moreOrlessViewAction = () => {
+    setDetailContactStatus(!detailContactStatus)
+  }
   const link_id = getRandomLinkId();
 
   const initialValues = emailLink !== null ?
@@ -162,7 +170,11 @@ const AddNewEmailLinkModal = ({
         >
           <Form>
             <ModalHeader toggle={toggleModal}>
-              <IntlMessages id="link.add-new-email-title" />
+             {(emailLink !== null) ? (
+                  <IntlMessages id="link.edit-email-title" />
+                ) : (
+                  <IntlMessages id="link.add-new-email-title" />
+              )}
             </ModalHeader>
             <ModalBody>
               <FormGroup>
@@ -192,23 +204,38 @@ const AddNewEmailLinkModal = ({
                     name="contactsFile"
                     accept=".xls,.xlsx"
                     onChange={(e)=>{setFieldValue("contactsFile", e.target.files[0])}}
-                    disabled={emailLink !== null}
+                    // disabled={emailLink !== null}
                   />
                 </InputGroup>
-
+                {(emailLink!==null)?(
+                  <>
+                   <a className="pl-1 text-primary" onClick={downloadContactFile}><IntlMessages id='link.download-contact' /></a>
+                   <a className="pl-1 text-primary" onClick={moreOrlessViewAction}>
+                     {!detailContactStatus?<IntlMessages id='link.contact-detail-show' />:<IntlMessages id='link.contact-detail-hide' />}
+                  </a>
+                   {detailContactStatus&&
+                     <EmailLinkPage link_id={emailLink.id}/>
+                   }
+                  
+                  </>
+                 
+                  ) : (
+                    <ExcelFile 
+                      filename='contacts-template'
+                      element={<a className="pl-1 text-primary" href='#'><IntlMessages id='link.download-template' /></a>}
+                    >
+                      <ExcelSheet data={[]} name="Emails">
+                        <ExcelColumn label="Email Address" value="email_address"/>
+                        <ExcelColumn label="First Name" value="first_name"/>
+                        <ExcelColumn label="Last Name" value="last_name"/>
+                      </ExcelSheet>
+                    </ExcelFile>
+                  )
+                }
                 
-                <ExcelFile 
-                  filename='contacts-template'
-                  element={<a className="pl-1 text-primary" href='#'><IntlMessages id='link.download-template' /></a>}
-                >
-                  <ExcelSheet data={[]} name="Emails">
-                    <ExcelColumn label="Email Address" value="email_address"/>
-                    <ExcelColumn label="First Name" value="first_name"/>
-                    <ExcelColumn label="Last Name" value="last_name"/>
-                  </ExcelSheet>
-                </ExcelFile>
-              </FormGroup>
 
+              </FormGroup>
+             
               <Row className="mb-3">
                 <Colxx sm={6}>
                   <FormGroup>

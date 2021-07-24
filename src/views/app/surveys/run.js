@@ -5,7 +5,7 @@ import {
   Row,
   Button
 } from 'reactstrap';
-
+import { useHistory } from 'react-router-dom';
 import publicIp from 'public-ip';
 
 import Breadcrumb from '../../../containers/navs/Breadcrumb';
@@ -19,7 +19,7 @@ import {
 import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
 import { NotificationManager } from '../../../components/common/react-notifications';
 import IntlMessages from '../../../helpers/IntlMessages';
-
+import {isCompleteUpdate1} from '../../../redux/result/actions'
 
 const RunSurvey = ({ 
   match,
@@ -31,17 +31,22 @@ const RunSurvey = ({
   resultItem,
   resultItemError,
   isResultItemLoaded,
-
+  isCompletedUpdateAction,
   getResultItemAction,
   updateResultItemAction,
 }) => {
 
   const [reRun,setReRun] = useState(false)
+  const history = useHistory();
   const handleOnUpdate = async (result, timeSpent, completed=false) => {
     const ip_address = await publicIp.v4();
-
+    if(completed){
+      isCompletedUpdateAction({
+        isCompleted:true
+    })
+    }
     if (resultItem && resultItem.id) {
-
+      
       updateResultItemAction({
         id: resultItem.id,
         result,
@@ -53,7 +58,9 @@ const RunSurvey = ({
   }
 
   const handleReRun = () => {
-    setReRun(!reRun)
+    // window.location.assign(`${process.env.REACT_APP_FRONTEND_URL}${match.url}`)
+    history.push("/app/surveys/157/run")
+
   }
 
   useEffect(() => {
@@ -154,6 +161,7 @@ const mapStateToProps = ({ survey, result }) => {
 export default injectIntl(
   connect(mapStateToProps, {
     getResultItemAction: getResultItem,
-    updateResultItemAction: updateResultItem
+    updateResultItemAction: updateResultItem,
+    isCompletedUpdateAction:isCompleteUpdate1
   })(RunSurvey)
 );

@@ -23,11 +23,22 @@ import {
   EMAIL_LINK_LIST_CHECK_EMAIL_INVITED,
   EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_SUCCESS,
   EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_ERROR,
+  CONTACT_ADD_ITEM,
+  CONTACT_ADD_ITEM_ERROR,
+  CONTACT_ADD_ITEM_SUCCESS,
+  CONTACT_DELETE_ITEM_SUCCESS,
+  CONTACT_DELETE_ITEM,
+  CONTACT_DELETE_ITEM_ERROR,
+  CONTACT_UPDATE_ITEM,
+  CONTACT_UPDATE_ITEM_SUCCESS,
+  CONTACT_UPDATE_ITEM_ERROR
 } from '../actions';
 
 const INIT_STATE = {
   emailLinkItems: [],
   emailLinkItem: null,
+  emailLinksCompletedResponse:{},
+  emailLinksTotalResponses:{},
   emailContact: null,
   isLoaded: false,
   isLoadedItem: false,
@@ -35,21 +46,21 @@ const INIT_STATE = {
   isSending: false,
   sendingSuccess: false,
   error: '',
+  contactError:''
 };
-
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case EMAIL_LINK_LIST_GET_LIST:
       return { ...state, isLoaded: false, };
     case EMAIL_LINK_LIST_GET_LIST_SUCCESS:
-      return { ...state, isLoaded: true, emailLinkItems: action.payload, };
+      return { ...state, isLoaded: true, emailLinkItems: action.payload.emailLinks,emailLinksCompletedResponse:action.payload.emailLinksCompletedResponse,emailLinksTotalResponses:action.payload.emailLinksTotalResponses};
     case EMAIL_LINK_LIST_GET_LIST_ERROR:
       return { ...state, isLoaded: true, error: action.payload, };
 
     case EMAIL_LINK_LIST_GET_ITEM:
       return { ...state, isLoadedItem: false, };
     case EMAIL_LINK_LIST_GET_ITEM_SUCCESS:
-      return { ...state, isLoadedItem: true, emailLinkItem: action.payload, };
+      return { ...state, isLoadedItem: true, emailLinkItem: action.payload,contactError:'' };
     case EMAIL_LINK_LIST_GET_ITEM_ERROR:
       return { ...state, isLoadedItem: true, error: action.payload, };
 
@@ -116,7 +127,24 @@ export default (state = INIT_STATE, action) => {
       return { ...state, emailContact: action.payload, };
     case EMAIL_LINK_LIST_CHECK_EMAIL_INVITED_ERROR:
       return { ...state, error: action.payload };
-
+    case CONTACT_ADD_ITEM:
+      return { ...state, emailContact:null};
+    case CONTACT_ADD_ITEM_SUCCESS:
+      return { ...state, emailContact: action.payload};
+    case CONTACT_ADD_ITEM_ERROR:
+      return { ...state, contactError: action.payload};
+    case CONTACT_UPDATE_ITEM:
+      return {...state, emailContact:null}
+    case CONTACT_UPDATE_ITEM_SUCCESS:
+      return {...state, emailContact: action.payload}
+    case CONTACT_UPDATE_ITEM_ERROR:
+      return {...state, contactError: action.payload}
+    case CONTACT_DELETE_ITEM:
+      return {...state, emailContact: null};
+    case CONTACT_DELETE_ITEM_SUCCESS:
+      return {...state, emailContact: action.payload};
+    case CONTACT_DELETE_ITEM_ERROR:
+      return { ...state, contactError: action.payload}
     default:
       return { ...state, };
   }

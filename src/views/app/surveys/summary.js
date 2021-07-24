@@ -12,6 +12,9 @@ import {
   DropdownToggle,
   NavItem,
 } from 'reactstrap';
+import {
+  getSurvey
+} from '../../../redux/survey/actions'
 import Moment from 'react-moment';
 import { NavLink } from 'react-router-dom';
 import classnames from 'classnames';
@@ -33,7 +36,7 @@ import { getCurrentUser } from '../../../helpers/Utils';
 const SummarySurvey = ({ 
   match,
   intl,
-
+  getSurveyItemAction,
   surveyItem,
   error,
   isLoaded,
@@ -41,7 +44,6 @@ const SummarySurvey = ({
 
   const { messages } = intl;
   const [currentUser] = useState(getCurrentUser());
-
   const exportToPDF = () => {
     if (isLoaded) {
       savePDF(surveyItem.name, surveyItem.json);
@@ -63,6 +65,11 @@ const SummarySurvey = ({
       NotificationManager.warning(error.message??error, 'Survey Error', 3000, null, null, '');
     }
   }, [error]);
+  useEffect(()=>{
+    if(surveyItem){
+      getSurveyItemAction({id: surveyItem.id})
+    }    
+  },[])
 
   let pages = 1;
   let questions = 0;
@@ -241,7 +248,7 @@ const SummarySurvey = ({
             averageTime = {new Date(Math.floor(surveyItem.average_time) * 1000).toISOString().substr(14, 5)}
             sharing = {surveyItem.is_share ? messages['summary.yes'] : messages['summary.no']}
           />
-          <ResponsesChartCard dates={surveyItem.results.map(item => item.created_at)}/>
+          <ResponsesChartCard dates={surveyItem.results.map(item => item)}/>
         </Colxx>
       </Row>
     </>
@@ -262,6 +269,6 @@ const mapStateToProps = ({ survey }) => {
   };
 };
 export default injectIntl(
-  connect(mapStateToProps, {
+  connect(mapStateToProps, { getSurveyItemAction: getSurvey
   })(SummarySurvey)
 );

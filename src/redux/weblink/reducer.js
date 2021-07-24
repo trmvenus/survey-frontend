@@ -15,6 +15,8 @@ import {
 
 const INIT_STATE = {
   webLinkItems: [],
+  webLinksTotalResponses:{},
+  weblinksCompletedResponse:{},
   isLoaded: false,
   isSaved: false,
   error: '',
@@ -25,7 +27,7 @@ export default (state = INIT_STATE, action) => {
     case WEB_LINK_LIST_GET_LIST:
       return { ...state, isLoaded: false, };
     case WEB_LINK_LIST_GET_LIST_SUCCESS:
-      return { ...state, isLoaded: true, webLinkItems: action.payload, };
+      return { ...state, isLoaded: true, webLinkItems: action.payload.webLinks,webLinksTotalResponses:action.payload.webLinksTotalResponses,weblinksCompletedResponse:action.payload.weblinksCompletedResponse };
     case WEB_LINK_LIST_GET_LIST_ERROR:
       return { ...state, isLoaded: true, error: action.payload, };
 

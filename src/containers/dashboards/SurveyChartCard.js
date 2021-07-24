@@ -40,7 +40,7 @@ const SurveyChartCard = ({
     data[i-1] = 0;
     if (dates) {
       for (const d of dates) {
-        if (d === date.format('YYYY-MM-DD')) {
+        if (moment.utc(d).local().format('YYYY-MM-DD') === date.format('YYYY-MM-DD')) {
           data[i-1] ++;
         }
       }

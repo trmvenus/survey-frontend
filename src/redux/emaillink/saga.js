@@ -11,6 +11,13 @@ import {
   EMAIL_LINK_LIST_GET_ITEM,
   EMAIL_LINK_LIST_SEND_EMAIL_CONTACT,
   EMAIL_LINK_LIST_CHECK_EMAIL_INVITED,
+  CONTACT_ADD_ITEM,
+  CONTACT_UPDATE_ITEM,
+  CONTACT_UPDATE_ITEM_ERROR,
+  CONTACT_UPDATE_ITEM_SUCCESS,
+  CONTACT_ADD_ITEM_SUCCESS,
+  CONTACT_ADD_ITEM_ERROR,
+  CONTACT_DELETE_ITEM
 } from '../actions';
 import { copySharedSurveyItems } from '../sharedSurvey/actions';
 
@@ -31,6 +38,13 @@ import {
   sendEmailContactError,
   checkIfEmailIsInvitedSuccess,
   checkIfEmailIsInvitedError,
+  addContactItemSuccess,
+  addContactItemError,
+  deleteContactItemSuccess,
+  deleteContactItemError,
+  updateContactItemSuccess,
+  updateContactItemError
+  
 } from './actions';
 
 export function* watchGetList() {
@@ -59,7 +73,7 @@ export function* watchGetItem() {
 
 const getEmailLinkItemAsync = async (id) => 
   await client
-    .get(`/link/email/${id}`)
+    .post(`/link/email/${id}`)
     .then(res => res.data)
     .catch(error => {throw error.response.data});
 
@@ -99,6 +113,64 @@ function* addEmailLinkItem({ payload }) {
   }
 }
 
+export function* watchContactAddItem(){
+  yield takeEvery(CONTACT_ADD_ITEM,addContactItem);
+}
+
+const addContactItemRequest = async (item) => {
+  return await client
+    .post('/link/email/contact/add',item)
+    .then((res) => res.data)
+    .catch((error) => {throw error.response.data;})
+}
+function* addContactItem({payload}){
+  try{
+    const response = yield call(addContactItemRequest,payload)
+    yield put(getEmailLinkItemSuccess(response));
+  } catch(error) {
+    yield put(addContactItemError(error))
+  }
+}
+
+export function* watchContactUpdateItem() {
+  yield takeEvery(CONTACT_UPDATE_ITEM, updateContactItem)
+}
+
+const updateContactItemRequest = async (id, item) => {
+  return await client
+    .put(`/link/email/contact/${id}`, item)
+    .then((res)=>res.data)
+    .catch((err)=> { throw err.response.data})
+}
+function* updateContactItem({payload}){
+  try{
+    const {id, item} = payload;
+    const response = yield call(updateContactItemRequest, id.id, item)
+    yield put(getEmailLinkItemSuccess(response))
+  }catch(error) {
+    yield put(updateContactItemError(error))
+  }
+}
+
+export function* watchContactDeleteItem(){
+  yield takeEvery(CONTACT_DELETE_ITEM, deleteContactItem);
+}
+
+const deleteContactItemRequest = async (item) => {
+  return await client
+    .delete('/link/email/contact/delete',item)
+    .then((res) => res.data)
+    .catch((err)=> { throw err.response.data})
+}
+
+function* deleteContactItem({payload}){ 
+  try{
+    const response= yield call(deleteContactItemRequest, payload);
+    yield put(getEmailLinkItemSuccess(response))
+  } catch(error) {
+    yield put(deleteContactItemError(error))
+  }
+}
 
 export function* watchUpdateItem() {
   yield takeEvery(EMAIL_LINK_LIST_UPDATE_ITEM, updateEmailLinkItem);
@@ -213,5 +285,8 @@ export default function* rootSaga() {
     fork(watchSendEmail),
     fork(watchSendEmailContact),
     fork(watchCheckIfEmailIsInvited),
+    fork(watchContactAddItem),
+    fork(watchContactDeleteItem),
+    fork(watchContactUpdateItem)
   ]);
 }
