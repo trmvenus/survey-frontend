@@ -51,10 +51,12 @@ const EmailRunSurvey = ({
   const [start, setStart] = useState(false);
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({name: null});
+  const [mode, setMode] = useState("");
 
   const {messages} = intl;
 
   const handleStart = () => {
+    console.log("id-->", resultItem)
     if (email.length > 0) {
       setErrors({...errors, email: ''});
       setStart(false);
@@ -98,6 +100,9 @@ const EmailRunSurvey = ({
     if (query && query.id) {
       setShareId(query.id);
     }
+    if(query && query.mode) {
+      setMode(query.mode);
+    }
     if (query && query.email) {
       setEmail(query.email);
       setStart(true);
@@ -117,6 +122,7 @@ const EmailRunSurvey = ({
   }, [start]);
 
   useEffect(() => {
+    // console.log("results-->",emailContact, surveyItem)
     if (emailContact && surveyItem) {
       if (emailContact.result_id) {
         if (emailContact.is_completed === false) {
@@ -146,6 +152,15 @@ const EmailRunSurvey = ({
     }
   }, [resultItemError]);
 
+  const displayAddress = (mode) => {
+    switch(mode) {
+      case "sms": return "Phone Number";
+      case "facebook": return 'facebook-userid';
+      case "twitter": return "twitter-userid";
+      default: return "link.email-address";
+    }
+  }
+
   return (
     <>
       <Row>
@@ -166,13 +181,13 @@ const EmailRunSurvey = ({
             <>
             <FormGroup row className="pl-3 pr-3">
               <Label for="email" sm={2} className="mb-2">
-                <IntlMessages id="link.email-address" />{' :'}
+                <IntlMessages id={displayAddress(mode)} />{' :'}
               </Label>
               <Colxx sm={8} className="mb-2">
                 <Input
                   name="email"
                   id="email"
-                  placeholder={messages['link.email-address']}
+                  placeholder={messages[displayAddress(mode)]}
                   readOnly={emailContact !== null}
                   value={email}
                   onChange={e => setEmail(e.target.value)}

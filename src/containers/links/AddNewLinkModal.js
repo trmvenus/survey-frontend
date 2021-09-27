@@ -27,15 +27,15 @@ import { addEmailLinkItem, updateEmailLinkItem } from '../../redux/actions';
 
 // Helpers
 import IntlMessages from '../../helpers/IntlMessages';
-import { getDefaultEmailLinkContent, getRandomLinkId } from '../../helpers/linkHelper';
+import { getRandomLinkId, getDefaultLinkContent } from '../../helpers/linkHelper';
 
 // Component
 import { Colxx } from '../../components/common/CustomBootstrap';
 
 // Containers
-import { FormikDatePicker } from '../../containers/form-validations/FormikFields';
+import { FormikDatePicker } from '../form-validations/FormikFields';
 
-import EmailLinkPage from '../../views/app/surveys/links/emaillink';
+import LinkPage from '../../views/app/surveys/links/linkPage';
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -77,75 +77,123 @@ const quillFormats = [
   'image',
 ];
 
-const AddNewEmailLinkModal = ({
+const AddNewLinkModal = ({
   intl,
-
+  mode,
   modalOpen,
   toggleModal,
   surveyid,
-  emailLink = null,
+  SMSLink = null,
 
-  addEmailLinkItemAction,
-  updateEmailLinkItemAction,
+  addSMSLinkItemAction,
+  updateSMSLinkItemAction,
 }) => {
+
+  useEffect(() => {
+    setLinkedMembers([]);
+  }, [modalOpen]);
 
   const { messages } = intl;
   const [detailContactStatus, setDetailContactStatus] = useState(false)
+  const [linkedMembers, setLinkedMembers] = useState([])
+
+  const addNewLinkMember = (values) => {
+    let dup = [...linkedMembers, values]
+    setLinkedMembers(dup)
+  }
+
+  const deleteNewLinkMember = (id) => {
+    let dup = linkedMembers.filter((contact, i) => i != id)
+    setLinkedMembers(dup)
+  }
+
+  const updateNewLinkMember = (id, values) => {
+    let dup = linkedMembers.map((contact, i) =>
+      i == id ? values : contact)
+    setLinkedMembers(dup)
+  }
+
   const addNewEmailLink = (values) => {
-    if (emailLink !== null) {
-      updateEmailLinkItemAction(emailLink.id, {
+    if (SMSLink !== null) {
+      updateSMSLinkItemAction(SMSLink.id, {
+        mode: mode,
         name: values.name,
         sender_name: values.senderName,
         sender_email: values.senderEmail,
         email_content: values.emailContent,
         close_quota: values.closeQuota,
-        close_date: values.closeDate,
-      });
-    } else {
-      addEmailLinkItemAction({
-        survey_id: surveyid,
-        name: values.name,
-        link_id: values.link_id,
-        contacts_file: values.contactsFile,
-        sender_name: values.senderName,
-        sender_email: values.senderEmail,
-        email_content: values.emailContent,
-        close_quota: values.closeQuota,
-        close_date: values.closeDate,
+        close_date: values.closeDate
       });
     }
-
+    else {
+      if (values.contactsFile)
+        addSMSLinkItemAction({
+          mode: mode,
+          survey_id: surveyid,
+          name: values.name,
+          link_id: values.link_id,
+          contacts_file: values.contactsFile,
+          sender_name: values.senderName,
+          sender_email: values.senderEmail,
+          email_content: values.emailContent,
+          close_quota: values.closeQuota,
+          close_date: values.closeDate,
+        });
+      else
+        addSMSLinkItemAction({
+          mode: mode,
+          survey_id: surveyid,
+          name: values.name,
+          link_id: values.link_id,
+          sender_name: values.senderName,
+          sender_email: values.senderEmail,
+          email_content: values.emailContent,
+          close_quota: values.closeQuota,
+          close_date: values.closeDate,
+          contact_members: linkedMembers
+        });
+    }
+    setLinkedMembers([]);
     toggleModal();
   };
 
   const downloadContactFile = () => {
-    console.log("emailLink", emailLink)
+    console.log("SMSLink-->>", SMSLink)
   }
-  const moreOrlessViewAction = () => {
-    setDetailContactStatus(!detailContactStatus)
+
+  const displayEditTitle = (mode) => {
+    if (mode == "sms") return 'link.edit-sms-title';
+    else if (mode == "facebook") return 'link.edit-facebook-title';
+    else if (mode == "twitter") return 'link.edit-twitter-title';
+  }
+
+  const displayAddTitle = (mode) => {
+    if (mode == "sms") return 'link.add-new-sms-title';
+    else if (mode == "facebook") return 'link.add-new-facebook-title';
+    else if (mode == "twitter") return 'link.add-new-twitter-title';
   }
   const link_id = getRandomLinkId();
 
-  const initialValues = emailLink !== null ?
+  const initialValues = SMSLink !== null ?
     {
-      name: emailLink.name,
-      link_id: emailLink.link_id,
+      name: SMSLink.name,
+      link_id: SMSLink.link_id,
       contactsFile: null,
-      senderName: emailLink.sender_name,
-      senderEmail: emailLink.sender_email,
-      emailContent: emailLink.email_content,
-      closeQuota: emailLink.close_quota ?? '',
-      closeDate: emailLink.close_date ? new Date(emailLink.close_date) : '',
+      senderName: SMSLink.sender_name,
+      senderEmail: SMSLink.sender_email,
+      emailContent: SMSLink.email_content,
+      closeQuota: SMSLink.close_quota ?? '',
+      closeDate: SMSLink.close_date ? new Date(SMSLink.close_date) : '',
     } :
     {
       name: '',
       link_id: link_id,
-      contactsFile: '',
+      contactsFile: null,
       senderName: '',
       senderEmail: '',
-      emailContent: getDefaultEmailLinkContent(link_id),
+      emailContent: getDefaultLinkContent(link_id, mode),
       closeQuota: 100,
-      closeDate: '',
+      closeDate: SMSLink?.close_date ? new Date('') : '',
     }
 
   return (
@@ -172,10 +220,10 @@ const AddNewEmailLinkModal = ({
         >
           <Form>
             <ModalHeader toggle={toggleModal}>
-              {(emailLink !== null) ? (
-                <IntlMessages id="link.edit-email-title" />
+              {(SMSLink !== null) ? (
+                <IntlMessages id={displayEditTitle(mode)} />
               ) : (
-                <IntlMessages id="link.add-new-email-title" />
+                <IntlMessages id={displayAddTitle(mode)} />
               )}
             </ModalHeader>
             <ModalBody>
@@ -195,49 +243,13 @@ const AddNewEmailLinkModal = ({
               </FormGroup>
 
               <FormGroup>
-                <Label>
-                  <IntlMessages id="link.contacts-file" />
-                </Label>
-                <InputGroup className="mb-1">
-                  <InputGroupAddon addonType="prepend">{messages['link.contacts']}</InputGroupAddon>
-                  <CustomInput
-                    type="file"
-                    id="contactsFile"
-                    name="contactsFile"
-                    accept=".xls,.xlsx"
-                    onChange={(e) => { setFieldValue("contactsFile", e.target.files[0]) }}
-                  // disabled={emailLink !== null}
-                  />
-                </InputGroup>
-                {(emailLink !== null) ? (
-                  <>
-                    <a className="pl-1 text-primary" onClick={downloadContactFile}><IntlMessages id='link.download-contact' /></a>
-                    <a className="pl-1 text-primary" onClick={moreOrlessViewAction}>
-                      {!detailContactStatus ? <IntlMessages id='link.contact-detail-show' /> : <IntlMessages id='link.contact-detail-hide' />}
-                    </a>
-                    {detailContactStatus &&
-                      <EmailLinkPage link_id={emailLink.id} />
-                    }
-
-                  </>
-
-                ) : (
-                  <ExcelFile
-                    filename='contacts-template'
-                    element={<a className="pl-1 text-primary" href='#'><IntlMessages id='link.download-template' /></a>}
-                  >
-                    <ExcelSheet data={[]} name="Emails">
-                      <ExcelColumn label="Email Address" value="email_address" />
-                      <ExcelColumn label="First Name" value="first_name" />
-                      <ExcelColumn label="Last Name" value="last_name" />
-                    </ExcelSheet>
-                  </ExcelFile>
-                )
-                }
-
-
+                <LinkPage link_id={SMSLink?.id || null}
+                  setFieldValue={setFieldValue}
+                  mode={mode}
+                  linkedMembers={linkedMembers} addNewLinkMember={addNewLinkMember}
+                  deleteNewLinkMember={deleteNewLinkMember}
+                  updateNewLinkMember={updateNewLinkMember} />
               </FormGroup>
-
               <Row className="mb-3">
                 <Colxx sm={6}>
                   <FormGroup>
@@ -315,7 +327,7 @@ const AddNewEmailLinkModal = ({
                 <IntlMessages id="survey.cancel" />
               </Button>
               <Button type="submit" color="primary">
-                {(emailLink !== null) ? (
+                {(SMSLink !== null) ? (
                   <IntlMessages id="menu.save" />
                 ) : (
                   <IntlMessages id="survey.submit" />
@@ -336,7 +348,7 @@ const mapStateToProps = ({ }) => {
 
 export default injectIntl(
   connect(mapStateToProps, {
-    addEmailLinkItemAction: addEmailLinkItem,
-    updateEmailLinkItemAction: updateEmailLinkItem,
-  })(AddNewEmailLinkModal)
+    addSMSLinkItemAction: addEmailLinkItem,
+    updateSMSLinkItemAction: updateEmailLinkItem,
+  })(AddNewLinkModal)
 );

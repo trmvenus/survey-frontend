@@ -93,8 +93,14 @@ export function* watchAddItem() {
 }
 
 const addEmailLinkItemRequest = async (item) => {
+  if(item.contact_members) {
+    return await client
+    .post('/link/email', item)
+    .then((res) => res.data)
+    .catch((error) => {throw error.response.data});
+  }
+  else {
   const uploadForm = new FormData();
-
   uploadForm.append("file", item.contacts_file);
   uploadForm.append("item", JSON.stringify({...item, contacts_file: null}));
 
@@ -102,6 +108,7 @@ const addEmailLinkItemRequest = async (item) => {
     .postForm('/link/email', uploadForm)
     .then((res) => res.data)
     .catch((error) => {throw error.response.data});
+  }
 }
 
 function* addEmailLinkItem({ payload }) {

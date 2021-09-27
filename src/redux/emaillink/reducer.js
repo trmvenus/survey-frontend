@@ -96,15 +96,16 @@ export default (state = INIT_STATE, action) => {
 
 
     case EMAIL_LINK_LIST_SEND_EMAIL:
-      return { ...state, };
+      return { ...state, isSending: true};
     case EMAIL_LINK_LIST_SEND_EMAIL_SUCCESS:
       return { 
         ...state, 
+        isSending: false,
         sendingSuccess: true, 
         emailLinkItems: state.emailLinkItems.map(item => item.id === action.payload.id ? {...item, is_sent: true} : item)
       };
     case EMAIL_LINK_LIST_SEND_EMAIL_ERROR:
-      return { ...state, error: action.payload, sendingSuccess: false, };
+      return { ...state, error: action.payload, sendingSuccess: false, isSending: false };
 
 
     case EMAIL_LINK_LIST_SEND_EMAIL_CONTACT:

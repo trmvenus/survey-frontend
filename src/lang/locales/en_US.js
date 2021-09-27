@@ -9,6 +9,10 @@ Table of Contents
 */
 
 const enMessages = {
+  'facebook-userid': 'Facebook userId',
+  'twitter-userid': 'Twitter userId',
+  'to-xlxs-mode': 'to Excel Mode',
+  'to-manual-mode': 'to Manual Mode',
   /* 01.General */
   'general.copyright': 'SurveyWizard © 2021 All Rights Reserved.',
 
@@ -148,6 +152,9 @@ const enMessages = {
   'menu.websitedashboard': 'Website Dashboard',
   'menu.manual': 'Manual',
   'menu.emaillink': 'Email Link',
+  'menu.smslink': 'SMS Link',
+  'menu.twitterlink': 'Twitter Link',
+  'menu.facebooklink': 'Facebook Link',
 
   /* 04.Dashboards */
   'dashboards.survey': 'Survey',
@@ -349,14 +356,31 @@ const enMessages = {
   'result.direct': 'Direct',
 
   /* 06.05. Link */
+  'link.twitter-address': 'Twitter Address',
+  'link.facebook-address': 'Facebook Address',
   'link.add-title': 'Add More Links',
   'link.web-link': 'Web Link',
   'link.email-link': 'Email Link',
+  'link.facebook-link': 'Facebook Link',
+  'link.twitter-link': 'Twitter Link',
+  'link.web': 'Web',
+  'link.email': 'Email',
+  'link.facebook': 'Facebook',
+  'link.twitter': 'Twitter',
   'link.manual-data-entry': 'Manual Data Entry',
+  'link.manual-entry': 'Manual Entry',
+  'link.sms': 'SMS',
+  'link.sms-link': 'SMS Link',
   'link.add-new-web-title': 'Add New Web Link',
   'link.edit-web-title' : 'Edit Web Link',
   'link.add-new-email-title': 'Add New Email Link',
+  'link.add-new-sms-title': 'Add New SMS Link',
+  'link.add-new-facebook-title': 'Add New Facebook Link',
+  'link.add-new-twitter-title': 'Add New Twitter Link',
   'link.edit-email-title': 'Edit Email Link',
+  'link.edit-sms-title': 'Edit SMS Link',
+  'link.edit-facebook-title': 'Edit Facebook Link',
+  'link.edit-twitter-title': 'Edit Twitter Link',
   'link.add-new-contact-title': 'Add New Contact',
   'link.edit-contact-title': 'Edit Contact',
   'link.survey-url': 'Survey Url',
@@ -389,7 +413,10 @@ const enMessages = {
   'link.email-address': 'Email Address',
   'link.recipients': 'Recipients',
   'link.failed': 'Failed',
+  'link.send-SMSMessage': 'send SMSMessage',
 
+  'Phone Number' :"Phone Number",
+  
   /* 06.06. Settings */
   'settings.active': 'Active',
   'settings.share': 'Share',

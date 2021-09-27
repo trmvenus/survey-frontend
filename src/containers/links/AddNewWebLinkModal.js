@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import {injectIntl} from 'react-intl';
+import { injectIntl } from 'react-intl';
 import {
   Button,
   FormGroup,
@@ -37,6 +37,8 @@ const WebLinkSchema = Yup.object().shape({
   url: Yup.string()
     .required('Survey Url is required!')
     .matches('^[a-z]+$', 'Survey Url can contain only lowercase letters!'),
+  closeQuota: Yup.string()
+    .required('close quota is required!'),
 });
 
 const AddNewWebLinkModal = ({
@@ -53,7 +55,7 @@ const AddNewWebLinkModal = ({
 
   const { messages } = intl;
 
-  const addNewWebLink = (values, {setValues}) => {
+  const addNewWebLink = (values, { setValues }) => {
     if (webLink !== null) {
       updateWebLinkItemAction(webLink.id, {
         name: values.name,
@@ -77,22 +79,22 @@ const AddNewWebLinkModal = ({
     toggleModal();
   };
   const initialValues = webLink !== null ?
-      {
-        name: webLink.name,
-        url: webLink.link_id,
-        closeQuota: webLink.close_quota||'',
-        closeDate: new Date(webLink.close_date),
-        isActive: webLink.is_active,
-        isMulti: webLink.is_multiple,
-      } :
-      {
-        name: '',
-        url: getRandomLinkId(),
-        closeQuota: '',
-        closeDate: '',
-        isActive: false,
-        isMulti:false
-      }
+    {
+      name: webLink.name,
+      url: webLink.link_id,
+      closeQuota: webLink.close_quota || '',
+      closeDate: new Date(webLink.close_date),
+      isActive: webLink.is_active,
+      isMulti: webLink.is_multiple,
+    } :
+    {
+      name: '',
+      url: getRandomLinkId(),
+      closeQuota: 100,
+      closeDate: '',
+      isActive: false,
+      isMulti: false
+    }
 
   return (
     <Formik
@@ -113,16 +115,16 @@ const AddNewWebLinkModal = ({
         <Modal
           isOpen={modalOpen}
           toggle={toggleModal}
-          backdrop="static" 
+          backdrop="static"
         >
           <Form>
             <ModalHeader toggle={toggleModal}>
               {(webLink !== null) ? (
-                    <IntlMessages id="link.edit-web-title" />
-                  ) : (
-                    <IntlMessages id="link.add-new-web-title" />
-               )}
-             
+                <IntlMessages id="link.edit-web-title" />
+              ) : (
+                <IntlMessages id="link.add-new-web-title" />
+              )}
+
             </ModalHeader>
             <ModalBody>
               <FormGroup>
@@ -139,7 +141,7 @@ const AddNewWebLinkModal = ({
                   </div>
                 )}
               </FormGroup>
-              
+
               <FormGroup>
                 <Label>
                   <IntlMessages id="link.survey-url" />{' '}<span className='luci-primary-color'>*</span>
@@ -233,7 +235,7 @@ const AddNewWebLinkModal = ({
   );
 };
 
-const mapStateToProps = ({  }) => {
+const mapStateToProps = ({ }) => {
   return {
   };
 };

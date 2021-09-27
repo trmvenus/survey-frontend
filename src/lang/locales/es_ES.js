@@ -9,6 +9,10 @@ Table of Contents
 */
 
 const lang = {
+  'facebook-userid': 'Facebook userId',
+  'twitter-userid': 'Twitter userId',
+  'to-xlxs-mode': 'to Excel Mode',
+  'to-manual-mode': 'to Manual Mode',
   /* 01.General */
   'general.copyright': 'SurveyWizard © Todos los derechos reservados.',
 
@@ -148,6 +152,9 @@ const lang = {
   'menu.websitedashboard': 'Sitio web',
   'menu.manual': 'Manual',
   'menu.emaillink': 'Email Enlaces',
+  'menu.smslink': 'SMS Enlaces',
+  'menu.twitterlink': 'Twitter Enlaces',
+  'menu.facebooklink': 'Facebook Enlaces',
 
   /* 04.Error  */
   'dashboards.survey': 'Encuesta',
@@ -346,14 +353,31 @@ const lang = {
   'result.direct': 'Directo',
 
   /* 06.05. Link */
+  'link.twitter-address': 'Dirección de Twitter',
+  'link.facebook-address': 'Dirección de Facebook',
   'link.add-title': 'Agregar Más Enlaces',
   'link.web-link': 'Web Enlaces',
   'link.email-link': 'Email Enlaces',
+  'link.facebook-link': 'Facebook Enlaces',
+  'link.twitter-link': 'Twitter Enlaces',
+  'link.web': 'Web',
+  'link.email': 'Email',
+  'link.facebook': 'Facebook',
+  'link.twitter': 'Twitter',
   'link.manual-data-entry': 'Entrada de Datos Manual',
+  'link.manual-entry': 'Entrada de Manual',
+  'link.sms-link': 'SMS Enlaces',
+  'link.sms-link': 'SMS',
   'link.add-new-web-title': 'Agregar Nuevo Web Enlace',
   'link.edit-web-title' : 'Edit Web Enlace',
   'link.add-new-email-title': 'Agregar Nuevo Email Enlace',
+  'link.add-new-sms-title': 'Agregar Nuevo SMS Enlace',
+  'link.add-new-facebook-title': 'Agregar Nuevo Facebook Enlace',
+  'link.add-new-twitter-title': 'Agregar Nuevo Twitter Enlace',
   'link.edit-email-title': 'Edit Email Enlace',
+  'link.edit-sms-title': 'Edit SMS Enlace',
+  'link.edit-facebook-title': 'Edit Facebook Enlace',
+  'link.edit-twitter-title': 'Edit Twitter Enlace',
   'link.add-new-contact-title': 'Agregar Nuevo Contactos',
   'link.edit-contact-title': 'Edit Contactos',
   'link.survey-url': 'Url de la Encuesta',
@@ -684,6 +708,7 @@ const lang = {
   'modal.no': 'No',
 
   /* 07.16.Navegación */
+  'Phone Number' : "Número de teléfono",
   'nav.basic': 'Navegación Básico',
   'nav.active': 'Activo',
   'nav.disabled': 'Discapacitado',
@@ -708,6 +733,7 @@ const lang = {
   'nav.center': 'Centro',
   'nav.pagination-alignment': 'Alineación de Paginación',
   'nav.breadcrumb-basic': 'Migas de Pan Básico',
+  'link.send-SMSMessage': 'enviar SMSMessage',
 
   /* 07.17.Tooltips y Popovers */
   'popover-tooltip.popover': 'Popovers',

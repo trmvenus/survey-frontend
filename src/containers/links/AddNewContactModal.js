@@ -44,7 +44,7 @@ const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const ContactSchema = Yup.object().shape({
   email: Yup.string()
-    .required('email is required!')
+    .required('phone number is required!')
     .min(3, 'Name must be longer than 3 characters!'),
 });
 
@@ -79,6 +79,7 @@ const AddNewContactModal = ({
     }
   }, [contactError]);
   const addNewContact = (values) => {
+    console.log("Hello:", values)
     const dublicate = contacts.filter(contact=>contact.email_address==values.email)
     if(dublicate.length==0 || contact?.email_address==values.email){
       if (contact !== null) {
