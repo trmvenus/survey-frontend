@@ -9,6 +9,7 @@ Table of Contents
 */
 
 const enMessages = {
+  'email-address': 'Email Address',
   'facebook-userid': 'Facebook userId',
   'twitter-userid': 'Twitter userId',
   'to-xlxs-mode': 'to Excel Mode',
@@ -20,6 +21,9 @@ const enMessages = {
   "unauthorized.detail": "You are not authorized to view the page you are trying to access.",
   
   /* 02.User Login, Logout, Register */
+  'user.confirm-password': "Confirm Password",
+  'user.original-password': "Original Password",
+  'user.reset-password': "Reset Password",
   'user.login-title': 'Login',
   'user.register': 'Register',
   'user.forgot-password': 'Forgot Password',
@@ -29,7 +33,7 @@ const enMessages = {
   'user.fullname': 'Full Name',
   'user.login-button': 'LOGIN',
   'user.register-button': 'REGISTER',
-  'user.reset-password-button': 'RESET',
+  'user.reset-password-button': 'Reset Password',
   'user.buy': 'BUY',
   'user.username': 'Username',
   'user.new-password-again': 'New Password Again',
@@ -140,6 +144,8 @@ const enMessages = {
   'menu.settings': 'Settings',
   'menu.account': 'Account',
   'menu.security': 'Security',
+  'menu.pillars': 'Pillars',
+  'menu.style': 'Style',
   'menu.results': 'Results',
   'menu.reports': 'Reports',
   'menu.links': 'Links',
@@ -419,6 +425,12 @@ const enMessages = {
   
   /* 06.06. Settings */
   'settings.active': 'Active',
+  'settings.font-size': 'Font-size',
+  'settings.font-color': 'Font color',
+  'settings.font-family': 'Font-Family',
+  'settings.font-family-description':'You can change font-family of questionnaires',
+  'settings.font-size-description': 'You can change font-size of questionnaires',
+  'settings.font-color-description': 'You can change font color of questionnaires',
   'settings.share': 'Share',
   'settings.multi-responses': 'Multi Responses',
   'settings.active-description': 'If the survey is not active, users cannot run the survey.',
@@ -801,6 +813,9 @@ const enMessages = {
   /* 09.02.Organizations */
   'organization.name': 'Name',
   'organization.add-new-modal-title': 'Add New Organization',
+  'pillar.add-new-modal-title': 'Add New Pillar',
+  'pillar.edit-modal-title': 'Edit New Pillar',
+
 
 };
 

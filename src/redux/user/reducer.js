@@ -11,6 +11,12 @@ import {
   USER_LIST_CHANGE_ORGANIZATION,
   USER_LIST_CHANGE_ORGANIZATION_SUCCESS,
   USER_LIST_CHANGE_ORGANIZATION_ERROR,
+  USER_LIST_UPDATE_ITEM,
+  USER_LIST_UPDATE_ITEM_SUCCESS,
+  USER_LIST_UPDATE_ITEM_ERROR,
+  MY_RESET_PASSWORD,
+  MY_RESET_PASSWORD_ERROR,
+  MY_RESET_PASSWORD_SUCCESS
 } from '../actions';
 
 const INIT_STATE = {
@@ -51,10 +57,24 @@ export default (state = INIT_STATE, action) => {
     case USER_LIST_ADD_ITEM_SUCCESS:
       return {
         ...state,
-        loading: true, 
+        loading: true,
         users: [action.payload, ...state.users]
       };
     case USER_LIST_ADD_ITEM_ERROR:
+      return { ...state, loading: true, error: action.payload };
+
+    case USER_LIST_UPDATE_ITEM:
+      return { ...state, loading: false };
+    case USER_LIST_UPDATE_ITEM_SUCCESS:
+      console.log("userrrr->>", action.payload)
+      return {
+        ...state,
+        users: state.users.map(user =>
+          user.id === action.payload.id ? action.payload : user
+        ),
+        loading: true
+      };
+    case USER_LIST_UPDATE_ITEM_ERROR:
       return { ...state, loading: true, error: action.payload };
 
     case USER_LIST_DELETE_ITEMS:
@@ -71,16 +91,26 @@ export default (state = INIT_STATE, action) => {
     case USER_LIST_CHANGE_ORGANIZATION:
       return { ...state, };
     case USER_LIST_CHANGE_ORGANIZATION_SUCCESS:
-      return { 
-        ...state, 
-        users: state.users.map(user => 
+      return {
+        ...state,
+        users: state.users.map(user =>
           user.id === action.payload.id ? {
             ...user, organization_id: action.payload.organization_id, organization_name: action.payload.organization_name
           } : user
         ),
       };
     case USER_LIST_CHANGE_ORGANIZATION_ERROR:
-      return { ...state, error: action.payload }
+      return { ...state, error: action.payload };
+
+    case MY_RESET_PASSWORD: 
+      return {...state};
+    case MY_RESET_PASSWORD_SUCCESS: 
+      return {...state};
+    case MY_RESET_PASSWORD_ERROR: 
+      return {
+        ...state,
+        error: action.payload
+      }
 
     default:
       return { ...state };

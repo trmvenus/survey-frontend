@@ -78,7 +78,8 @@ const data = [
         icon: 'simple-icon-key',
         label: 'menu.security',
         to: `${adminRoot}/settings/security`,
-      },
+      }, 
+     
     ],
   },
   {
@@ -97,6 +98,11 @@ const data = [
         icon: 'simple-icon-organization',
         label: 'menu.organizations',
         to: `${adminRoot}/admin/organizations`,
+      },
+      {
+        icon: 'iconsminds-castle',
+        label: 'menu.pillars',
+        to: `${adminRoot}/admin/pillars`,
       },
     ],
   },

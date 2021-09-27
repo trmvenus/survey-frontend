@@ -11,7 +11,7 @@ import {
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 
-import { FormikReactSelect, FormikCustomRadioGroup } from '../../containers/form-validations/FormikFields';
+import { FormikReactSelect, FormikCustomRadioGroup } from '../form-validations/FormikFields';
 import IntlMessages from '../../helpers/IntlMessages';
 import { addUser, updateUser } from '../../redux/user/actions';
 import { getRoleName, UserRole } from '../../helpers/authHelper';
@@ -185,7 +185,6 @@ const AddNewModal = ({
           </Form>
         )}
       </Formik>
-    
     </Modal>
   );
 };

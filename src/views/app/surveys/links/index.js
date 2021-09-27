@@ -77,6 +77,8 @@ const LinksSurvey = ({
   const [selectedSMSLink, setSelectedSMSLink] = useState(null);
   const [tooltipOpen, setTooltipOpen] = useState("");
   const [modalMode, setModalMode] = useState("");
+  const [isDisplayError, setIsDisplayError] = useState(false);
+  //const [notificationDisplay, setNotificationDisplay] = useState(false);
 
   const toggle = (selString) => {
     if (tooltipOpen != "") {
@@ -89,30 +91,31 @@ const LinksSurvey = ({
   // useEffect(() => console.log("isEmailSending->>", isEmailSending))
 
   useEffect(() => {
-    if (surveyItemError) {
+    if (surveyItemError && isDisplayError) {
       NotificationManager.warning(surveyItemError.message ?? surveyItemError, 'Links Error', 3000, null, null, '');
     }
   }, [surveyItemError]);
 
   useEffect(() => {
-    if (webLinkError) {
+    if (webLinkError && isDisplayError) {
       NotificationManager.warning(webLinkError.message ?? webLinkError, 'Links Error', 3000, null, null, '');
     }
   }, [webLinkError]);
 
   useEffect(() => {
-    if (emailLinkError) {
+    if (emailLinkError && isDisplayError) {
       NotificationManager.warning(emailLinkError.message ?? emailLinkError, 'Links Error', 3000, null, null, '');
     }
   }, [emailLinkError]);
 
   useEffect(() => {
-    if (sendingEmailSuccess) {
+    if (sendingEmailSuccess && isDisplayError) {
       NotificationManager.success(messages['link.email-sending-success-message'], 'Send Email', 3000, null, null, '');
     }
   }, [sendingEmailSuccess]);
 
   useEffect(() => {
+    setTimeout(()=>setIsDisplayError(true), 3000)
     getWebLinkListAction({ id: surveyid });
     getEmailLinkListAction({ id: surveyid });
   }, [surveyid]);
@@ -390,7 +393,7 @@ const LinksSurvey = ({
                   </Tooltip>
                 </Colxx>
                 <Colxx md={2} sm={3}>
-                  <Button id="emailLink" color="outline-primary" block size="xs" className="mb-2" onClick={handleAddEmailLink}>
+                  <Button id="emailLink" color="outline-primary" block size="xs" className="mb-2" onClick={() => handleAddLink("email")}>
                     <i className="iconsminds-mail" style={{ fontSize: "18px" }} />
                     {/* <IntlMessages id='link.email-link' /> */}
                   </Button>

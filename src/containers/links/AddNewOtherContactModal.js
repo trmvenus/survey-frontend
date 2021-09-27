@@ -42,7 +42,7 @@ const displayAddressPlaceholder = (mode = "") => {
   if (mode == "sms") return 'Phone Number';
   else if (mode == "facebook") return 'Facebook userId';
   else if (mode == 'twitter') return 'Twitter userId';
-  else return '';
+  else return 'Email address';
 }
 
 const AddNewContactModal = ({
@@ -101,10 +101,20 @@ const AddNewContactModal = ({
   }
   const validateAddress = (address) => {
     if (address == "") return "required";
-    //validation code
+    switch(mode) {
+      case "sms":
+        var phoneno = /^\d+$/;
+        if (!address.match(phoneno)) return 'not validate phone number';
+        break;
+      case "facebook": break;
+      case "twitter": break;
+      default: break;
+    }
+      
   }
 
   const addNewContact = (values) => {
+    console.log("link_id->>", emaillink_id)
     var err = validateAddress(values.email)
     if (err) {
       setErrors(err)
@@ -141,7 +151,7 @@ const AddNewContactModal = ({
             message: "This email already exist.",
           })
         else {
-          if (link_id == null)
+          if (emaillink_id == null)
             addNewLinkMember({
               emaillink_id: emaillink_id,
               link_id: link_id,

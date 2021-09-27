@@ -27,6 +27,8 @@ class Sidebar extends Component {
       viewingParentMenu: '',
       collapsedMenus: [],
       menuItems: dynamicMenuItems,
+      loadMySurveyCount: 0,
+      loadEntireSurveyCount: 0
     };
   }
 
@@ -254,10 +256,9 @@ class Sidebar extends Component {
 
       if (this.props.mySurveyItems !== prevProps.mySurveyItems) {
         const surveysMenu = menu.find(item => item.id == 'surveys');
-
         if (surveysMenu) {
           const mySurveysMenu = surveysMenu.subs.find(item => item.id == 'mysurveys-parent');
-          if (mySurveysMenu) {
+          if (mySurveysMenu && mySurveysMenu.subs.length == 0 ) {
             this.props.mySurveyItems.forEach(surveyItem => {
               mySurveysMenu.subs.push({
                 id: 'survey-id-' + surveyItem.id,
@@ -276,7 +277,7 @@ class Sidebar extends Component {
 
         if (surveysMenu) {
           const entireSurveysMenu = surveysMenu.subs.find(item => item.id == 'allsurveys-parent');
-          if (entireSurveysMenu) {
+          if (entireSurveysMenu && entireSurveysMenu.subs.length == 0) {
             this.props.entireSurveyItems.forEach(surveyItem => {
               entireSurveysMenu.subs.push({
                 id: 'entire-survey-id-' + surveyItem.id,

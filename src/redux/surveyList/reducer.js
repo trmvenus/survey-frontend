@@ -1,4 +1,7 @@
 import {
+  SURVEY_LIST_GET_TOTAL,
+  SURVEY_LIST_GET_TOTAL_SUCCESS,
+  SURVEY_LIST_GET_TOTAL_ERROR,
   SURVEY_LIST_GET_LIST,
   SURVEY_LIST_GET_LIST_SUCCESS,
   SURVEY_LIST_GET_LIST_ERROR,
@@ -24,9 +27,13 @@ import {
   SURVEY_LIST_SET_MULTI_RESPONSES_ITEM,
   SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR,
   SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS,
+  SURVEY_STYLE_UPDATE_ITEM,
+  SURVEY_STYLE_UPDATE_ITEM_ERROR,
+  SURVEY_STYLE_UPDATE_ITEM_SUCCESS,
 } from '../actions';
 
 const INIT_STATE = {
+  totalSurveyItems: [],
   mySurveyItems: [],
   surveyItems: [],
   error: '',
@@ -49,6 +56,17 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
+    case SURVEY_LIST_GET_TOTAL:
+      return { ...state, loading: false };
+    case SURVEY_LIST_GET_TOTAL_SUCCESS:
+      return {
+        ...state,
+        loading: true,
+        totalSurveyItems: action.payload
+      };
+    case SURVEY_LIST_GET_LIST_ERROR:
+      return { ...state, loading: true, error: action.payload };
+
     case SURVEY_LIST_GET_LIST:
       return { ...state, loading: false };
 
@@ -116,11 +134,11 @@ export default (state = INIT_STATE, action) => {
       const keyword = action.payload.toLowerCase();
       const searchItems = state.mySurveyItems.filter(
         (item) =>
-          item.name.toLowerCase().indexOf(keyword) > -1 || item.id==keyword
-          // ||
-          // item.status.toLowerCase().indexOf(keyword) > -1 ||
-          // item.category.toLowerCase().indexOf(keyword) > -1 ||
-          // item.label.toLowerCase().indexOf(keyword) > -1
+          item.name.toLowerCase().indexOf(keyword) > -1 || item.id == keyword
+        // ||
+        // item.status.toLowerCase().indexOf(keyword) > -1 ||
+        // item.category.toLowerCase().indexOf(keyword) > -1 ||
+        // item.label.toLowerCase().indexOf(keyword) > -1
       );
       return {
         ...state,
@@ -150,17 +168,17 @@ export default (state = INIT_STATE, action) => {
       return { ...state, loading: false, };
 
     case SURVEY_LIST_DELETE_ITEMS_SUCCESS:
-      return { 
-        ...state, 
-        loading: true, 
+      return {
+        ...state,
+        loading: true,
         surveyItems: state.surveyItems.filter(item => !state.selectedItems.includes(item.id)),
         selectedItems: [],
       };
 
     case SURVEY_LIST_DELETE_ITEMS_ERROR:
-      return { 
-        ...state, 
-        loading: true, 
+      return {
+        ...state,
+        loading: true,
         error: action.payload,
         selectedItems: [],
       };
@@ -177,9 +195,9 @@ export default (state = INIT_STATE, action) => {
       };
 
     case SURVEY_LIST_COPY_ITEMS_ERROR:
-      return { 
-        ...state, 
-        loading: true, 
+      return {
+        ...state,
+        loading: true,
         error: action.payload,
         selectedItems: [],
       };
@@ -191,14 +209,27 @@ export default (state = INIT_STATE, action) => {
     case SURVEY_LIST_SHARE_ITEM_SUCCESS:
       return {
         ...state,
-        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_share: !item.is_share} : item),
+        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? { ...item, is_share: !item.is_share } : item),
       };
     case SURVEY_LIST_SHARE_ITEM_ERROR:
       return {
         ...state,
         error: action.payload,
       };
-
+      case SURVEY_STYLE_UPDATE_ITEM:
+        return {
+          ...state,
+        };
+      case SURVEY_STYLE_UPDATE_ITEM_SUCCESS:
+        return {
+          ...state,
+          // surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? { ...item, is_share: !item.is_share } : item),
+        };
+      case SURVEY_STYLE_UPDATE_ITEM_ERROR:
+        return {
+          ...state,
+          // error: action.payload,
+        };
     case SURVEY_LIST_ACTIVE_ITEM:
       return {
         ...state,
@@ -206,7 +237,7 @@ export default (state = INIT_STATE, action) => {
     case SURVEY_LIST_ACTIVE_ITEM_SUCCESS:
       return {
         ...state,
-        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_active: !item.is_active} : item),
+        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? { ...item, is_active: !item.is_active } : item),
       };
     case SURVEY_LIST_ACTIVE_ITEM_ERROR:
       return {
@@ -221,7 +252,7 @@ export default (state = INIT_STATE, action) => {
     case SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS:
       return {
         ...state,
-        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? {...item, is_multi_responses: !item.is_multi_responses} : item),
+        surveyItems: state.surveyItems.map(item => item.id === action.payload.id ? { ...item, is_multi_responses: !item.is_multi_responses } : item),
       };
     case SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR:
       return {

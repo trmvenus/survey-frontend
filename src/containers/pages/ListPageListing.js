@@ -7,6 +7,7 @@ function collect(props) {
 }
 
 const ListPageListing = ({
+  handleEdit,
   items,
   displayMode,
   selectedItems,
@@ -19,7 +20,7 @@ const ListPageListing = ({
   ImageListView,
   DataListView,
   ThumbListView,
-  ContextMenuContainer,
+  ContextMenuContainer
 }) => {
   return (
     <Row>
@@ -27,6 +28,7 @@ const ListPageListing = ({
         if (displayMode === 'imagelist') {
           return (
             <ImageListView
+              handleEdit={handleEdit}
               key={item.id}
               item={item}
               isSelect={selectedItems.includes(item.id)}
@@ -38,6 +40,7 @@ const ListPageListing = ({
         if (displayMode === 'thumblist') {
           return (
             <ThumbListView
+              handleEdit={handleEdit}
               key={item.id}
               item={item}
               isSelect={selectedItems.includes(item.id)}
@@ -48,6 +51,7 @@ const ListPageListing = ({
         }
         return (
           <DataListView
+            handleEdit={handleEdit}
             key={item.id}
             item={item}
             isSelect={selectedItems.includes(item.id)}

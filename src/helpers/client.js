@@ -11,7 +11,6 @@ export function client(endpoint, { method, body, contentType='application/json',
     }
 
     const response = axios(options);
-
     return response;
 }
 export function client1(endpoint, { method, body, contentType='application/json', ...customConfig } = {}) {

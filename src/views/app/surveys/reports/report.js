@@ -284,7 +284,7 @@ const ReportPage = ({
     }
 
     generateReport();
-  }, [isSurveyItemLoaded, isReportItemLoaded, isResultItemsLoaded, isPillarItemsLoaded]);
+  }, [isSurveyItemLoaded, isReportItemLoaded, isResultItemsLoaded, isPillarItemsLoaded, reportItem]);
 
   useEffect(() => {
     if (surveyItem) {

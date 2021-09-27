@@ -2,11 +2,11 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { client } from '../../helpers/client';
 
-import { 
-  REPORT_LIST_GET_LIST, 
-  REPORT_LIST_GET_ITEM, 
+import {
+  REPORT_LIST_GET_LIST,
+  REPORT_LIST_GET_ITEM,
   REPORT_LIST_ADD_ITEM,
-  REPORT_LIST_UPDATE_ITEM, 
+  REPORT_LIST_UPDATE_ITEM,
   REPORT_LIST_DELETE_ITEM,
   REPORT_LIST_RESET_SHARE_LINK,
   REPORT_LIST_GET_ITEM_SHARE,
@@ -31,9 +31,9 @@ const getReportListRequest = async (payload) =>
   await client
     .get(`/report?survey=${payload.id}`)
     .then((user) => user.data)
-    .catch((error) => {throw error.response.data});
+    .catch((error) => { throw error.response.data });
 
-function* getReportListItems({payload}) {
+function* getReportListItems({ payload }) {
   try {
     const response = yield call(getReportListRequest, payload);
     yield put(getReportListSuccess(response));
@@ -51,9 +51,9 @@ const getReportItemRequest = async (payload) =>
   await client
     .get(`/report/${payload.id}`)
     .then((user) => user.data)
-    .catch((error) => {throw error.response.data});
+    .catch((error) => { throw error.response.data });
 
-function* getReportItem({payload}) {
+function* getReportItem({ payload }) {
   try {
     const response = yield call(getReportItemRequest, payload);
     yield put(getReportItemSuccess(response));
@@ -71,9 +71,9 @@ const getReportItemShareRequest = async (payload) =>
   await client
     .get(`/report/share?id=${payload.id}`)
     .then((user) => user.data)
-    .catch((error) => {throw error.response.data});
+    .catch((error) => { throw error.response.data });
 
-function* getReportShareItem({payload}) {
+function* getReportShareItem({ payload }) {
   try {
     const response = yield call(getReportItemShareRequest, payload);
     yield put(getReportItemSuccess(response));
@@ -87,11 +87,11 @@ export function* watchGetItemShare() {
 }
 
 
-const addReportItemRequest = async (item) => 
+const addReportItemRequest = async (item) =>
   await client
     .post('/report', item)
     .then((user) => user.data)
-    .catch((error) => {throw error.response.data});
+    .catch((error) => { throw error.response.data });
 
 function* addReportItem({ payload }) {
   try {
@@ -111,22 +111,23 @@ const updateReportItemRequest = async (payload) => {
   const id = payload.id;
   if (payload.filter) {
     return await client
-      .put(`/report/${id}`, {filter: payload.filter})
+      .put(`/report/${id}`, { filter: payload.filter })
       .then((res) => res.data)
-      .catch((error) => {throw error.response.data}); 
+      .catch((error) => { throw error.response.data });
   } else if (payload.sections) {
     return await client
-      .put(`/report/${id}`, {sections: payload.sections})
+      .put(`/report/${id}`, { sections: payload.sections })
       .then((res) => res.data)
-      .catch((error) => {throw error.response.data}); 
+      .catch((error) => { throw error.response.data });
   } else {
     throw new Error("Param Error");
   }
-} 
+}
 
-function* updateReportItem({payload}) {
+function* updateReportItem({ payload }) {
   try {
     const response = yield call(updateReportItemRequest, payload);
+    console.log("response->>", response)
     yield put(updateReportItemSuccess(response));
   } catch (error) {
     yield put(updateReportItemError(error));
@@ -138,14 +139,14 @@ export function* watchUpdateItem() {
 }
 
 
-const deleteReportItemRequest = async (id) => 
+const deleteReportItemRequest = async (id) =>
   await client
     .delete(`/report/${id}`)
     .then((res) => res.data)
-    .catch((err) => {throw err.response.data});  
+    .catch((err) => { throw err.response.data });
 
-function* deleteReportItem({payload}) {
-  const {id} = payload;
+function* deleteReportItem({ payload }) {
+  const { id } = payload;
   try {
     const response = yield call(deleteReportItemRequest, id);
     yield put(deleteReportItemSuccess(response));
@@ -159,13 +160,13 @@ export function* watchDeleteItem() {
 }
 
 
-const resetReportShareLinkRequest = async (id) => 
+const resetReportShareLinkRequest = async (id) =>
   await client
     .put(`/report/${id}/reset`)
     .then(res => res.data)
-    .catch(err => {throw err.response.data});
+    .catch(err => { throw err.response.data });
 
-function* resetReportShareLink({payload}) {
+function* resetReportShareLink({ payload }) {
   try {
     const response = yield call(resetReportShareLinkRequest, payload.id);
     yield put(resetReportShareLinkSuccess(response));
@@ -180,6 +181,6 @@ export function* watchResetReportShareLink() {
 
 
 export default function* rootSaga() {
-  yield all([fork(watchGetList), fork(watchGetItem), fork(watchGetItemShare), fork(watchAddItem), fork(watchUpdateItem), 
-              fork(watchDeleteItem), fork(watchResetReportShareLink), ]);
+  yield all([fork(watchGetList), fork(watchGetItem), fork(watchGetItemShare), fork(watchAddItem), fork(watchUpdateItem),
+  fork(watchDeleteItem), fork(watchResetReportShareLink),]);
 }

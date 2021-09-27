@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import * as SurveyKo from "survey-knockout";
 import * as SurveyJSCreator from "survey-creator";
@@ -42,12 +42,12 @@ widgets.bootstrapslider(SurveyKo);
 const SurveyCreator = ({
   json = {}, 
   saveSurvey = null,
-
+  pillarItems,
   locale,
 }) => {
 
   var surveyCreator;
-  
+  const [pillarOptions, setPillarOptions] = useState([])
   const saveMySurvey = (saveNo, callback) => {
     if (saveSurvey)
       saveSurvey(surveyCreator.JSON);
@@ -59,13 +59,34 @@ const SurveyCreator = ({
     SurveyJSCreator.localization.currentLocale = locale;
   }, [locale]);
 
+  // useEffect(()=>{
+  //   if(pillarItems){
+  //     const pillar_ = []
+  //     pillarItems.forEach(pillar => {
+  //       pillar_.push({"value":pillar.id, text:pillar.name})
+  //     });
+  //     console.log("pillar_", pillar_)
+  //     setPillarOptions(pillar_)
+  //     console.log(pillarOptions)
+  //   }
+  
+  // },[pillarItems])
   useEffect(() => {
-
+    console.log("pillarOption---->>", pillarOptions)
+    const pillar_ = []
+    pillarItems.forEach(pillar => {
+      pillar_.push({"value":pillar.id, text:pillar.name})
+    });
+    console.log("pillar_", pillar_)
+    setPillarOptions(pillar_)
+    console.log(pillarOptions)
+    const pp =  [{value: "19ojrotjrioturoeiutioreut", text: "1rtry5y5y65654"}, {value: "2", text: "2"},]
     SurveyKo
       .Serializer
       .addProperty("question", {
         name: "pillar:dropdown", 
-        choices: [{"value": "1", text: "1"}, {"value": "2", text: "2"},]
+        // choices: [{value: "19ojrotjrioturoeiutioreut", text: "1rtry5y5y65654"}, {value: "2", text: "2"},]
+        choices:pillar_
       });
     
     SurveyKo.Serializer.addProperty("question", {name: "question score(not for pillar):number"});
@@ -108,9 +129,12 @@ const SurveyCreator = ({
   </div>);
 }
 
-const mapStateToProps = ({ settings, }) => {
+const mapStateToProps = ({ settings, pillar }) => {
+  const { pillarItems } = pillar;
+  console.log("pillarItems==>>", pillarItems)
   return {
     locale: settings.locale,
+    pillarItems,
   };
 };
 

@@ -35,7 +35,15 @@ const RunSurvey = ({
   getResultItemAction,
   updateResultItemAction,
 }) => {
-
+  const  hexToRgb = (hex) => {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16),
+      a:1
+    } : undefined;
+  }
   const [reRun,setReRun] = useState(false)
   const history = useHistory();
   const handleOnUpdate = async (result, timeSpent, completed=false) => {
@@ -86,6 +94,19 @@ const RunSurvey = ({
       NotificationManager.warning(resultItemError.message??resultItemError, 'Run Survey Error', 3000, null, null, '');
     }
   }, [resultItemError]);
+
+  useEffect(() => {
+    if (surveyItem) {
+      // document.documentElement.style.setProperty("--text-color",hexToRgb(surveyItem.color||'#000000'));
+      document.documentElement.style.setProperty("--hex-text-color", surveyItem.color||'#000000');
+      document.documentElement.style.setProperty("--text-size", surveyItem.font_size||'14px')
+      document.documentElement.style.setProperty("--font-weight", surveyItem.bold?'bold':'normal')
+      document.documentElement.style.setProperty("--text-decoration", surveyItem.underline?'underline':'none')
+      document.documentElement.style.setProperty("--font-style", surveyItem.italic?'italic':'normal')
+      document.documentElement.style.setProperty("--font-family", surveyItem.family||'Arial')
+
+    }
+  }, [surveyItem]);
 
   return (
     <>

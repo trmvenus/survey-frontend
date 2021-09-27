@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CustomInput, Badge } from 'reactstrap';
+import { Card, CustomInput, Badge, Button } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import classnames from 'classnames';
 import { ContextMenuTrigger } from 'react-contextmenu';
@@ -8,10 +8,11 @@ import Moment from 'react-moment';
 import { Colxx } from '../../components/common/CustomBootstrap';
 import { client } from '../../helpers/client';
 import { getRoleName } from '../../helpers/authHelper';
+import IntlMessages from '../../helpers/IntlMessages';
 
-const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
+const DataListView = ({ item, isSelect, collect, onCheckItem, handleEdit}) => {
   const user = item;
-  
+
   return (
     <Colxx xxs="12" className="mb-3">
       <ContextMenuTrigger id="menu_id" data={user.id} collect={collect}>
@@ -41,7 +42,7 @@ const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
                   type="checkbox"
                   id={`activate_${user.id}`}
                   defaultChecked={user.is_active}
-                  onChange={() => {client.put(`/user/${user.id}/active`)}}
+                  onChange={() => { client.put(`/user/${user.id}/active`) }}
                   label="Activate"
                 />
               </div>
@@ -51,7 +52,7 @@ const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
                     type="checkbox"
                     id={`create_${user.id}`}
                     defaultChecked={user.p_create}
-                    onChange={() => {client.put('/user/permission', {user: user.id, method: 'p_create'})}}
+                    onChange={() => { client.put('/user/permission', { user: user.id, method: 'p_create' }) }}
                     label="Create"
                   />
                 </div>
@@ -62,7 +63,7 @@ const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
                     type="checkbox"
                     id={`edit_${user.id}`}
                     defaultChecked={user.p_edit}
-                    onChange={() => {client.put('/user/permission', {user: user.id, method: 'p_edit'})}}
+                    onChange={() => { client.put('/user/permission', { user: user.id, method: 'p_edit' }) }}
                     label="Edit"
                   />
                 </div>
@@ -73,7 +74,7 @@ const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
                     type="checkbox"
                     id={`view_${user.id}`}
                     defaultChecked={user.p_view}
-                    onChange={() => {client.put('/user/permission', {user: user.id, method: 'p_view'})}}
+                    onChange={() => { client.put('/user/permission', { user: user.id, method: 'p_view' }) }}
                     label="View"
                   />
                 </div>
@@ -84,7 +85,7 @@ const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
                     type="checkbox"
                     id={`copy_${user.id}`}
                     defaultChecked={user.p_copy}
-                    onChange={() => {client.put('/user/permission', {user: user.id, method: 'p_copy'})}}
+                    onChange={() => { client.put('/user/permission', { user: user.id, method: 'p_copy' }) }}
                     label="Copy"
                   />
                 </div>
@@ -95,7 +96,7 @@ const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
                     type="checkbox"
                     id={`delete_${user.id}`}
                     defaultChecked={user.p_delete}
-                    onChange={() => {client.put('/user/permission', {user: user.id, method: 'p_delete'})}}
+                    onChange={() => { client.put('/user/permission', { user: user.id, method: 'p_delete' }) }}
                     label="Delete"
                   />
                 </div>
@@ -112,9 +113,19 @@ const DataListView = ({ item, isSelect, collect, onCheckItem }) => {
                 type="checkbox"
                 id={`check_${user.id}`}
                 checked={isSelect}
-                onChange={() => {}}
+                onChange={() => { }}
                 label=""
               />
+            </div>
+            <div className="float-right align-self-center mr-3" >
+              <Button
+                size="xs"
+                color="outline-success"
+                className=""
+                onClick={() => handleEdit(user)}
+              >
+                <IntlMessages id="menu.edit" />
+              </Button>
             </div>
           </div>
         </Card>

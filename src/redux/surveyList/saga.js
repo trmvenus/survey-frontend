@@ -3,16 +3,21 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import { client } from '../../helpers/client';
 
 import {
+  SURVEY_LIST_GET_TOTAL,
   SURVEY_LIST_GET_LIST,
   SURVEY_LIST_ADD_ITEM, 
   SURVEY_LIST_DELETE_ITEMS, 
   SURVEY_LIST_COPY_ITEMS, 
   SURVEY_LIST_SHARE_ITEM, 
   SURVEY_LIST_ACTIVE_ITEM,
-  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM
+  SURVEY_LIST_SET_MULTI_RESPONSES_ITEM,
+  SURVEY_STYLE_UPDATE_ITEM,
+  SURVEY_STYLE_UPDATE_ITEM_ERROR,
 } from '../actions';
 
 import {
+  getSurveyTotalListSuccess,
+  getSurveyTotalListError,
   getSurveyListSuccess,
   getSurveyListError,
   addSurveyItemSuccess,
@@ -27,6 +32,8 @@ import {
   activeSurveyItemError,
   setMultiResponsesSurveyItemSuccess,
   setMultiResponsesSurveyItemError,
+  changeStyleSurveyItem_Success,
+  changeStyleSurveyItem_Error
 } from './actions';
 
 export function* watchGetList() {
@@ -48,6 +55,24 @@ function* getSurveyListItems() {
   }
 }
 
+export function* watchGetTotalList() {
+  yield takeEvery(SURVEY_LIST_GET_TOTAL, getSurveyTotalListItems);
+}
+
+const getSurveyTotalListRequest = async () =>
+  await client
+    .get('/survey/all')
+    .then((res) => res.data)
+    .catch((error) => { throw error.response.data });
+
+function* getSurveyTotalListItems() {
+  try {
+    const response = yield call(getSurveyTotalListRequest);
+    yield put(getSurveyTotalListSuccess(response));
+  } catch (error) {
+    yield put(getSurveyTotalListError(error));
+  }
+}
 
 export function* watchAddItem() {
   yield takeEvery(SURVEY_LIST_ADD_ITEM, addSurveyItem);
@@ -128,6 +153,24 @@ function* shareSurveyItem({ payload }) {
   }
 }
 
+export function* watchUpdateStyleItem() {
+  yield takeEvery(SURVEY_STYLE_UPDATE_ITEM, updateStyleSurveyItem)
+}
+
+const updateStyleSurveyItemRequest = async (item) => 
+  await client
+    .post(`/survey/style`, item)
+    .then((res) => res.data)
+    .catch((error) => { throw error.response.data });
+
+function* updateStyleSurveyItem({payload}) {
+  try{
+    const response = yield call(updateStyleSurveyItemRequest, payload);
+    yield put(changeStyleSurveyItem_Success(response))
+  } catch (error) {
+    yield put(changeStyleSurveyItem_Error(error))
+  }
+}
 
 export function* watchActiveItem() {
   yield takeEvery(SURVEY_LIST_ACTIVE_ITEM, activeSurveyItem);
@@ -176,7 +219,9 @@ export default function* rootSaga() {
     fork(watchDeleteItems),
     fork(watchCopyItems),
     fork(watchShareItem),
+    fork(watchUpdateStyleItem),
     fork(watchActiveItem),
     fork(watchSetMultiResponsesItem),
+    fork(watchGetTotalList)
   ]);
 }

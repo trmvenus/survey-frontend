@@ -9,6 +9,7 @@ Table of Contents
 */
 
 const lang = {
+  'email-address': 'Email Address',
   'facebook-userid': 'Facebook userId',
   'twitter-userid': 'Twitter userId',
   'to-xlxs-mode': 'to Excel Mode',
@@ -20,6 +21,9 @@ const lang = {
   "unauthorized.detail": "You are not authorized to view the page you are trying to access.",
   
   /* 02.Inicio de sesión de usuario, cierre de sesión, registro */
+  'user.confirm-password': "Confirm Password",
+  'user.original-password': "Original Password",
+  'user.reset-password': "Reset Password",
   'user.login-title': 'Iniciar sesión',
   'user.register': 'Registro',
   'user.forgot-password': 'Se te olvidó tu contraseña',
@@ -140,6 +144,8 @@ const lang = {
   'menu.settings': 'Configuraciones',
   'menu.account': 'Cuenta Configuraciones',
   'menu.security': 'Seguridad',
+  'menu.pillars': 'Pillars',
+  'menu.style':'estilo',
   'menu.results': 'Resultados',
   'menu.reports': 'Informes',
   'menu.links': 'Enlaces',
@@ -413,9 +419,16 @@ const lang = {
 
   /* 06.06. Settings */
   'settings.active': 'Activo',
+  'settings.font-size': 'Tamaño de fuente',
+  'settings.font-color': 'Color de fuente',
+  'settings.font-family': 'Familia de fuentes',
   'settings.share': 'Compartir',
   'settings.multi-response': 'Respuesta Múltiple',
   'settings.active-description': 'Si la encuesta no está activada, los usuarios no pueden ejecutar la encuesta.',
+  'settings.font-size-description': 'Puede cambiar el tamaño de fuente de los cuestionarios.',
+  'settings.font-family-description': 'Puede cambiar la familia de fuentes de los cuestionarios.',
+
+  'settings.font-color-description': 'Puede cambiar el color de la fuente de los cuestionarios.',
   'settings.share-description': 'Compartir una encuesta permite a otros usuarios ejecutar la encuesta.',
   'settings.multi-responses-description': 'Si se permiten varias respuestas, un usuario puede ejecutar la encuesta varias veces.',
 
@@ -797,7 +810,9 @@ const lang = {
 
   /* 09.02.Organization */
   'organization.name': 'Nombre',
-  'organization.add-new-modal-title': 'Agregar Nueva Organización.',
+  'pillar.add-new-modal-title': 'Agregar Nueva Pillar.',
+  'pillar.edit-modal-title': 'Editar Nueva Pillar',
+
 };
 
 export default lang;

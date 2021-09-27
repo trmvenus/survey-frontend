@@ -1,4 +1,7 @@
 import {
+  SURVEY_LIST_GET_TOTAL,
+  SURVEY_LIST_GET_TOTAL_ERROR,
+  SURVEY_LIST_GET_TOTAL_SUCCESS,
   SURVEY_LIST_GET_LIST,
   SURVEY_LIST_GET_LIST_SUCCESS,
   SURVEY_LIST_GET_LIST_ERROR,
@@ -24,6 +27,10 @@ import {
   SURVEY_LIST_SET_MULTI_RESPONSES_ITEM,
   SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_SUCCESS,
   SURVEY_LIST_SET_MULTI_RESPONSES_ITEM_ERROR,
+
+  SURVEY_STYLE_UPDATE_ITEM,
+  SURVEY_STYLE_UPDATE_ITEM_SUCCESS,
+  SURVEY_STYLE_UPDATE_ITEM_ERROR
 } from '../actions';
 
 export const getSurveyList = () => ({
@@ -37,6 +44,20 @@ export const getSurveyListSuccess = (items) => ({
 
 export const getSurveyListError = (error) => ({
   type: SURVEY_LIST_GET_LIST_ERROR,
+  payload: error,
+});
+
+export const getSurveyTotalList = () => ({
+  type: SURVEY_LIST_GET_TOTAL,
+});
+
+export const getSurveyTotalListSuccess = (items) => ({
+  type: SURVEY_LIST_GET_TOTAL_SUCCESS,
+  payload: items,
+});
+
+export const getSurveyTotalListError = (error) => ({
+  type: SURVEY_LIST_GET_TOTAL_ERROR,
   payload: error,
 });
 
@@ -109,6 +130,7 @@ export const shareSurveyItem = (payload) => ({
   payload: payload,
 });
 
+
 export const shareSurveyItemSuccess = (item) => ({
   type: SURVEY_LIST_SHARE_ITEM_SUCCESS,
   payload: item,
@@ -118,6 +140,21 @@ export const shareSurveyItemError = (error) => ({
   type: SURVEY_LIST_SHARE_ITEM_ERROR,
   payload: error,
 });
+
+
+export const changeStyleSurveyItem = (payload) => ({
+  type: SURVEY_STYLE_UPDATE_ITEM,
+  payload: payload
+})
+
+export const changeStyleSurveyItem_Success = (payload) => ({
+  type: SURVEY_STYLE_UPDATE_ITEM_SUCCESS,
+  payload: payload
+})
+export const changeStyleSurveyItem_Error = (payload) => ({
+  type: SURVEY_STYLE_UPDATE_ITEM_ERROR,
+  payload: payload
+})
 
 export const activeSurveyItem = (payload) => ({
   type: SURVEY_LIST_ACTIVE_ITEM,

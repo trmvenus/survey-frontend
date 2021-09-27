@@ -168,14 +168,14 @@ const LinkPage = ({
     if (mode == "sms") return 'menu.smslink';
     else if (mode == "facebook") return 'menu.facebooklink';
     else if (mode == 'twitter') return 'menu.twitterlink';
-    else return '';
+    else return 'menu.emaillink';
   }
 
   const displayAddress = (mode = "") => {
     if (mode == "sms") return 'Phone Number';
     else if (mode == "facebook") return 'facebook-userid';
     else if (mode == 'twitter') return 'twitter-userid';
-    else return '';
+    else return 'email-address';
   }
 
   return (

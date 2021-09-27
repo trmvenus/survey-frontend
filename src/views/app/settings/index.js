@@ -20,6 +20,11 @@ const Settings = ({ match }) => (
         path={`${match.url}/security`}
         render={(props) => <SecuritySettings {...props} />}
       />
+     
+      <Route
+        path={`${match.url}/pillar`}
+        render={(props) => <SecuritySettings {...props} />}
+      />
       <Redirect to="/surveys" />
     </Switch>
   </Suspense>

@@ -66,6 +66,8 @@ const UsersSettings = ({
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedItemOrganizationId, setSelectedItemOrganizationId] = useState(0);
   const [lastChecked, setLastChecked] = useState(null);
+  const [isEditModal, setIsEditModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({});
 
   useEffect(() => {
     setCurrentPage(1);
@@ -180,6 +182,18 @@ const UsersSettings = ({
     return false;
   });
 
+  const handleEditModalOpen = (user) => {
+    setSelectedUser(user);
+    setIsEditModal(true);
+    setNewModalOpen(true);
+  }
+
+  const handleAddModalOpen = () => {
+    setSelectedUser({});
+    setIsEditModal(false);
+    setNewModalOpen(true);
+  }
+
   const startIndex = (currentPage - 1) * selectedPageSize;
   const endIndex = currentPage * selectedPageSize;
 
@@ -214,15 +228,18 @@ const UsersSettings = ({
           }}
           orderOptions={orderOptions}
           pageSizes={pageSizes}
-          toggleModal={() => setNewModalOpen(!newModalOpen)}
+          toggleModal={handleAddModalOpen}
           handleDeleteSelected={handleDeleteSelected}
         />
         <AddNewModal
+          isEdit={isEditModal}
           modalOpen={newModalOpen}
           toggleModal={() => setNewModalOpen(!newModalOpen)}
           categories={categories}
+          user={selectedUser}
         />
         <ListPageListing
+          handleEdit={handleEditModalOpen}
           items={users}
           displayMode={displayMode}
           selectedItems={selectedItems}

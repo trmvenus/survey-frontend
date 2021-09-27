@@ -4,9 +4,17 @@
 @import './_03_core.scss';
 @import './_04_plugins.scss';
 @import './_05_views.scss';
-
 /** your custom css code **/
-
+:root {
+  --text-color: rgb(7, 2, 2);
+  --hex-text-color: rgb(7, 2, 2);
+  --bg-color: rgb(189, 165, 165);   
+  --text-size:14px ;
+  --font-weight:300;
+  --text-decoration: 'none';
+  --font-style: 'normal';
+  --font-family: 'Arial'
+};
 .svd_commercial_container {
   display: none !important;
 }
@@ -126,3 +134,20 @@ html {
   background-color: $theme-color-1 !important;
 }
 */
+.FormatColorTextIcon > span > svg >path:first-child{
+  color: var(--text-color)!important;
+
+}
+
+.sv_main .sv_container .sv_body .sv_p_root .sv_q_title {
+  color: var(--hex-text-color)!important;
+  font-size: var(--text-size)!important;
+  font-weight: var(--font-weight)!important;
+  font-family: var(--font-family)!important;
+  font-style: var(--font-style)!important;
+  text-decoration: var(--text-decoration)!important;
+}
+
+.toolSelected :first-child {
+  background-color: $theme-color-1 ;
+}

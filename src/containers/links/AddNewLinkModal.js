@@ -165,12 +165,14 @@ const AddNewLinkModal = ({
     if (mode == "sms") return 'link.edit-sms-title';
     else if (mode == "facebook") return 'link.edit-facebook-title';
     else if (mode == "twitter") return 'link.edit-twitter-title';
+    else return 'link.edit-email-title';
   }
 
   const displayAddTitle = (mode) => {
     if (mode == "sms") return 'link.add-new-sms-title';
     else if (mode == "facebook") return 'link.add-new-facebook-title';
     else if (mode == "twitter") return 'link.add-new-twitter-title';
+    else return 'link.add-new-email-title';
   }
   const link_id = getRandomLinkId();
 

@@ -34,7 +34,7 @@ export const getDefaultLinkContent = (link_id, mode) => {
     Thank you for your time and feedback. We appreciate it.
     Regards.
     @SurveyWizardSite.`;
-  else if(mode == "facebook") 
+  else if (mode == "facebook")
     return `Hello, {FirstName}.
     Nice to meet you.
     I hope to listen your review about my survey.
@@ -44,7 +44,7 @@ export const getDefaultLinkContent = (link_id, mode) => {
     Regards.
     @SurveyWizardSite.  
     Please note that this message was sent to: {EmailAddress}.`;
-  else if(mode == "twitter") 
+  else if (mode == "twitter")
     return `Hello, {FirstName}.
     Nice to meet you.
     I hope to listen your review about my survey.
@@ -54,6 +54,20 @@ export const getDefaultLinkContent = (link_id, mode) => {
     Regards.
     @SurveyWizardSite.  
     Please note that this message was sent to: {EmailAddress}.`;
+  else
+    return `
+  <p>Hello, {FirstName}.</p>
+  <p>{enter your message here}</p>
+  <p>
+    <a href="${shareEmailSurveyPath}${link_id}">
+      Click here to run the survey.
+    </a>
+  </p>
+  <p>Thank you for your time and feedback. We appreciate it.</p>
+  <p>Regards.</p>
+  <p>@SurveyWizardSite,</p>
+  <p>Please note that this message was sent to: {EmailAddress}.</p>
+  `;
 }
 
 

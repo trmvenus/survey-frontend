@@ -11,6 +11,12 @@ import {
   USER_LIST_CHANGE_ORGANIZATION,
   USER_LIST_CHANGE_ORGANIZATION_SUCCESS,
   USER_LIST_CHANGE_ORGANIZATION_ERROR,
+  USER_LIST_UPDATE_ITEM_SUCCESS,
+  USER_LIST_UPDATE_ITEM_ERROR,
+  USER_LIST_UPDATE_ITEM,
+  MY_RESET_PASSWORD,
+  MY_RESET_PASSWORD_ERROR,
+  MY_RESET_PASSWORD_SUCCESS
 } from '../actions';
 
 export const getUserList = (filterOption) => ({
@@ -43,6 +49,21 @@ export const addUserError = (error) => ({
   payload: error,
 });
 
+export const updateUser = (user_id, user) => ({
+  type: USER_LIST_UPDATE_ITEM,
+  payload: {user_id, user}
+})
+
+export const updateUserError = (error) => ({
+  type: USER_LIST_UPDATE_ITEM_ERROR,
+  payload: error
+})
+
+export const updateUserSuccess = (user) => ({
+  type: USER_LIST_UPDATE_ITEM_SUCCESS,
+  payload: user
+})
+
 export const deleteUsers = (ids) => ({
   type: USER_LIST_DELETE_ITEMS,
   payload: ids,
@@ -71,4 +92,19 @@ export const changeOrganizationSuccess = (user) => ({
 export const changeOrganizationError = (error) => ({
   type: USER_LIST_CHANGE_ORGANIZATION_ERROR,
   payload: error,
+});
+
+export const resetPassword = (user_id, originalPassword, newPassword) => ({
+  type: MY_RESET_PASSWORD,
+  payload: {user_id, originalPassword, newPassword}
+});
+
+export const resetPasswordError = (err) => ({
+  type: MY_RESET_PASSWORD_ERROR,
+  payload: err
+});
+
+export const resetPasswordSuccess = () => ({
+  type: MY_RESET_PASSWORD_SUCCESS,
+  payload: {}
 });

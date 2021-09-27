@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Card, 
   CardBody, 
@@ -26,6 +26,7 @@ import { ThemeColors } from '../../helpers/ThemeColors';
 const SummaryCard = ({
   reportData = []
 }) => {
+
   const colors = ThemeColors();
   const ids = ['1']
   const drawLineChart = (question, isMatrix=false, rowno=0) => {

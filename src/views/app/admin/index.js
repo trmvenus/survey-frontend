@@ -8,7 +8,9 @@ const Users = React.lazy(() =>
 const Organizations = React.lazy(() => 
   import(/* webpackChunkName: "organizations" */ './organizations')
 )
-
+const Pillars = React.lazy(() => 
+  import(/* webpackChunkName: "organizations" */ './pillars')
+)
 const AdminSettings = ({ match }) => (
   <Suspense fallback={<div className="loading" />}>
     <Switch>
@@ -21,6 +23,11 @@ const AdminSettings = ({ match }) => (
       <ProtectedRoute
         path={`${match.url}/organizations`}
         component={Organizations}
+        roles={[UserRole.Admin]}
+      />
+       <ProtectedRoute
+        path={`${match.url}/pillars`}
+        component={Pillars}
         roles={[UserRole.Admin]}
       />
       <Redirect to="/error" />

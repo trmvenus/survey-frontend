@@ -1,16 +1,17 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { 
-  Row, 
-  Button, 
-  Card, 
+import {
+  Row,
+  Button,
+  Card,
   CardHeader,
-  CardBody, 
+  CardBody,
   Nav,
   NavItem,
   Badge,
   TabContent,
   TabPane,
+  Input
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import classnames from 'classnames';
@@ -32,9 +33,10 @@ import EditDescription from '../../../containers/settings/EditDescription';
 import { getCurrentUser } from '../../../helpers/Utils';
 import IntlMessages from '../../../helpers/IntlMessages';
 import { getRoleName, UserRole } from '../../../helpers/authHelper';
+import ResetModal from './resetModal';
 
 
-const ProfileSettings = ({ 
+const ProfileSettings = ({
   match,
 
   additionalUserInfo,
@@ -49,6 +51,7 @@ const ProfileSettings = ({
   const [currentUser] = useState(getCurrentUser());
   const [editingMode, setEditingMode] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+  const [newModalOpen, setNewModalOpen] = useState(false);
 
   const handleChangeEditingMode = () => {
     if (editingMode) {
@@ -80,7 +83,7 @@ const ProfileSettings = ({
 
   useEffect(() => {
     if (authUserError) {
-      NotificationManager.warning(authUserError.message??authUserError, 'Profile Page Error', 3000, null, null, '');
+      NotificationManager.warning(authUserError.message ?? authUserError, 'Profile Page Error', 3000, null, null, '');
     }
   }, [authUserError]);
 
@@ -146,7 +149,24 @@ const ProfileSettings = ({
                 >
                   {getRoleName(currentUser.role)}
                 </Badge>
+                <Badge
+                  color={currentUser.is_active == true ? 'outline-success' : 'outline-danger'}
+                  className="mb-1 mr-1"
+                  pill
+                >
+                  {currentUser.is_active == true ? 'activated' : 'not activated'}
+                </Badge>
               </p>
+              <div className="float-right align-self-center mr-1" >
+                <Button
+                  size="xs"
+                  color="outline-secondary"
+                  className=""
+                  onClick={() => setNewModalOpen(true)}
+                >
+                  <IntlMessages id="user.reset-password-button" />
+                </Button>
+              </div>
               <p className="text-muted text-small mb-2">
                 <IntlMessages id="menu.contact" />
               </p>
@@ -222,7 +242,11 @@ const ProfileSettings = ({
           </Card>
         </Colxx>
       </Row>
-    
+      <ResetModal
+        user={currentUser}
+        modalOpen={newModalOpen}
+        toggleModal={() => setNewModalOpen(!newModalOpen)}
+      />
     </>
   )
 };
